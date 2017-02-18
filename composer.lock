@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fb7d45bf46b26fc80de02bed0e6a5587",
-    "content-hash": "f08e0abea71b3609f00e1c90c38a4e7d",
+    "hash": "e3e7641042560c0ff6925f551df8d172",
+    "content-hash": "3e1973632da5eb484b99a5330529d639",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -88,6 +88,58 @@
             ]
         },
         {
+            "name": "bower-asset/jquery.countdown",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hilios/jQuery.countdown.git",
+                "reference": "f4dd04b02be1e0504c03d886efe8a94de7f2da6b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hilios/jQuery.countdown/zipball/f4dd04b02be1e0504c03d886efe8a94de7f2da6b",
+                "reference": "f4dd04b02be1e0504c03d886efe8a94de7f2da6b",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery": ">=1.7"
+            },
+            "require-dev": {
+                "bower-asset/bootstrap": "~3",
+                "bower-asset/jquery": "~1.11"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "dist/jquery.countdown.js"
+                ],
+                "bower-asset-ignore": [
+                    "**/.*",
+                    "src",
+                    "test",
+                    "package.json",
+                    "Gruntfile.js",
+                    "node_modules",
+                    "bower_components"
+                ]
+            },
+            "license": [
+                {
+                    "type": "MIT",
+                    "url": "https://github.com/hilios/jQuery.countdown/blob/2.0.4/LICENSE.md"
+                }
+            ],
+            "description": "jQuery plugin to display a countdown clock on your page",
+            "keywords": [
+                "auction",
+                "clock",
+                "countdown",
+                "coupons",
+                "date",
+                "datetime"
+            ]
+        },
+        {
             "name": "bower-asset/jquery.inputmask",
             "version": "3.3.4",
             "source": {
@@ -138,6 +190,45 @@
                 "jquery",
                 "mask",
                 "plugins"
+            ]
+        },
+        {
+            "name": "bower-asset/nprogress",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rstacruz/nprogress.git",
+                "reference": "254266ea50c220f6507fa3f2978fc530147c7f06"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rstacruz/nprogress/zipball/254266ea50c220f6507fa3f2978fc530147c7f06",
+                "reference": "254266ea50c220f6507fa3f2978fc530147c7f06",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "nprogress.js",
+                    "nprogress.css"
+                ],
+                "bower-asset-ignore": [
+                    "**/.*",
+                    "node_modules",
+                    "components",
+                    "package.json",
+                    "test",
+                    "vendor"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "slim progress bar",
+            "keywords": [
+                "bar",
+                "progress",
+                "spinner"
             ]
         },
         {
@@ -263,6 +354,91 @@
             "time": "2016-09-14 20:40:20"
         },
         {
+            "name": "codemix/yii2-localeurls",
+            "version": "1.4.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codemix/yii2-localeurls.git",
+                "reference": "f080c39eec2e989173f3c10f3fba36f3043bdd2f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/codemix/yii2-localeurls/zipball/f080c39eec2e989173f3c10f3fba36f3043bdd2f",
+                "reference": "f080c39eec2e989173f3c10f3fba36f3043bdd2f",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "codemix\\localeurls\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Härtl",
+                    "email": "haertl.mike@gmail.com"
+                }
+            ],
+            "description": "Automatic locale/language management for URLs.",
+            "keywords": [
+                "i18n",
+                "locale",
+                "yii2"
+            ],
+            "time": "2017-01-09 12:26:05"
+        },
+        {
+            "name": "edgardmessias/yii2-nprogress",
+            "version": "0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/edgardmessias/yii2-nprogress.git",
+                "reference": "fdff230f40e3ee0299db506895106e0a121e1e37"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/edgardmessias/yii2-nprogress/zipball/fdff230f40e3ee0299db506895106e0a121e1e37",
+                "reference": "fdff230f40e3ee0299db506895106e0a121e1e37",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/nprogress": "*",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "edgardmessias\\assets\\nprogress\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Edgard Messias",
+                    "email": "edgardmessias@gmail.com"
+                }
+            ],
+            "description": "Slim progress bars for Ajax'y applications. Inspired by Google, YouTube, and Medium for Yii2 Framework.",
+            "keywords": [
+                "assets",
+                "extension",
+                "nprogress",
+                "pjax",
+                "yii2"
+            ],
+            "time": "2015-08-19 20:01:09"
+        },
+        {
             "name": "ezyang/htmlpurifier",
             "version": "v4.8.0",
             "source": {
@@ -305,6 +481,43 @@
                 "html"
             ],
             "time": "2016-07-16 12:58:58"
+        },
+        {
+            "name": "russ666/yii2-countdown",
+            "version": "0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/russ666/yii2-countdown.git",
+                "reference": "1059963d4e919d129ddb441076591963d521f844"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/russ666/yii2-countdown/zipball/1059963d4e919d129ddb441076591963d521f844",
+                "reference": "1059963d4e919d129ddb441076591963d521f844",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery.countdown": "*",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "russ666\\widgets\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "jQuery countdown widget for Yii2",
+            "keywords": [
+                "countdown",
+                "jquery",
+                "widget",
+                "yii2"
+            ],
+            "time": "2015-03-04 10:12:10"
         },
         {
             "name": "swiftmailer/swiftmailer",
