@@ -8,10 +8,11 @@
 
 namespace frontend\controllers;
 
-use frontend\models\MoveModel;
+use frontend\components\FigureComponent;
+use frontend\components\PawnComponent;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use Yii;
 
 class GameController extends Controller
 {
@@ -44,13 +45,27 @@ class GameController extends Controller
     }
 
     /**
-     * Displays homepage.
+     * Displays game page.
      *
      * @return mixed
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $figure = Yii::$app->get('figure');
+        $pawn = $figure->build('pawn');
+        $knight = $figure->build('knight');
+        $bishop = $figure->build('bishop');
+        $rook = $figure->build('rook');
+        $king = $figure->build('king');
+        $queen = $figure->build('queen');
+        return $this->render('index', [
+            'pawn' => $pawn,
+            'knight' => $knight,
+            'bishop' => $bishop,
+            'rook' => $rook,
+            'king' => $king,
+            'queen' => $queen
+        ]);
     }
 
 }

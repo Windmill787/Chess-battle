@@ -103,5 +103,6 @@ return [
     'Resign' => 'Сдаться',
     'Game' => 'Игра',
     'Play' => 'Играть',
-    'Offer Draw' => 'Предложить Ничью'
+    'Offer Draw' => 'Предложить Ничью',
+    'Are you sure you want to logout?' => 'Вы уверены что хотите выйти?'
 ];

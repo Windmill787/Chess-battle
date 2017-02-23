@@ -71,6 +71,13 @@ return [
                 ],
             ],
         ],
+        'figure' => '\frontend\components\FigureBuilderComponent',
+        'pawn' => [
+            'class' => 'frontend\components\PawnComponent',
+        ],
+        'knight' => [
+            'class' => 'frontend\components\KnightComponent',
+        ],
     ],
     'params' => $params,
 ];

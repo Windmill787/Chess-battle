@@ -53,7 +53,9 @@ NProgressAsset::register($this);
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
                 Yii::t('app', 'Logout').' ('.Yii::$app->user->identity->username.')',
-                ['class' => 'btn btn-link logout']
+                ['class' => 'btn btn-link logout',
+                'data-confirm' => Yii::t('app', 'Are you sure you want to logout?')]
+
             )
             . Html::endForm()
             . '</li>';
