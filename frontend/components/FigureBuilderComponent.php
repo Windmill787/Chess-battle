@@ -9,24 +9,20 @@
 namespace frontend\components;
 
 use Yii;
+use yii\base\Component;
 
 class FigureBuilderComponent
 {
-    public static function build($name)
+    public static function build($name, $class)
     {
         $image = self::setImage($name);
-        $figure = new FigureComponent($name, $image);
+        $figure = new $class($name, $image);
         return $figure;
     }
 
     public static function setImage($name)
     {
-        return "/figureImages/".$name.".svg";
-    }
-
-    public static function setClass($name)
-    {
-        $class = Yii::$app->get($name);
-        return $class;
+        $image = "/figureImages/".$name.".svg";
+        return $image;
     }
 }

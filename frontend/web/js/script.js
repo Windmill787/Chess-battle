@@ -1,24 +1,21 @@
 /**
  * Created by max on 19.02.17.
  */
-$('#clock')
-    .on('update.countdown', function(event) {
-    var format = '%M:%S';
-    $(this).html(event.strftime(format));
-    })
+$('#enemy')
     .on('finish.countdown', function() {
     $(this).parent()
     .addClass('disabled')
     .html('Time is out!');
-    })
-    .countdown((new Date().valueOf() + 600000).toString(), {defer: false});
+    });
 
-$('#resignButton').on('click', function () {
-    $('#clock').countdown('stop');
-});
+/*$('#resignButton')
+    .on('click' , function () {
+    .countdown('stop');
+});*/
 
 $('#drawButton').on('click', function () {
     $('#clock').countdown('stop');
+    $('#clockMy').countdown('stop');
 });
 
 $('#enemyMoveButton').on('click', function () {
@@ -28,5 +25,3 @@ $('#enemyMoveButton').on('click', function () {
 $('#myMoveButton').on('click', function () {
     $('#clock').countdown('resume');
 });
-
-var board = ChessBoard('board');

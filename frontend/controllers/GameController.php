@@ -8,11 +8,10 @@
 
 namespace frontend\controllers;
 
-use frontend\components\FigureComponent;
-use frontend\components\PawnComponent;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use Yii;
+use yii\filters\VerbFilter;
 
 class GameController extends Controller
 {
@@ -24,41 +23,38 @@ class GameController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index'],
+                'only' => ['index', 'preview'],
                 'rules' => [
                     [
-                        'actions' => ['index'],
+                        'actions' => ['index', 'preview'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                 ],
             ],
-            /*
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post'],
                 ],
             ],
-            */
         ];
     }
 
     /**
-     * Displays game page.
+     * Displays game play page.
      *
      * @return mixed
      */
-    public function actionIndex()
+    public function actionPlay()
     {
-        $figure = Yii::$app->get('figure');
-        $pawn = $figure->build('pawn');
-        $knight = $figure->build('knight');
-        $bishop = $figure->build('bishop');
-        $rook = $figure->build('rook');
-        $king = $figure->build('king');
-        $queen = $figure->build('queen');
-        return $this->render('index', [
+        $pawn = Yii::$app->get('pawn');
+        $knight = Yii::$app->get('knight');
+        $bishop = Yii::$app->get('bishop');
+        $rook = Yii::$app->get('rook');
+        $king = Yii::$app->get('king');
+        $queen = Yii::$app->get('queen');
+        return $this->render('play', [
             'pawn' => $pawn,
             'knight' => $knight,
             'bishop' => $bishop,
@@ -68,4 +64,13 @@ class GameController extends Controller
         ]);
     }
 
+    /**
+     * Displays game preview page.
+     *
+     * @return mixed
+     */
+    public function actionPreview()
+    {
+        return $this->render('preview');
+    }
 }

@@ -17,24 +17,25 @@
 use yii\helpers\Html;
 use russ666\widgets\Countdown;
 use yii\bootstrap\Modal;
+use Ryanhs\Chess\Chess;
 
 $this->title = Yii::t('app', 'Game');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
     <div class="col-lg-5">
-        <div class="row thumbnail" align="right">
+        <div class="row thumbnail">
             <div class="caption">
 
                 <h1>
-                    <div class="label label-default">
-                        <span id="clock">
-                            <span id="clockEnemy"></span>
-                        </span>
+                    <div class="label label-default" id="enemy">
+                        <?= Countdown::widget([
+                            'datetime' => date('Y-m-d H:i:s O', time() + 600),
+                            'format' => '%M:%S'
+                        ])
+                        ?>
                     </div>
                 </h1>
-
-                <?php print_r($pawn) ?>
 
                 <?= Html::img($pawn->image) ?>
 
@@ -48,9 +49,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?= Html::img($queen->image) ?>
 
-
                 <?= Html::beginTag('table', [
-                    'class' => 'table table-striped table-bordered'
+                    'class' => 'table-bordered'
                 ]); ?>
 
                     <?php $symbolLabel = [
@@ -92,6 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'width' => 50,
                                     'bgcolor' => '#FFFFFF'
                                 ]); ?>
+                                <?= $symbolLabel[$col].$row ?>
                                 <?= Html::endTag('td'); ?>
 
                             <?php } else { ?>
@@ -101,6 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'width' => 50,
                                     'bgcolor' => '#AF5200'
                                 ]); ?>
+                                <?= $symbolLabel[$col].$row ?>
                                 <?= Html::endTag('td'); ?>
                             <?php }
                         }
@@ -110,17 +112,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::endTag('table'); ?>
 
                 <h1>
-                    <div class="label label-default">
-                        <span id="clock">
-                            <span id="clockEnemy"></span>
-                        </span>
-                    </div>
-                </h1>
-
-                <h1>
-                    <div id="clock" style="visibility: hidden; position: absolute">
+                    <div class="label label-default" id="clockMy">
                         <?= Countdown::widget([
-                            'datetime' => date('m')
+                            'datetime' => date('Y-m-d H:i:s O', time() + 600),
+                            'format' => '%M:%S',
                         ])
                         ?>
                     </div>
