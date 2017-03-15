@@ -2,23 +2,20 @@
 
 /* @var $this yii\web\View */
 
+use yii\helpers\Html;
+
 $this->title = Yii::t('app', 'My Yii Application');
 ?>
 <div class="site-index">
 
-    <div class="body-content">
+        <div class="jumbotron">
+            <h1><?= Yii::t('app', 'Congratulations!') ?></h1>
 
-        <div class="row">
-            <div class="col-lg-4">
+            <p class="lead"><?= Yii::t('app', 'You have successfully logged in and you can start play') ?></p>
 
-            </div>
-            <div class="col-lg-4">
-
-            </div>
-            <div class="col-lg-4">
-
-            </div>
+            <p><?= Html::a(Yii::t('app', 'New game'), ['//game/play'],
+                    ['class' => 'btn btn-lg btn-success']) ?>
+            </p>
         </div>
 
-    </div>
 </div>

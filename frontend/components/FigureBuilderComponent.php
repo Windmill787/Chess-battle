@@ -13,7 +13,7 @@ use yii\base\Component;
 
 class FigureBuilderComponent
 {
-    public static function build($name, $class)
+    /*public static function build($name, $class)
     {
         $image = self::setImage($name);
         $figure = new $class($name, $image);
@@ -24,5 +24,5 @@ class FigureBuilderComponent
     {
         $image = "/figureImages/".$name.".svg";
         return $image;
-    }
+    }*/
 }

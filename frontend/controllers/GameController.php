@@ -8,9 +8,11 @@
 
 namespace frontend\controllers;
 
+use app\models\Figure;
+use frontend\components\FigureComponent;
+use frontend\components\PawnComponent;
 use yii\web\Controller;
 use yii\filters\AccessControl;
-use Yii;
 use yii\filters\VerbFilter;
 
 class GameController extends Controller
@@ -48,19 +50,9 @@ class GameController extends Controller
      */
     public function actionPlay()
     {
-        $pawn = Yii::$app->get('pawn');
-        $knight = Yii::$app->get('knight');
-        $bishop = Yii::$app->get('bishop');
-        $rook = Yii::$app->get('rook');
-        $king = Yii::$app->get('king');
-        $queen = Yii::$app->get('queen');
+        $whitePawn1 = new PawnComponent('white', 1);
         return $this->render('play', [
-            'pawn' => $pawn,
-            'knight' => $knight,
-            'bishop' => $bishop,
-            'rook' => $rook,
-            'king' => $king,
-            'queen' => $queen
+            'whitePawn' => $whitePawn1
         ]);
     }
 

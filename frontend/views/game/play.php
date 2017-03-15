@@ -7,20 +7,17 @@
  */
 
 /* @var $this yii\web\View */
-/* @var $pawn \frontend\components\FigureComponent */
-/* @var $knight \frontend\components\FigureComponent */
-/* @var $bishop \frontend\components\FigureComponent */
-/* @var $king \frontend\components\FigureComponent */
-/* @var $queen \frontend\components\FigureComponent */
-/* @var $rook \frontend\components\FigureComponent */
+/* @var $whitePawn \frontend\components\PawnComponent */
 
 use yii\helpers\Html;
 use russ666\widgets\Countdown;
 use yii\bootstrap\Modal;
-use Ryanhs\Chess\Chess;
+use common\widgets\ChessBoard;
+use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
 
-$this->title = Yii::t('app', 'Game');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = Yii::t('app', 'Play');
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
 
     <div class="col-lg-5">
@@ -28,94 +25,116 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="caption">
 
                 <h1>
-                    <div class="label label-default" id="enemy">
+                    <div class="label label-default">
                         <?= Countdown::widget([
-                            'datetime' => date('Y-m-d H:i:s O', time() + 600),
+                            'id' => 'enemy',
+                            'datetime' => date('Y-m-d H:i:s O', time() + 0),
                             'format' => '%M:%S'
                         ])
                         ?>
                     </div>
                 </h1>
+                <?php Pjax::begin() ?>
 
-                <?= Html::img($pawn->image) ?>
+                <?php
+                if (Yii::$app->request->post()) {
+                    $whitePawn->startPositionRow = $whitePawn->startPositionRow + 2;
+                }
 
-                <?= Html::img($knight->image) ?>
+                $symbolLabel = [
+                    '','a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'
+                ];
 
-                <?= Html::img($bishop->image) ?>
-
-                <?= Html::img($rook->image) ?>
-
-                <?= Html::img($king->image) ?>
-
-                <?= Html::img($queen->image) ?>
-
-                <?= Html::beginTag('table', [
+                echo Html::beginTag('table', [
                     'class' => 'table-bordered'
-                ]); ?>
+                ]);
+                echo Html::beginTag('tfoot');
+                echo Html::beginTag('tr');
+                foreach($symbolLabel as $label) :
 
-                    <?php $symbolLabel = [
-                        '','a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'
-                    ];
-                    foreach($symbolLabel as $label) : ?>
+                    echo Html::beginTag('th', [
+                        'style' => [
+                            'text-align' => 'center',
+                            'vertical-align' => 'middle'
+                        ]
+                    ]);
+                    echo Html::encode($label);
+                    echo Html::endTag('th');
+                endforeach;
+                echo Html::endTag('tr');
+                echo Html::endTag('tfoot');
 
-                        <?= Html::beginTag('th', [
-                            'style' => [
-                                'text-align' => 'center',
-                                'vertical-align' => 'middle'
-                            ]
-                        ]); ?>
-                        <?= Html::encode($label); ?>
-                        <?= Html::endTag('th'); ?>
+                for($row=8;$row>=1;$row--) {
 
-                    <?php endforeach;
+                    echo Html::beginTag('tr');
 
-                    for($row=8;$row>=1;$row--) { ?>
+                    echo Html::beginTag('th', [
+                        'style' => [
+                            'text-align' => 'center',
+                            'vertical-align' => 'middle'
+                        ]
+                    ]);
+                    echo Html::encode($row);
+                    echo Html::endTag('th');
 
-                        <?= Html::beginTag('tr'); ?>
+                    for ($col = 1; $col <= 8; $col++) {
+                        $total = $row + $col;
+                        if ($total % 2 == 0) {
 
-                        <?= Html::beginTag('th', [
-                            'style' => [
-                                'text-align' => 'center',
-                                'vertical-align' => 'middle'
-                            ]
-                        ]); ?>
-                        <?= Html::encode($row); ?>
-                        <?= Html::endTag('th'); ?>
+                            echo Html::beginTag('td', [
+                                'height' => 50,
+                                'width' => 50,
+                                'bgcolor' => '#AF5200',
+                                'align' => 'center',
+                                'valign' => 'center'
+                            ]);
+                            if ($row == $whitePawn->startPositionRow && $col == $whitePawn->startPositionCol) {
+                                echo Html::img($whitePawn->image);
+                            }
+                            echo Html::endTag('td');
 
-                        <?php
-                        for ($col = 1; $col <= 8; $col++) {
-                            $total = $row + $col;
-                            if ($total % 2 == 0) { ?>
+                        } else {
 
-                                <?= Html::beginTag('td', [
-                                    'height' => 50,
-                                    'width' => 50,
-                                    'bgcolor' => '#FFFFFF'
-                                ]); ?>
-                                <?= $symbolLabel[$col].$row ?>
-                                <?= Html::endTag('td'); ?>
+                            echo Html::beginTag('td', [
+                                'height' => 50,
+                                'width' => 50,
+                                'bgcolor' => '#FFFFFF',
+                                'align' => 'center',
+                                'valign' => 'center'
+                            ]);
 
-                            <?php } else { ?>
+                            if ($row == $whitePawn->startPositionRow && $col == $whitePawn->startPositionCol) {
+                                echo Html::img($whitePawn->image);
+                            }
 
-                                <?= Html::beginTag('td', [
-                                    'height' => 50,
-                                    'width' => 50,
-                                    'bgcolor' => '#AF5200'
-                                ]); ?>
-                                <?= $symbolLabel[$col].$row ?>
-                                <?= Html::endTag('td'); ?>
-                            <?php }
+                            echo Html::endTag('td');
                         }
-                    } ?>
-                        <?= Html::endTag('tr'); ?>
+                    }
+                }
+                echo Html::endTag('tr');
 
-                <?= Html::endTag('table'); ?>
+                echo Html::endTag('table');
+
+                ?>
+
+                <?= Html::beginForm(); ?>
+
+                <?= Html::submitButton('Move pawn', [
+                    'class' => 'btn btn-primary',
+                    'name' => 'pawn-button'
+
+                ]) ?>
+
+                <?= Html::endForm() ?>
+
+                <?php Pjax::end() ?>
 
                 <h1>
-                    <div class="label label-default" id="clockMy">
+                    <div class="label label-default">
                         <?= Countdown::widget([
-                            'datetime' => date('Y-m-d H:i:s O', time() + 600),
-                            'format' => '%M:%S',
+                            'id' => 'my',
+                            'datetime' => date('Y-m-d H:i:s O', time() + 0),
+                            'format' => '%M:%S'
                         ])
                         ?>
                     </div>
@@ -144,12 +163,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div class="form-group">
-                    <?php /* Html::button(Yii::t('app', 'Start'),
-                        ['class' => 'btn btn-success', 'id' => 'startButton']) */ ?>
 
-
-                    <?php
-                    Modal::begin([
+                    <?php Modal::begin([
                         'header' => '<h2 align="center">You lose!</h2>',
                         'toggleButton' => [
                             'label' => Yii::t('app', 'Resign'),
@@ -157,17 +172,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             'id' => 'resignButton'
                         ],
                     ]);
-
                     echo 'You lose';
-
+                    echo Html::button(Yii::t('app', 'Back'),
+                        ['class' => 'btn btn-primary']);
                     Modal::end();
                     ?>
 
                     <?= Html::button(Yii::t('app', 'Offer Draw'),
                         ['class' => 'btn btn-primary', 'id' => 'drawButton']) ?>
+
                 </div>
 
             </div>
         </div>
     </div>
 
+<?php //acceptance tests, jenkins, selenium, driver, config(WebDriver: url, browser(better firefox, chrome), Yii parts, config...
+        //fixture-data from tables, -f -fails(codeseption),
+        //consept build, run ) ?>

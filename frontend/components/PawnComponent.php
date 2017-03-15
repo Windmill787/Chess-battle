@@ -10,8 +10,10 @@ namespace frontend\components;
 
 class PawnComponent extends FigureComponent
 {
-    public function __construct($name, $image, $config = [])
+    public $name = 'pawn';
+
+    public function __construct($color, $number = null, $config = [])
     {
-        parent::__construct($name, $image, $config);
+        parent::__construct($color, $this->name, $number, $config);
     }
 }

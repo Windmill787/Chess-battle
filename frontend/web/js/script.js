@@ -1,27 +1,27 @@
 /**
  * Created by max on 19.02.17.
  */
-$('#enemy')
+$('#enemy, #my')
     .on('finish.countdown', function() {
     $(this).parent()
     .addClass('disabled')
     .html('Time is out!');
     });
 
-/*$('#resignButton')
-    .on('click' , function () {
-    .countdown('stop');
-});*/
+$('#resignButton').on('click', function () {
+    $('#enemy, #my').countdown('pause')
+});
 
 $('#drawButton').on('click', function () {
-    $('#clock').countdown('stop');
-    $('#clockMy').countdown('stop');
+    $('#enemy, #my').countdown('pause')
 });
 
 $('#enemyMoveButton').on('click', function () {
-    $('#clock').countdown('pause');
+    $('#enemy').countdown('pause');
+    $('#my').countdown('resume');
 });
 
 $('#myMoveButton').on('click', function () {
-    $('#clock').countdown('resume');
+    $('#my').countdown('pause');
+    $('#enemy').countdown('start');
 });

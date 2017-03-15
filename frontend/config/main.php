@@ -70,7 +70,8 @@ return [
                     ],
                 ],
             ],
-        ],
+        ]
+        /*,
         'pawn' => \frontend\components\FigureBuilderComponent::build('pawn',
             \frontend\components\PawnComponent::className()),
         'knight' => \frontend\components\FigureBuilderComponent::build('knight',
@@ -82,7 +83,7 @@ return [
         'king' => \frontend\components\FigureBuilderComponent::build('king',
             \frontend\components\KingComponent::className()),
         'queen' => \frontend\components\FigureBuilderComponent::build('queen',
-            \frontend\components\QueenComponent::className()),
+            \frontend\components\QueenComponent::className()),*/
     ],
     'params' => $params,
 ];
