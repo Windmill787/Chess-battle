@@ -8,21 +8,14 @@
 
 namespace frontend\components;
 
-use Yii;
-use yii\base\Component;
+use app\models\Figure;
 
 class FigureBuilderComponent
 {
-    /*public static function build($name, $class)
+    public static function build($color, $name, $number)
     {
-        $image = self::setImage($name);
-        $figure = new $class($name, $image);
+        $figure = Figure::findOne(['color' => $color,'name' => $name,'number' => $number]);
+        $pawn = new PawnComponent($color, $name, $number);
         return $figure;
     }
-
-    public static function setImage($name)
-    {
-        $image = "/figureImages/".$name.".svg";
-        return $image;
-    }*/
 }

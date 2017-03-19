@@ -10,21 +10,19 @@ namespace common\widgets;
 
 use yii\helpers\Html;
 use yii\bootstrap\Widget;
+use yii\widgets\Pjax;
 
-class ChessBoard extends Widget
+class Board extends Widget
 {
-    public $symbolLabel = [
-        '','a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'
-    ];
-
-    public function init()
+    public static function widget($object, $figure)
     {
+        Pjax::begin();
         echo Html::beginTag('table', [
             'class' => 'table-bordered'
         ]);
         echo Html::beginTag('tfoot');
         echo Html::beginTag('tr');
-        foreach($this->symbolLabel as $label) :
+        foreach ($object->symbolLabel as $label) :
 
             echo Html::beginTag('th', [
                 'style' => [
@@ -38,7 +36,7 @@ class ChessBoard extends Widget
         echo Html::endTag('tr');
         echo Html::endTag('tfoot');
 
-        for($row=8;$row>=1;$row--) {
+        for ($object->y = 8; $object->y >= 1; $object->y--) {
 
             echo Html::beginTag('tr');
 
@@ -48,11 +46,12 @@ class ChessBoard extends Widget
                     'vertical-align' => 'middle'
                 ]
             ]);
-            echo Html::encode($row);
+            echo Html::encode($object->y);
             echo Html::endTag('th');
 
-            for ($col = 1; $col <= 8; $col++) {
-                $total = $row + $col;
+            for ($object->x = 1; $object->x <= 8; $object->x++) {
+
+                $total = $object->y + $object->x;
                 if ($total % 2 == 0) {
 
                     echo Html::beginTag('td', [
@@ -62,9 +61,13 @@ class ChessBoard extends Widget
                         'align' => 'center',
                         'valign' => 'center'
                     ]);
-                    /*if ($row == $whitePawn->startPositionRow && $col == $whitePawn->startPositionCol) {
-                        echo Html::img($whitePawn->image);
-                    }*/
+                    foreach ($figure as $item) {
+                        if ($object->x == $item->currentPositionX && $object->y == $item->currentPositionY) {
+                            echo Html::img($item->image, [
+                                'id' => 'figure1'
+                            ]);
+                        }
+                    }
                     echo Html::endTag('td');
 
                 } else {
@@ -77,16 +80,37 @@ class ChessBoard extends Widget
                         'valign' => 'center'
                     ]);
 
-                    /*if ($row == $whitePawn->startPositionRow && $col == $whitePawn->startPositionCol) {
-                        echo Html::img($whitePawn->image);
-                    }*/
+                    foreach ($figure as $item) {
+                        if ($object->x == $item->currentPositionX && $object->y == $item->currentPositionY) {
+                            echo Html::img($item->image, [
+                                'id' => 'figure'
+                            ]);
+                        }
+                    }
 
                     echo Html::endTag('td');
+
                 }
             }
         }
         echo Html::endTag('tr');
 
         echo Html::endTag('table');
+        echo Html::beginForm();
+        echo Html::submitButton('Move pawn 1', [
+            'class' => 'btn btn-primary hidden',
+            'name' => 'pawn',
+            'id' => 'pawn1'
+        ]);
+        echo Html::submitButton('Move pawn 2', [
+            'class' => 'btn btn-primary hidden',
+            'name' => 'pawn2',
+            'id' => 'pawn2'
+        ]);
+        echo Html::endForm();
+
+        Pjax::end();
+
+
     }
 }

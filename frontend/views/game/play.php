@@ -8,12 +8,12 @@
 
 /* @var $this yii\web\View */
 /* @var $whitePawn \frontend\components\PawnComponent */
+/* @var $board \frontend\components\BoardComponent */
 
 use yii\helpers\Html;
 use russ666\widgets\Countdown;
 use yii\bootstrap\Modal;
-use common\widgets\ChessBoard;
-use yii\widgets\ActiveForm;
+use common\widgets\Board;
 use yii\widgets\Pjax;
 
 $this->title = Yii::t('app', 'Play');
@@ -34,100 +34,14 @@ $this->title = Yii::t('app', 'Play');
                         ?>
                     </div>
                 </h1>
-                <?php Pjax::begin() ?>
 
                 <?php
-                if (Yii::$app->request->post()) {
-                    $whitePawn->startPositionRow = $whitePawn->startPositionRow + 2;
-                }
-
-                $symbolLabel = [
-                    '','a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'
-                ];
-
-                echo Html::beginTag('table', [
-                    'class' => 'table-bordered'
-                ]);
-                echo Html::beginTag('tfoot');
-                echo Html::beginTag('tr');
-                foreach($symbolLabel as $label) :
-
-                    echo Html::beginTag('th', [
-                        'style' => [
-                            'text-align' => 'center',
-                            'vertical-align' => 'middle'
-                        ]
-                    ]);
-                    echo Html::encode($label);
-                    echo Html::endTag('th');
-                endforeach;
-                echo Html::endTag('tr');
-                echo Html::endTag('tfoot');
-
-                for($row=8;$row>=1;$row--) {
-
-                    echo Html::beginTag('tr');
-
-                    echo Html::beginTag('th', [
-                        'style' => [
-                            'text-align' => 'center',
-                            'vertical-align' => 'middle'
-                        ]
-                    ]);
-                    echo Html::encode($row);
-                    echo Html::endTag('th');
-
-                    for ($col = 1; $col <= 8; $col++) {
-                        $total = $row + $col;
-                        if ($total % 2 == 0) {
-
-                            echo Html::beginTag('td', [
-                                'height' => 50,
-                                'width' => 50,
-                                'bgcolor' => '#AF5200',
-                                'align' => 'center',
-                                'valign' => 'center'
-                            ]);
-                            if ($row == $whitePawn->startPositionRow && $col == $whitePawn->startPositionCol) {
-                                echo Html::img($whitePawn->image);
-                            }
-                            echo Html::endTag('td');
-
-                        } else {
-
-                            echo Html::beginTag('td', [
-                                'height' => 50,
-                                'width' => 50,
-                                'bgcolor' => '#FFFFFF',
-                                'align' => 'center',
-                                'valign' => 'center'
-                            ]);
-
-                            if ($row == $whitePawn->startPositionRow && $col == $whitePawn->startPositionCol) {
-                                echo Html::img($whitePawn->image);
-                            }
-
-                            echo Html::endTag('td');
-                        }
-                    }
-                }
-                echo Html::endTag('tr');
-
-                echo Html::endTag('table');
-
+                print_r($whitePawn)
                 ?>
 
-                <?= Html::beginForm(); ?>
-
-                <?= Html::submitButton('Move pawn', [
-                    'class' => 'btn btn-primary',
-                    'name' => 'pawn-button'
-
-                ]) ?>
-
-                <?= Html::endForm() ?>
-
-                <?php Pjax::end() ?>
+                <?= Board::widget($board, [
+                        $whitePawn, $whitePawn2
+                ]); ?>
 
                 <h1>
                     <div class="label label-default">

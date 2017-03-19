@@ -25,3 +25,12 @@ $('#myMoveButton').on('click', function () {
     $('#my').countdown('pause');
     $('#enemy').countdown('start');
 });
+
+$('#figure').on('click', function () {
+    $('#pawn1, #pawn2').removeClass('hidden');
+    $('#figure').css('border','2px solid #F0E68C').css('background-color','#F0E68C');
+});
+
+$('td').on('click', function () {
+    $('img.figure').css('border','0px').css('background-color','');
+});

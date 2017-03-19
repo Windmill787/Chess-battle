@@ -16,4 +16,15 @@ class PawnComponent extends FigureComponent
     {
         parent::__construct($color, $this->name, $number, $config);
     }
+
+    public function move()
+    {
+        $this->currentPositionX = $this->currentPositionX + $this->moveX;
+        $this->currentPositionY = $this->currentPositionY + $this->moveY;
+    }
+
+    public function firstMove() {
+        $this->currentPositionX = $this->currentPositionX + $this->moveX;
+        $this->currentPositionY = $this->currentPositionY + $this->moveY + 1;
+    }
 }

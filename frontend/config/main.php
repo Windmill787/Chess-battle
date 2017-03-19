@@ -70,10 +70,15 @@ return [
                     ],
                 ],
             ],
-        ]
-        /*,
-        'pawn' => \frontend\components\FigureBuilderComponent::build('pawn',
-            \frontend\components\PawnComponent::className()),
+        ],
+        'pawn' => [
+            'class' => 'frontend\components\PawnComponent',
+            'color' => 'white',
+            'number' => 1
+        ],
+        /*'Figure' => 'frontend\components\FigureComponent',
+        'Pawn' => 'frontend\components\PawnComponent',*/
+        /*
         'knight' => \frontend\components\FigureBuilderComponent::build('knight',
             \frontend\components\KnightComponent::className()),
         'bishop' => \frontend\components\FigureBuilderComponent::build('bishop',

@@ -11,6 +11,7 @@ use Yii;
  * @property string $color
  * @property string $name
  * @property string $number
+ * @property string $start_position
  *
  * @property PlayPosition[] $playPositions
  * @property PlayPosition[] $playPositions0
