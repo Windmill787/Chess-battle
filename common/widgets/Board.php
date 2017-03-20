@@ -14,15 +14,22 @@ use yii\widgets\Pjax;
 
 class Board extends Widget
 {
-    public static function widget($object, $figure)
+    public static function widget($board, $figure)
     {
         Pjax::begin();
+
+        foreach ($figure as $item) {
+            if (isset($_POST[$item->color.$item->name.$item->number])) {
+                $item->move();
+            }
+        }
+
         echo Html::beginTag('table', [
             'class' => 'table-bordered'
         ]);
         echo Html::beginTag('tfoot');
         echo Html::beginTag('tr');
-        foreach ($object->symbolLabel as $label) :
+        foreach ($board->symbolLabel as $label) :
 
             echo Html::beginTag('th', [
                 'style' => [
@@ -36,7 +43,7 @@ class Board extends Widget
         echo Html::endTag('tr');
         echo Html::endTag('tfoot');
 
-        for ($object->y = 8; $object->y >= 1; $object->y--) {
+        for ($board->y = 8; $board->y >= 1; $board->y--) {
 
             echo Html::beginTag('tr');
 
@@ -46,12 +53,12 @@ class Board extends Widget
                     'vertical-align' => 'middle'
                 ]
             ]);
-            echo Html::encode($object->y);
+            echo Html::encode($board->y);
             echo Html::endTag('th');
 
-            for ($object->x = 1; $object->x <= 8; $object->x++) {
+            for ($board->x = 1; $board->x <= 8; $board->x++) {
 
-                $total = $object->y + $object->x;
+                $total = $board->y + $board->x;
                 if ($total % 2 == 0) {
 
                     echo Html::beginTag('td', [
@@ -62,9 +69,10 @@ class Board extends Widget
                         'valign' => 'center'
                     ]);
                     foreach ($figure as $item) {
-                        if ($object->x == $item->currentPositionX && $object->y == $item->currentPositionY) {
+                        if ($board->x == $item->currentPositionX && $board->y == $item->currentPositionY) {
                             echo Html::img($item->image, [
-                                'id' => 'figure1'
+                                'id' => 'figure'.$item->id,
+                                'onclick' => "light(".$item->name.', '.$item->id.")"
                             ]);
                         }
                     }
@@ -81,9 +89,10 @@ class Board extends Widget
                     ]);
 
                     foreach ($figure as $item) {
-                        if ($object->x == $item->currentPositionX && $object->y == $item->currentPositionY) {
+                        if ($board->x == $item->currentPositionX && $board->y == $item->currentPositionY) {
                             echo Html::img($item->image, [
-                                'id' => 'figure'
+                                'id' => 'figure'.$item->id,
+                                'onclick' => "light(".$item->name.', '.$item->id.")"
                             ]);
                         }
                     }
@@ -96,17 +105,16 @@ class Board extends Widget
         echo Html::endTag('tr');
 
         echo Html::endTag('table');
+
         echo Html::beginForm();
-        echo Html::submitButton('Move pawn 1', [
-            'class' => 'btn btn-primary hidden',
-            'name' => 'pawn',
-            'id' => 'pawn1'
+        foreach ($figure as $item) {
+            echo Html::submitButton('Move '.$item->color.' '.$item->name.' '.$item->number.' 
+            (X -> '.$item->moveX.' |Y -> '.$item->moveY.')', [
+                'class' => 'btn btn-primary hidden move',
+                'name' => $item->color.$item->name.$item->number,
+                'id' => $item->name.$item->id
         ]);
-        echo Html::submitButton('Move pawn 2', [
-            'class' => 'btn btn-primary hidden',
-            'name' => 'pawn2',
-            'id' => 'pawn2'
-        ]);
+        }
         echo Html::endForm();
 
         Pjax::end();

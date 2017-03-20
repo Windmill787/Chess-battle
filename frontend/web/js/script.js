@@ -26,11 +26,21 @@ $('#myMoveButton').on('click', function () {
     $('#enemy').countdown('start');
 });
 
-$('#figure').on('click', function () {
-    $('#pawn1, #pawn2').removeClass('hidden');
-    $('#figure').css('border','2px solid #F0E68C').css('background-color','#F0E68C');
-});
+var pawn = 'pawn';
+var knight = 'knight';
+var bishop = 'bishop';
+var rook = 'rook';
+var queen = 'queen';
+var king = 'king';
 
-$('td').on('click', function () {
-    $('img.figure').css('border','0px').css('background-color','');
+function light (figure, id) {
+    $('img').css('border','none').css('background-color','inherit');
+    $('#figure' + id).css('border','2px solid #F0E68C').css('background-color','#F0E68C');
+    $('.move').addClass('hidden');
+    $('#' + figure + id).removeClass('hidden');
+}
+
+$('th').on('click', function () {
+    $('img').css('border','none').css('background-color','inherit');
+    $('.move').addClass('hidden');
 });

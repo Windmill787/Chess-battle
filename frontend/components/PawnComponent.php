@@ -19,12 +19,19 @@ class PawnComponent extends FigureComponent
 
     public function move()
     {
-        $this->currentPositionX = $this->currentPositionX + $this->moveX;
-        $this->currentPositionY = $this->currentPositionY + $this->moveY;
+        if ($this->currentPositionX && $this->currentPositionY < 8) {
+            $this->currentPositionX = $this->currentPositionX + $this->moveX;
+            $this->currentPositionY = $this->currentPositionY + $this->moveY;
+            parent::move();
+        } else {
+            $this->currentPositionX = $this->currentPositionX + 0;
+            $this->currentPositionY = $this->currentPositionY + 0;
+        }
     }
 
     public function firstMove() {
         $this->currentPositionX = $this->currentPositionX + $this->moveX;
         $this->currentPositionY = $this->currentPositionY + $this->moveY + 1;
+        parent::move();
     }
 }

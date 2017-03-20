@@ -11,12 +11,14 @@ namespace frontend\components;
 use app\models\Chessboard;
 use app\models\Figure;
 use app\models\Move;
+use app\models\PlayPositions;
 use app\models\StartPosition;
 use frontend\interfaces\FigureInterface;
 use yii\base\Component;
 
 class FigureComponent extends Component implements FigureInterface
 {
+    public $id;
     public $color;
     public $name;
     public $image;
@@ -36,21 +38,28 @@ class FigureComponent extends Component implements FigureInterface
     public function __construct($color, $name, $number = null, $config = [])
     {
         $figure = Figure::findOne(['color' => $color,'name' => $name,'number' => $number]);
+        $this->id = $figure->id;
         $this->name = $figure->name;
         $this->color = $figure->color;
         $this->number = $figure->number;
         $this->setStartPositions($figure->start_position);
-        $this->setMoves($figure->id);
-        $this->currentPositionX = $this->startPositionX;
-        $this->currentPositionY = $this->startPositionY;
+        $this->setMoves($this->id);
+        $this->getCurrentPositions($this->id);
         $this->image = $this->setImage($color, $name);
         parent::__construct($config);
     }
 
     public function setStartPositions($id) {
-        $startPosition = Chessboard::findOne(['id' => $id]);
-        $this->startPositionX = $startPosition->x;
-        $this->startPositionY = $startPosition->y;
+        $position = Chessboard::findOne(['id' => $id]);
+        $this->startPositionX = $position->x;
+        $this->startPositionY = $position->y;
+    }
+
+    public function getCurrentPositions($figure_id) {
+        $position = PlayPositions::findOne(['figure_id' => $figure_id]);
+        $this->currentPositionX = $position->current_x;
+        $this->currentPositionY = $position->current_y;
+
     }
 
     public function setMoves($figure_id) {
@@ -60,7 +69,11 @@ class FigureComponent extends Component implements FigureInterface
     }
 
     public function move() {
-
+        $position = PlayPositions::findOne(['figure_id' => $this->id]);
+        $position->figure_id = $this->id;
+        $position->current_x = $this->currentPositionX;
+        $position->current_y = $this->currentPositionY;
+        $position->save();
     }
 
     public function getMoves() {

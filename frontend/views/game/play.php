@@ -40,7 +40,7 @@ $this->title = Yii::t('app', 'Play');
                 ?>
 
                 <?= Board::widget($board, [
-                        $whitePawn, $whitePawn2
+                        $whitePawn, $whitePawn2, $whiteKnight1
                 ]); ?>
 
                 <h1>
@@ -94,6 +94,15 @@ $this->title = Yii::t('app', 'Play');
 
                     <?= Html::button(Yii::t('app', 'Offer Draw'),
                         ['class' => 'btn btn-primary', 'id' => 'drawButton']) ?>
+
+                    <?php
+                    echo Html::beginForm();
+                    echo Html::submitButton('RollBack', [
+                        'class' => 'btn btn-primary',
+                        'name' => 'back'
+                    ]);
+                    echo Html::endForm();
+                    ?>
 
                 </div>
 
