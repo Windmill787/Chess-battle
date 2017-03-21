@@ -11,5 +11,10 @@ namespace frontend\components;
 
 class BishopComponent extends FigureComponent
 {
+    public $name = 'bishop';
 
+    public function __construct($color, $number = null, $config = [])
+    {
+        parent::__construct($color, $this->name, $number, $config);
+    }
 }

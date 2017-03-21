@@ -29,6 +29,7 @@ class FigureComponent extends Component implements FigureInterface
     public $currentPositionY;
     public $moveX;
     public $moveY;
+    public $resultMoves;
 
     public function setImage($color, $name) {
         $image = "/figureImages/".$color.ucfirst($name).".svg";
@@ -43,7 +44,7 @@ class FigureComponent extends Component implements FigureInterface
         $this->color = $figure->color;
         $this->number = $figure->number;
         $this->setStartPositions($figure->start_position);
-        $this->setMoves($this->id);
+        $this->setMoves();
         $this->getCurrentPositions($this->id);
         $this->image = $this->setImage($color, $name);
         parent::__construct($config);
@@ -62,10 +63,8 @@ class FigureComponent extends Component implements FigureInterface
 
     }
 
-    public function setMoves($figure_id) {
-        $move = Move::findOne(['figure_id' => $figure_id]);
-        $this->moveX = $move->move_x;
-        $this->moveY = $move->move_y;
+    public function setMoves() {
+
     }
 
     public function move() {

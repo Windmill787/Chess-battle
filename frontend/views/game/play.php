@@ -35,13 +35,7 @@ $this->title = Yii::t('app', 'Play');
                     </div>
                 </h1>
 
-                <?php
-                print_r($whitePawn)
-                ?>
-
-                <?= Board::widget($board, [
-                        $whitePawn, $whitePawn2, $whiteKnight1
-                ]); ?>
+                <?= Board::widget($board, $figures); ?>
 
                 <h1>
                     <div class="label label-default">

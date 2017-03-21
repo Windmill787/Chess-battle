@@ -19,7 +19,7 @@ class KnightComponent extends FigureComponent
 
     public function move()
     {
-        if ($this->currentPositionX && $this->currentPositionY < 7) {
+        if ($this->currentPositionX < 8 && $this->currentPositionY < 8) {
             $this->currentPositionX = $this->currentPositionX + $this->moveX;
             $this->currentPositionY = $this->currentPositionY + $this->moveY;
             parent::move();
@@ -27,5 +27,11 @@ class KnightComponent extends FigureComponent
             $this->currentPositionX = $this->currentPositionX + 0;
             $this->currentPositionY = $this->currentPositionY + 0;
         }
+    }
+
+    public function setMoves()
+    {
+        $this->moveX = 1;
+        $this->moveY = 2;
     }
 }

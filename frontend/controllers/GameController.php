@@ -54,51 +54,22 @@ class GameController extends Controller
     {
         $board = new BoardComponent();
 
-        /*Yii::$container->setSingleton('frontend\components\PawnComponent', [], [
-            ['white'],
-            ['number' => '1']
-        ]);
+        $figures = FigureBuilderComponent::build();
 
-        $whitePawn1 = Yii::$container->get('frontend\components\PawnComponent');
-        $figure = Yii::$container->get('figure');
-        */
-
-        $whitePawn1 = new PawnComponent('white', 1);
-        $whitePawn2 = new PawnComponent('white', 2);
-        $whiteKnight1 = new KnightComponent('white', 1);
+        foreach ($figures as $item) {
+            if (isset($_POST[$item->color.$item->name.$item->number])) {
+                $item->move();
+            }
+        }
 
         if (isset($_POST['back'])) {
-            $position = PlayPositions::findOne(['figure_id' => $whiteKnight1->id]);
-            $position->figure_id = $whiteKnight1->id;
-            $position->current_x = $whiteKnight1->startPositionX;
-            $position->current_y = $whiteKnight1->startPositionY;
-
-            $position = PlayPositions::findOne(['figure_id' => $whitePawn1->id]);
-            $position->figure_id = $whitePawn1->id;
-            $position->current_x = $whitePawn1->startPositionX;
-            $position->current_y = $whitePawn1->startPositionY;
-
-            $position = PlayPositions::findOne(['figure_id' => $whitePawn2->id]);
-            $position->figure_id = $whitePawn2->id;
-            $position->current_x = $whitePawn2->startPositionX;
-            $position->current_y = $whitePawn2->startPositionY;
-            $position->save();
+            FigureBuilderComponent::back($figures);
             $this->refresh();
         }
 
-        /*if (Yii::$app->request->post('pawn')) {
-            $whitePawn1->move();
-        }
-
-        if (Yii::$app->request->post('pawn2')) {
-            $whitePawn1->firstMove();
-        }*/
-
         return $this->render('play', [
             'board' => $board,
-            'whitePawn' => $whitePawn1,
-            'whitePawn2' => $whitePawn2,
-            'whiteKnight1' => $whiteKnight1
+            'figures' => $figures
 
         ]);
     }

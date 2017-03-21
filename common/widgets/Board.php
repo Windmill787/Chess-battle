@@ -18,12 +18,6 @@ class Board extends Widget
     {
         Pjax::begin();
 
-        foreach ($figure as $item) {
-            if (isset($_POST[$item->color.$item->name.$item->number])) {
-                $item->move();
-            }
-        }
-
         echo Html::beginTag('table', [
             'class' => 'table-bordered'
         ]);
@@ -108,8 +102,7 @@ class Board extends Widget
 
         echo Html::beginForm();
         foreach ($figure as $item) {
-            echo Html::submitButton('Move '.$item->color.' '.$item->name.' '.$item->number.' 
-            (X -> '.$item->moveX.' |Y -> '.$item->moveY.')', [
+            echo Html::submitButton('Move', [
                 'class' => 'btn btn-primary hidden move',
                 'name' => $item->color.$item->name.$item->number,
                 'id' => $item->name.$item->id
@@ -118,7 +111,5 @@ class Board extends Widget
         echo Html::endForm();
 
         Pjax::end();
-
-
     }
 }
