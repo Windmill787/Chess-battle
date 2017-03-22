@@ -22,8 +22,10 @@ class RookComponent extends FigureComponent
 
     public function move()
     {
-        $this->currentPositionX = $this->currentPositionX + $this->moveX;
-        $this->currentPositionY = $this->currentPositionY + $this->moveY;
-        parent::move();
+        if ($this->currentPositionX < 8 && $this->currentPositionY < 8) {
+            $this->currentPositionX = $this->currentPositionX + $this->moveX;
+            $this->currentPositionY = $this->currentPositionY + $this->moveY;
+            parent::move();
+        }
     }
 }

@@ -24,9 +24,16 @@ class PawnComponent extends FigureComponent
     public function move()
     {
         if ($this->currentPositionX == $this->startPositionX && $this->currentPositionY == $this->startPositionY) {
-            $this->currentPositionX = $this->currentPositionX + $this->moveX;
-            $this->currentPositionY = $this->currentPositionY + $this->moveY + 1;
-            parent::move();
+            $square = PlayPositions::findOne([
+                'current_x' => $this->currentPositionX + $this->moveX,
+                'current_y' => $this->currentPositionY + $this->moveY + 1
+            ]);
+
+            if (empty($square->figure_id)) {
+                $this->currentPositionX = $this->currentPositionX + $this->moveX;
+                $this->currentPositionY = $this->currentPositionY + $this->moveY + 1;
+                parent::move();
+            }
         } else if ($this->currentPositionX && $this->currentPositionY < 8) {
             $this->currentPositionX = $this->currentPositionX + $this->moveX;
             $this->currentPositionY = $this->currentPositionY + $this->moveY;
