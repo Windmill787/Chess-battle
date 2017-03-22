@@ -12,4 +12,6 @@ namespace frontend\interfaces;
 interface FigureInterface
 {
     public function move();
+
+    public function attack();
 }

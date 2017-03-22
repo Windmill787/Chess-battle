@@ -8,8 +8,6 @@
 
 namespace frontend\components;
 
-use app\models\PlayPositions;
-
 class KnightComponent extends FigureComponent
 {
     public $name = 'knight';
@@ -21,13 +19,24 @@ class KnightComponent extends FigureComponent
 
     public function move()
     {
-        if ($this->currentPositionX < 8 && $this->currentPositionY < 8) {
-            $this->currentPositionX = $this->currentPositionX + $this->moveX;
-            $this->currentPositionY = $this->currentPositionY + $this->moveY;
-            parent::move();
-        } else {
-            $this->currentPositionX = $this->currentPositionX + 0;
-            $this->currentPositionY = $this->currentPositionY + 0;
+        if ($this->color == 'white') {
+            if ($this->currentPositionX < 8 && $this->currentPositionY < 8) {
+                $this->currentPositionX = $this->currentPositionX + $this->moveX;
+                $this->currentPositionY = $this->currentPositionY + $this->moveY;
+                parent::move();
+            } else {
+                $this->currentPositionX = $this->currentPositionX + 0;
+                $this->currentPositionY = $this->currentPositionY + 0;
+            }
+        } else if ($this->color == 'black') {
+            if ($this->currentPositionX > 1 && $this->currentPositionY > 1) {
+                $this->currentPositionX = $this->currentPositionX - $this->moveX;
+                $this->currentPositionY = $this->currentPositionY - $this->moveY;
+                parent::move();
+            } else {
+                $this->currentPositionX = $this->currentPositionX - 0;
+                $this->currentPositionY = $this->currentPositionY - 0;
+            }
         }
     }
 

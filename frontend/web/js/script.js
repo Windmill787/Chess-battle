@@ -37,7 +37,9 @@ function light (figure, id) {
     $('img').css('border','none').css('background-color','inherit');
     $('#figure' + id).css('border','2px solid #F0E68C').css('background-color','#F0E68C');
     $('.move').addClass('hidden');
-    $('#' + figure + id).removeClass('hidden');
+    $('#move' + figure + id).removeClass('hidden');
+    $('#firstMove' + figure + id).removeClass('hidden');
+    $('#attack' + figure + id).removeClass('hidden');
 }
 
 $('th').on('click', function () {

@@ -29,7 +29,8 @@ class FigureComponent extends Component implements FigureInterface
     public $currentPositionY;
     public $moveX;
     public $moveY;
-    public $resultMoves;
+    public $attackX;
+    public $attackY;
 
     public function setImage($color, $name) {
         $image = "/figureImages/".$color.ucfirst($name).".svg";
@@ -73,6 +74,11 @@ class FigureComponent extends Component implements FigureInterface
         $position->current_x = $this->currentPositionX;
         $position->current_y = $this->currentPositionY;
         $position->save();
+    }
+
+    public function attack()
+    {
+
     }
 
     public function getMoves() {

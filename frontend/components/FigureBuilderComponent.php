@@ -31,6 +31,23 @@ class FigureBuilderComponent
             $whiteRook2 = new RookComponent('white', 2),
             $whiteQueen = new QueenComponent('white'),
             $whiteKing = new KingComponent('white'),
+
+            $blackPawn1 = new PawnComponent('black', 1),
+            $blackPawn2 = new PawnComponent('black', 2),
+            $blackPawn3 = new PawnComponent('black', 3),
+            $blackPawn4 = new PawnComponent('black', 4),
+            $blackPawn5 = new PawnComponent('black', 5),
+            $blackPawn6 = new PawnComponent('black', 6),
+            $blackPawn7 = new PawnComponent('black', 7),
+            $blackPawn8 = new PawnComponent('black', 8),
+            $blackKnight1 = new KnightComponent('black', 1),
+            $blackKnight2 = new KnightComponent('black', 2),
+            $blackBishop1 = new BishopComponent('black', 1),
+            $blackBishop2 = new BishopComponent('black', 2),
+            $blackRook1 = new RookComponent('black', 1),
+            $blackRook2 = new RookComponent('black', 2),
+            $blackQueen = new QueenComponent('black'),
+            $blackKing = new KingComponent('black'),
         ];
     }
 

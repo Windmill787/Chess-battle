@@ -104,10 +104,27 @@ class Board extends Widget
         foreach ($figure as $item) {
             echo Html::submitButton('Move', [
                 'class' => 'btn btn-primary hidden move',
-                'name' => $item->color.$item->name.$item->number,
-                'id' => $item->name.$item->id
-        ]);
+                'name' => 'move' . $item->color . $item->name . $item->number,
+                'id' => 'move' . $item->name . $item->id
+            ]);
+
+            if ($item->name == 'pawn' && $item->currentPositionY == $item->startPositionY) {
+                echo Html::submitButton('Move +2', [
+                    'class' => 'btn btn-primary hidden move',
+                    'name' => 'firstMove' . $item->color . $item->name . $item->number,
+                    'id' => 'firstMove' . $item->name . $item->id
+                ]);
+            }
         }
+
+        foreach ($figure as $item) {
+            echo Html::submitButton('Attack', [
+                'class' => 'btn btn-danger hidden move',
+                'name' => 'attack' . $item->color . $item->name . $item->number,
+                'id' => 'attack' . $item->name . $item->id
+            ]);
+        }
+
         echo Html::endForm();
 
         Pjax::end();

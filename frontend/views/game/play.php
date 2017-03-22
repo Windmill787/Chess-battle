@@ -14,7 +14,7 @@ use yii\helpers\Html;
 use russ666\widgets\Countdown;
 use yii\bootstrap\Modal;
 use common\widgets\Board;
-use yii\widgets\Pjax;
+use frontend\components\PawnComponent;
 
 $this->title = Yii::t('app', 'Play');
 //$this->params['breadcrumbs'][] = $this->title;

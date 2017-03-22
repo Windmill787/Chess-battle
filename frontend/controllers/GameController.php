@@ -57,16 +57,55 @@ class GameController extends Controller
         $figures = FigureBuilderComponent::build();
 
         foreach ($figures as $item) {
-            if (isset($_POST[$item->color.$item->name.$item->number])) {
-                $square = PlayPositions::findOne([
-                    'current_x' => $item->currentPositionX + $item->moveX,
-                    'current_y' => $item->currentPositionY + $item->moveY
-                ]);
-
+            if (isset($_POST['move'.$item->color.$item->name.$item->number])) {
+                if ($item->color == 'white') {
+                    $square = PlayPositions::findOne([
+                        'current_x' => $item->currentPositionX + $item->moveX,
+                        'current_y' => $item->currentPositionY + $item->moveY
+                    ]);
+                } else if ($item->color == 'black') {
+                    $square = PlayPositions::findOne([
+                        'current_x' => $item->currentPositionX - $item->moveX,
+                        'current_y' => $item->currentPositionY - $item->moveY
+                    ]);
+                }
                 if (empty($square->figure_id)) {
                     $item->move();
                 }
+            }
 
+            if (isset($_POST['firstMove'.$item->color.$item->name.$item->number])) {
+                if ($item->color == 'white') {
+                    $square = PlayPositions::findOne([
+                        'current_x' => $item->currentPositionX + $item->moveX,
+                        'current_y' => $item->currentPositionY + $item->moveY
+                    ]);
+                } else if ($item->color == 'black') {
+                    $square = PlayPositions::findOne([
+                        'current_x' => $item->currentPositionX - $item->moveX,
+                        'current_y' => $item->currentPositionY - $item->moveY
+                    ]);
+                }
+                if (empty($square->figure_id)) {
+                    $item->firstMove();
+                }
+            }
+
+            if (isset($_POST['attack'.$item->color.$item->name.$item->number])) {
+                if ($item->color == 'white') {
+                    $square = PlayPositions::findOne([
+                        'current_x' => $item->currentPositionX + $item->attackX,
+                        'current_y' => $item->currentPositionY + $item->attackY
+                    ]);
+                } else if ($item->color == 'black') {
+                    $square = PlayPositions::findOne([
+                        'current_x' => $item->currentPositionX - $item->attackX,
+                        'current_y' => $item->currentPositionY - $item->attackY
+                    ]);
+                }
+                if (empty($square->figure_id) == false) {
+                    $item->attack();
+                }
             }
         }
 
