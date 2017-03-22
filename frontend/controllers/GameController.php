@@ -58,7 +58,15 @@ class GameController extends Controller
 
         foreach ($figures as $item) {
             if (isset($_POST[$item->color.$item->name.$item->number])) {
-                $item->move();
+                $square = PlayPositions::findOne([
+                    'current_x' => $item->currentPositionX + $item->moveX,
+                    'current_y' => $item->currentPositionY + $item->moveY
+                ]);
+
+                if (empty($square->figure_id)) {
+                    $item->move();
+                }
+
             }
         }
 

@@ -8,6 +8,8 @@
 
 namespace frontend\components;
 
+use app\models\PlayPositions;
+
 class KnightComponent extends FigureComponent
 {
     public $name = 'knight';
