@@ -78,7 +78,15 @@ class FigureComponent extends Component implements FigureInterface
 
     public function attack()
     {
-
+        if ($this->color == 'white') {
+            $this->currentPositionX = $this->currentPositionX + $this->attackX;
+            $this->currentPositionY = $this->currentPositionY + $this->attackY;
+            $this->move();
+        } else if ($this->color == 'black') {
+            $this->currentPositionX = $this->currentPositionX - $this->attackX;
+            $this->currentPositionY = $this->currentPositionY - $this->attackY;
+            $this->move();
+        }
     }
 
     public function getMoves() {

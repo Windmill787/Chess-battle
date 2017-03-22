@@ -17,4 +17,8 @@ class KingComponent extends FigureComponent
     {
         parent::__construct($color, $this->name, $number, $config);
     }
+
+    public function castling() {
+
+    }
 }
