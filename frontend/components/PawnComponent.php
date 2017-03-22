@@ -41,15 +41,6 @@ class PawnComponent extends FigureComponent
 
     public function attack()
     {
-        if ($this->color == 'white') {
-            $this->currentPositionX = $this->currentPositionX + $this->attackX;
-            $this->currentPositionY = $this->currentPositionY + $this->attackY;
-            parent::move();
-        } else if ($this->color == 'black') {
-            $this->currentPositionX = $this->currentPositionX - $this->attackX;
-            $this->currentPositionY = $this->currentPositionY - $this->attackY;
-            parent::move();
-        }
     }
 
     public function setMoves() {

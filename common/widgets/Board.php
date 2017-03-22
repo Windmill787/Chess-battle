@@ -11,6 +11,7 @@ namespace common\widgets;
 use yii\helpers\Html;
 use yii\bootstrap\Widget;
 use yii\widgets\Pjax;
+use app\models\PlayPositions;
 
 class Board extends Widget
 {
@@ -102,18 +103,51 @@ class Board extends Widget
 
         echo Html::beginForm();
         foreach ($figure as $item) {
-            echo Html::submitButton('Move', [
-                'class' => 'btn btn-primary hidden move',
-                'name' => 'move' . $item->color . $item->name . $item->number,
-                'id' => 'move' . $item->name . $item->id
+
+            if ($item->color == 'white') {
+                $square = PlayPositions::findOne([
+                    'current_x' => $item->currentPositionX + $item->moveX,
+                    'current_y' => $item->currentPositionY + $item->moveY
+                ]);
+
+                if (empty($square->figure_id)) {
+                    echo Html::submitButton('Move', [
+                        'class' => 'btn btn-primary hidden move',
+                        'name' => 'move' . $item->color . $item->name . $item->number,
+                        'id' => 'move' . $item->name . $item->id
+                    ]);
+                }
+            }
+
+            if ($item->color == 'black') {
+                $square = PlayPositions::findOne([
+                    'current_x' => $item->currentPositionX - $item->moveX,
+                    'current_y' => $item->currentPositionY - $item->moveY
+                ]);
+
+                if (empty($square->figure_id)) {
+                    echo Html::submitButton('Move', [
+                        'class' => 'btn btn-primary hidden move',
+                        'name' => 'move' . $item->color . $item->name . $item->number,
+                        'id' => 'move' . $item->name . $item->id
+                    ]);
+                }
+            }
+
+            $square = PlayPositions::findOne([
+                'current_x' => $item->currentPositionX + $item->moveX,
+                'current_y' => $item->currentPositionY + $item->moveY + 1
             ]);
 
-            if ($item->name == 'pawn' && $item->currentPositionY == $item->startPositionY) {
-                echo Html::submitButton('Move +2', [
-                    'class' => 'btn btn-primary hidden move',
-                    'name' => 'firstMove' . $item->color . $item->name . $item->number,
-                    'id' => 'firstMove' . $item->name . $item->id
-                ]);
+            if (empty($square->figure_id)) {
+                if ($item->name == 'pawn' && $item->currentPositionY == $item->startPositionY) {
+
+                    echo Html::submitButton('Move +2', [
+                        'class' => 'btn btn-primary hidden move',
+                        'name' => 'firstMove' . $item->color . $item->name . $item->number,
+                        'id' => 'firstMove' . $item->name . $item->id
+                    ]);
+                }
             }
         }
 
