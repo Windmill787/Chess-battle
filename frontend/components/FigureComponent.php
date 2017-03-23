@@ -64,6 +64,16 @@ class FigureComponent extends Component implements FigureInterface
         $this->currentPositionY = $position->current_y;
     }
 
+    public function setMoves() {
+
+    }
+
+    public function setAttacks()
+    {
+        $this->attackX = $this->moveX;
+        $this->attackY = $this->moveY;
+    }
+
     public function savePosition() {
         $position = PlayPositions::findOne(['figure_id' => $this->id]);
         $position->figure_id = $this->id;
@@ -72,23 +82,16 @@ class FigureComponent extends Component implements FigureInterface
         $position->save();
     }
 
-    public function setMoves() {
-
-    }
-
-    public function setAttacks() {
-
-    }
     public function attack()
     {
         if ($this->color == 'white') {
             $this->currentPositionX = $this->currentPositionX + $this->attackX;
             $this->currentPositionY = $this->currentPositionY + $this->attackY;
-            $this->move();
+            $this->savePosition();
         } else if ($this->color == 'black') {
             $this->currentPositionX = $this->currentPositionX - $this->attackX;
             $this->currentPositionY = $this->currentPositionY - $this->attackY;
-            $this->move();
+            $this->savePosition();
         }
     }
 
@@ -96,9 +99,51 @@ class FigureComponent extends Component implements FigureInterface
         if ($this->color == 'white') {
             $this->currentPositionX = $this->currentPositionX + $this->moveX;
             $this->currentPositionY = $this->currentPositionY + $this->moveY;
+            $this->savePosition();
         } else if ($this->color == 'black') {
             $this->currentPositionX = $this->currentPositionX - $this->moveX;
             $this->currentPositionY = $this->currentPositionY - $this->moveY;
+            $this->savePosition();
         }
     }
+
+    public function desiredAttackPosition() {
+        if ($this->color == 'white') {
+            $desiredPosition = PlayPositions::findOne([
+                'current_x' => $this->currentPositionX + $this->attackX,
+                'current_y' => $this->currentPositionY + $this->attackY
+            ]);
+            return $desiredPosition;
+        } else if ($this->color == 'black') {
+            $desiredPosition = PlayPositions::findOne([
+                'current_x' => $this->currentPositionX - $this->attackX,
+                'current_y' => $this->currentPositionY - $this->attackY
+            ]);
+            return $desiredPosition;
+        }
+    }
+
+    public function desiredMovePosition() {
+        if ($this->color == 'white') {
+            $desiredPosition = PlayPositions::findOne([
+                'current_x' => $this->currentPositionX + $this->moveX,
+                'current_y' => $this->currentPositionY + $this->moveY
+            ]);
+            return $desiredPosition;
+        } else if ($this->color == 'black') {
+            $desiredPosition = PlayPositions::findOne([
+                'current_x' => $this->currentPositionX - $this->moveX,
+                'current_y' => $this->currentPositionY - $this->moveY
+            ]);
+            return $desiredPosition;
+        }
+    }
+
+    public function changeStatus($desiredPosition) {
+        $figure = Figure::findOne(['id' => $desiredPosition->figure_id]);
+        $figure->status = 'killed';
+        $figure->save();
+    }
+
+
 }

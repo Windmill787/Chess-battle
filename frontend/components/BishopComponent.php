@@ -8,33 +8,34 @@
 
 namespace frontend\components;
 
-use app\models\PlayPositions;
-
 class BishopComponent extends FigureComponent
 {
     public $name = 'bishop';
-    public $moveX = 1;
-    public $moveY = 1;
 
     public function __construct($color, $number = null, $config = [])
     {
         parent::__construct($color, $this->name, $number, $config);
     }
 
-    public function move()
-    {
-        if ($this->color == 'white') {
-            if ($this->currentPositionX < 8 && $this->currentPositionY < 8) {
-                $this->currentPositionX = $this->currentPositionX + $this->moveX * 3;
-                $this->currentPositionY = $this->currentPositionY + $this->moveY * 3;
-                $this->savePosition();
-            }
-        } else if ($this->color == 'black') {
-            if ($this->currentPositionX > 1 && $this->currentPositionY > 1) {
-                $this->currentPositionX = $this->currentPositionX - $this->moveX / 3;
-                $this->currentPositionY = $this->currentPositionY - $this->moveY / 3;
-                $this->savePosition();
-            }
+    public function move() {
+        $desiredPosition = $this->desiredMovePosition();
+
+        if (empty($desiredPosition->figure_id)) {
+            parent::move();
         }
+    }
+
+    public function attack() {
+        $desiredPosition = $this->desiredAttackPosition();
+
+        if (empty($desiredPosition->figure_id) == false) {
+            parent::changeStatus($desiredPosition);
+            parent::attack();
+        }
+    }
+
+    public function setMoves() {
+        $this->moveX = 1;
+        $this->moveY = 1;
     }
 }

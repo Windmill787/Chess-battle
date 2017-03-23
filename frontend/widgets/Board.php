@@ -6,7 +6,7 @@
  * Time: 18:40
  */
 
-namespace common\widgets;
+namespace frontend\widgets;
 
 use yii\helpers\Html;
 use yii\bootstrap\Widget;
@@ -62,12 +62,12 @@ class Board extends Widget
                         'align' => 'center',
                         'valign' => 'center'
                     ]);
-                    foreach ($figures as $item) {
-                        if ($board->x == $item->currentPositionX && $board->y == $item->currentPositionY) {
-                            if ($item->status != 'killed') {
-                                echo Html::img($item->image, [
-                                    'id' => 'figure'.$item->id,
-                                    'onclick' => "light(".$item->name.', '.$item->id.")"
+                    foreach ($figures as $figure) {
+                        if ($board->x == $figure->currentPositionX && $board->y == $figure->currentPositionY) {
+                            if ($figure->status != 'killed') {
+                                echo Html::img($figure->image, [
+                                    'id' => 'figure'.$figure->id,
+                                    'onclick' => "light(".$figure->name.', '.$figure->id.")"
                                 ]);
                             }
                         }
@@ -84,17 +84,16 @@ class Board extends Widget
                         'valign' => 'center'
                     ]);
 
-                    foreach ($figures as $item) {
-                        if ($board->x == $item->currentPositionX && $board->y == $item->currentPositionY) {
-                            if ($item->status != 'killed') {
-                                echo Html::img($item->image, [
-                                    'id' => 'figure' . $item->id,
-                                    'onclick' => "light(" . $item->name . ', ' . $item->id . ")"
+                    foreach ($figures as $figure) {
+                        if ($board->x == $figure->currentPositionX && $board->y == $figure->currentPositionY) {
+                            if ($figure->status != 'killed') {
+                                echo Html::img($figure->image, [
+                                    'id' => 'figure' . $figure->id,
+                                    'onclick' => "light(" . $figure->name . ', ' . $figure->id . ")"
                                 ]);
                             }
                         }
                     }
-
                     echo Html::endTag('td');
 
                 }
@@ -105,7 +104,9 @@ class Board extends Widget
         echo Html::endTag('table');
 
         echo Html::beginForm();
+
         Buttons::widget($figures);
+
         echo Html::endForm();
 
         Pjax::end();

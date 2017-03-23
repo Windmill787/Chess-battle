@@ -21,6 +21,7 @@ class m170309_203841_create_figure_table extends Migration
             'name' => $this->string(6)->defaultValue('pawn'),
             'number' => $this->string(5),
             'start_position' => $this->integer(1)->notNull(),
+            'status' => $this->string(10)->defaultValue('active')
         ]);
 
         // creates index for column `start_position`

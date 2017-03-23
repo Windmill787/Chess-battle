@@ -56,6 +56,7 @@ class GameController extends Controller
 
         $figures = FigureBuilderComponent::build();
 
+        // fix this!
         foreach ($figures as $item) {
             if (isset($_POST['move'.$item->color.$item->name.$item->number])) {
                 $item->move();
@@ -71,6 +72,7 @@ class GameController extends Controller
             }
         }
 
+        // fix this!
         if (isset($_POST['back'])) {
             FigureBuilderComponent::back($figures);
             FigureBuilderComponent::resetStatuses();

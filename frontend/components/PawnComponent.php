@@ -8,7 +8,6 @@
 
 namespace frontend\components;
 
-use app\models\Figure;
 use app\models\PlayPositions;
 
 class PawnComponent extends FigureComponent
@@ -21,46 +20,19 @@ class PawnComponent extends FigureComponent
     }
 
     public function move() {
-        if ($this->color == 'white') {
-            if ($this->currentPositionX && $this->currentPositionY < 8) {
-                parent::move();
-                $this->savePosition();
-            }
-        } else if ($this->color == 'black') {
-            if ($this->currentPositionX && $this->currentPositionY > 1) {
-                parent::move();
-                $this->savePosition();
-            }
+        $desiredPosition = $this->desiredMovePosition();
+
+        if (empty($desiredPosition->figure_id)) {
+            parent::move();
         }
     }
 
     public function attack() {
-        if ($this->color == 'white') {
-                $square = PlayPositions::findOne([
-                    'current_x' => $this->currentPositionX + $this->attackX,
-                    'current_y' => $this->currentPositionY + $this->attackY
-                ]);
+        $desiredPosition = $this->desiredAttackPosition();
 
-                if (empty($square->figure_id) == false) {
-                    $figure = Figure::findOne(['id' => $square->figure_id]);
-                    $figure->status = 'killed';
-                    $figure->save();
-                    parent::attack();
-                    $this->savePosition();
-                }
-        } else if ($this->color == 'black') {
-            $square = PlayPositions::findOne([
-                'current_x' => $this->currentPositionX - $this->attackX,
-                'current_y' => $this->currentPositionY - $this->attackY
-            ]);
-
-            if (empty($square->figure_id) == false) {
-                $figure = Figure::findOne(['id' => $square->figure_id]);
-                $figure->status = 'killed';
-                $figure->save();
-                parent::attack();
-                $this->savePosition();
-            }
+        if (empty($desiredPosition->figure_id) == false) {
+            parent::changeStatus($desiredPosition);
+            parent::attack();
         }
     }
 
@@ -74,32 +46,38 @@ class PawnComponent extends FigureComponent
         $this->attackY = 1;
     }
 
-    public function firstMove() {
-        if ($this->color == 'white') {
-            if ($this->currentPositionX == $this->startPositionX && $this->currentPositionY == $this->startPositionY) {
-                $square = PlayPositions::findOne([
+    public function desiredFirstMovePosition() {
+        if ($this->currentPositionX == $this->startPositionX && $this->currentPositionY == $this->startPositionY) {
+            if ($this->color == 'white') {
+                $desiredPosition = PlayPositions::findOne([
                     'current_x' => $this->currentPositionX + $this->moveX,
                     'current_y' => $this->currentPositionY + $this->moveY + 1
                 ]);
-
-                if (empty($square->figure_id)) {
-                    $this->currentPositionX = $this->currentPositionX + $this->moveX;
-                    $this->currentPositionY = $this->currentPositionY + $this->moveY + 1;
-                    $this->savePosition();
-                }
-            }
-        } else if ($this->color == 'black') {
-            if ($this->currentPositionX == $this->startPositionX && $this->currentPositionY == $this->startPositionY) {
-                $square = PlayPositions::findOne([
+                return $desiredPosition;
+            } else if ($this->color == 'black') {
+                $desiredPosition = PlayPositions::findOne([
                     'current_x' => $this->currentPositionX - $this->moveX,
                     'current_y' => $this->currentPositionY - $this->moveY - 1
                 ]);
+                return $desiredPosition;
+            }
+        }
+    }
 
-                if (empty($square->figure_id)) {
-                    $this->currentPositionX = $this->currentPositionX - $this->moveX;
-                    $this->currentPositionY = $this->currentPositionY - $this->moveY - 1;
-                    $this->savePosition();
-                }
+    public function firstMove() {
+        $desiredPosition = $this->desiredFirstMovePosition();
+
+        if ($this->color == 'white') {
+            if (empty($desiredPosition->figure_id)) {
+                $this->currentPositionX = $this->currentPositionX + $this->moveX;
+                $this->currentPositionY = $this->currentPositionY + $this->moveY + 1;
+                $this->savePosition();
+            }
+        } else if ($this->color == 'black') {
+            if (empty($desiredPosition->figure_id)) {
+                $this->currentPositionX = $this->currentPositionX - $this->moveX;
+                $this->currentPositionY = $this->currentPositionY - $this->moveY - 1;
+                $this->savePosition();
             }
         }
     }

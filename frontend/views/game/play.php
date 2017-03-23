@@ -13,8 +13,7 @@
 use yii\helpers\Html;
 use russ666\widgets\Countdown;
 use yii\bootstrap\Modal;
-use common\widgets\Board;
-use frontend\components\PawnComponent;
+use frontend\widgets\Board;
 
 $this->title = Yii::t('app', 'Play');
 //$this->params['breadcrumbs'][] = $this->title;
@@ -91,7 +90,7 @@ $this->title = Yii::t('app', 'Play');
 
                     <?php
                     echo Html::beginForm();
-                    echo Html::submitButton('RollBack', [
+                    echo Html::submitButton('New game', [
                         'class' => 'btn btn-primary',
                         'name' => 'back',
                         'onclick' => 'unhideAll()'
