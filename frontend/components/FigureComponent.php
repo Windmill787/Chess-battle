@@ -23,6 +23,7 @@ class FigureComponent extends Component implements FigureInterface
     public $name;
     public $image;
     public $number;
+    public $status;
     public $startPositionX;
     public $startPositionY;
     public $currentPositionX;
@@ -44,8 +45,10 @@ class FigureComponent extends Component implements FigureInterface
         $this->name = $figure->name;
         $this->color = $figure->color;
         $this->number = $figure->number;
+        $this->status = $figure->status;
         $this->setStartPositions($figure->start_position);
         $this->setMoves();
+        $this->setAttacks();
         $this->getCurrentPositions($this->id);
         $this->image = $this->setImage($color, $name);
         parent::__construct($config);
@@ -61,14 +64,6 @@ class FigureComponent extends Component implements FigureInterface
         $position = PlayPositions::findOne(['figure_id' => $figure_id]);
         $this->currentPositionX = $position->current_x;
         $this->currentPositionY = $position->current_y;
-
-    }
-
-    public function setMoves() {
-
-    }
-
-    public function move() {
     }
 
     public function savePosition() {
@@ -79,15 +74,31 @@ class FigureComponent extends Component implements FigureInterface
         $position->save();
     }
 
-    public function attack()
-    {
+    public function setMoves() {
 
     }
 
-    public function getMoves() {
-        return [
-            'X' => $this->moveX,
-            'Y' => $this->moveY
-        ];
+    public function setAttacks() {
+
+    }
+
+    public function move() {
+        if ($this->color == 'white') {
+            $this->currentPositionX = $this->currentPositionX + $this->moveX;
+            $this->currentPositionY = $this->currentPositionY + $this->moveY;
+        } else if ($this->color == 'black') {
+            $this->currentPositionX = $this->currentPositionX - $this->moveX;
+            $this->currentPositionY = $this->currentPositionY - $this->moveY;
+        }
+    }
+
+    public function attack() {
+        if ($this->color == 'white') {
+            $this->currentPositionX = $this->currentPositionX + $this->attackX;
+            $this->currentPositionY = $this->currentPositionY + $this->attackY;
+        } else if ($this->color == 'black') {
+            $this->currentPositionX = $this->currentPositionX - $this->attackX;
+            $this->currentPositionY = $this->currentPositionY - $this->attackY;
+        }
     }
 }

@@ -8,12 +8,15 @@
 
 namespace frontend\components;
 
+use app\models\Figure;
 use app\models\PlayPositions;
+use yii\base\Component;
 
-class FigureBuilderComponent
+class FigureBuilderComponent extends Component
 {
     public static function build()
     {
+        // need fix!
         return $figures = [
             $whitePawn1 = new PawnComponent('white', 1),
             $whitePawn2 = new PawnComponent('white', 2),
@@ -58,6 +61,14 @@ class FigureBuilderComponent
             $position->current_x = $item->startPositionX;
             $position->current_y = $item->startPositionY;
             $position->save();
+        }
+    }
+
+    public static function resetStatuses() {
+        $figures = Figure::find()->all();
+        foreach ($figures as $item) {
+            $item->status = 'active';
+            $item->save();
         }
     }
 }

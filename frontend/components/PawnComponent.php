@@ -8,47 +8,59 @@
 
 namespace frontend\components;
 
+use app\models\Figure;
 use app\models\PlayPositions;
 
 class PawnComponent extends FigureComponent
 {
     public $name = 'pawn';
-    public $availableMoves = 2;
-    public $attackX = 1;
-    public $attackY = 1;
 
     public function __construct($color, $number = null, $config = [])
     {
         parent::__construct($color, $this->name, $number, $config);
     }
 
-    public function move()
-    {
+    public function move() {
         if ($this->color == 'white') {
             if ($this->currentPositionX && $this->currentPositionY < 8) {
-                $this->currentPositionX = $this->currentPositionX + $this->moveX;
-                $this->currentPositionY = $this->currentPositionY + $this->moveY;
+                parent::move();
                 $this->savePosition();
             }
         } else if ($this->color == 'black') {
             if ($this->currentPositionX && $this->currentPositionY > 1) {
-                $this->currentPositionX = $this->currentPositionX - $this->moveX;
-                $this->currentPositionY = $this->currentPositionY - $this->moveY;
+                parent::move();
                 $this->savePosition();
             }
         }
     }
 
-    public function attack()
-    {
+    public function attack() {
         if ($this->color == 'white') {
-            $this->currentPositionX = $this->currentPositionX + $this->attackX;
-            $this->currentPositionY = $this->currentPositionY + $this->attackY;
-            $this->savePosition();
+                $square = PlayPositions::findOne([
+                    'current_x' => $this->currentPositionX + $this->attackX,
+                    'current_y' => $this->currentPositionY + $this->attackY
+                ]);
+
+                if (empty($square->figure_id) == false) {
+                    $figure = Figure::findOne(['id' => $square->figure_id]);
+                    $figure->status = 'killed';
+                    $figure->save();
+                    parent::attack();
+                    $this->savePosition();
+                }
         } else if ($this->color == 'black') {
-            $this->currentPositionX = $this->currentPositionX - $this->attackX;
-            $this->currentPositionY = $this->currentPositionY - $this->attackY;
-            $this->savePosition();
+            $square = PlayPositions::findOne([
+                'current_x' => $this->currentPositionX - $this->attackX,
+                'current_y' => $this->currentPositionY - $this->attackY
+            ]);
+
+            if (empty($square->figure_id) == false) {
+                $figure = Figure::findOne(['id' => $square->figure_id]);
+                $figure->status = 'killed';
+                $figure->save();
+                parent::attack();
+                $this->savePosition();
+            }
         }
     }
 
@@ -57,8 +69,12 @@ class PawnComponent extends FigureComponent
         $this->moveY = 1;
     }
 
-    public function firstMove()
-    {
+    public function setAttacks() {
+        $this->attackX = 1;
+        $this->attackY = 1;
+    }
+
+    public function firstMove() {
         if ($this->color == 'white') {
             if ($this->currentPositionX == $this->startPositionX && $this->currentPositionY == $this->startPositionY) {
                 $square = PlayPositions::findOne([

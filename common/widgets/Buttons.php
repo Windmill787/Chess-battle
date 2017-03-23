@@ -21,6 +21,7 @@ class Buttons extends Widget
         foreach ($figures as $item) {
 
             if ($item->color == 'white') {
+                // default move
                 $square = PlayPositions::findOne([
                     'current_x' => $item->currentPositionX + $item->moveX,
                     'current_y' => $item->currentPositionY + $item->moveY
@@ -32,24 +33,27 @@ class Buttons extends Widget
                         'name' => 'move' . $item->color . $item->name . $item->number,
                         'id' => 'move' . $item->name . $item->id
                     ]);
-                }
 
-                $square = PlayPositions::findOne([
-                    'current_x' => $item->currentPositionX + $item->moveX,
-                    'current_y' => $item->currentPositionY + $item->moveY + 1
-                ]);
+                    $square = PlayPositions::findOne([
+                        'current_x' => $item->currentPositionX + $item->moveX,
+                        'current_y' => $item->currentPositionY + $item->moveY + 1
+                    ]);
 
-                if (empty($square->figure_id)) {
-                    if ($item->name == 'pawn' && $item->currentPositionY == $item->startPositionY) {
+                    if (empty($square->figure_id)) {
+                        if ($item->name == 'pawn' && $item->currentPositionY == $item->startPositionY) {
 
-                        echo Html::submitButton('Move +2', [
-                            'class' => 'btn btn-primary hidden move',
-                            'name' => 'firstMove' . $item->color . $item->name . $item->number,
-                            'id' => 'firstMove' . $item->name . $item->id
-                        ]);
+                            echo Html::submitButton('Move +2', [
+                                'class' => 'btn btn-primary hidden move',
+                                'name' => 'firstMove' . $item->color . $item->name . $item->number,
+                                'id' => 'firstMove' . $item->name . $item->id
+                            ]);
+                        }
                     }
                 }
 
+                // first move
+
+                // attack move
                 $square = PlayPositions::findOne([
                     'current_x' => $item->currentPositionX + $item->attackX,
                     'current_y' => $item->currentPositionY + $item->attackY
@@ -58,16 +62,18 @@ class Buttons extends Widget
                 if (empty($square->figure_id) == false) {
                     $figure = Figure::findOne(['id' => $square->figure_id]);
                     if ($figure->color != 'white') {
-                        echo Html::submitButton('Attack', [
+                        echo Html::submitButton('Attack '.$figure->name, [
                             'class' => 'btn btn-danger hidden move',
                             'name' => 'attack' . $item->color . $item->name . $item->number,
-                            'id' => 'attack' . $item->name . $item->id
+                            'id' => 'attack' . $item->name . $item->id,
+                            'onclick' => 'hideVictim('.$figure->id.')'
                         ]);
                     }
                 }
             }
 
             if ($item->color == 'black') {
+                // default move
                 $square = PlayPositions::findOne([
                     'current_x' => $item->currentPositionX - $item->moveX,
                     'current_y' => $item->currentPositionY - $item->moveY
@@ -81,6 +87,7 @@ class Buttons extends Widget
                     ]);
                 }
 
+                // first move
                 $square = PlayPositions::findOne([
                     'current_x' => $item->currentPositionX - $item->moveX,
                     'current_y' => $item->currentPositionY - $item->moveY - 1
@@ -97,6 +104,7 @@ class Buttons extends Widget
                     }
                 }
 
+                // attack move
                 $square = PlayPositions::findOne([
                     'current_x' => $item->currentPositionX - $item->attackX,
                     'current_y' => $item->currentPositionY - $item->attackY
@@ -105,7 +113,7 @@ class Buttons extends Widget
                 if (empty($square->figure_id) == false) {
                     $figure = Figure::findOne(['id' => $square->figure_id]);
                     if ($figure->color != 'black') {
-                        echo Html::submitButton('Attack', [
+                        echo Html::submitButton('Attack '.$figure->name, [
                             'class' => 'btn btn-danger hidden move',
                             'name' => 'attack' . $item->color . $item->name . $item->number,
                             'id' => 'attack' . $item->name . $item->id

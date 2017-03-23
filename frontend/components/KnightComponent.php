@@ -9,6 +9,7 @@
 namespace frontend\components;
 
 use app\models\PlayPositions;
+use app\models\Figure;
 
 class KnightComponent extends FigureComponent
 {
@@ -25,21 +26,13 @@ class KnightComponent extends FigureComponent
     {
         if ($this->color == 'white') {
             if ($this->currentPositionX < 8 && $this->currentPositionY < 8) {
-                $this->currentPositionX = $this->currentPositionX + $this->moveX;
-                $this->currentPositionY = $this->currentPositionY + $this->moveY;
+                parent::move();
                 $this->savePosition();
-            } else {
-                $this->currentPositionX = $this->currentPositionX + 0;
-                $this->currentPositionY = $this->currentPositionY + 0;
             }
         } else if ($this->color == 'black') {
             if ($this->currentPositionX > 1 && $this->currentPositionY > 1) {
-                $this->currentPositionX = $this->currentPositionX - $this->moveX;
-                $this->currentPositionY = $this->currentPositionY - $this->moveY;
+                parent::move();
                 $this->savePosition();
-            } else {
-                $this->currentPositionX = $this->currentPositionX - 0;
-                $this->currentPositionY = $this->currentPositionY - 0;
             }
         }
     }
@@ -53,8 +46,10 @@ class KnightComponent extends FigureComponent
             ]);
 
             if (empty($square->figure_id) == false) {
-                $this->currentPositionX = $this->currentPositionX + $this->attackX;
-                $this->currentPositionY = $this->currentPositionY + $this->attackY;
+                $figure = Figure::findOne(['id' => $square->figure_id]);
+                $figure->status = 'killed';
+                $figure->save();
+                parent::attack();
                 $this->savePosition();
             }
         } else if ($this->color == 'black') {
@@ -64,8 +59,10 @@ class KnightComponent extends FigureComponent
             ]);
 
             if (empty($square->figure_id) == false) {
-                $this->currentPositionX = $this->currentPositionX - $this->attackX;
-                $this->currentPositionY = $this->currentPositionY - $this->attackY;
+                $figure = Figure::findOne(['id' => $square->figure_id]);
+                $figure->status = 'killed';
+                $figure->save();
+                parent::attack();
                 $this->savePosition();
             }
         }

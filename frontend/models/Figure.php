@@ -12,6 +12,7 @@ use Yii;
  * @property string $name
  * @property string $number
  * @property string $start_position
+ * @property string $status
  *
  * @property PlayPosition[] $playPositions
  * @property PlayPosition[] $playPositions0
@@ -37,6 +38,7 @@ class Figure extends \yii\db\ActiveRecord
             [['color'], 'string', 'max' => 5],
             [['name'], 'string', 'max' => 6],
             [['number'], 'string', 'max' => 5],
+            [['status'], 'string', 'max' => 10],
         ];
     }
 
@@ -50,6 +52,7 @@ class Figure extends \yii\db\ActiveRecord
             'color' => 'Color',
             'name' => 'Name',
             'number' => 'Number',
+            'status' => 'Status'
         ];
     }
 

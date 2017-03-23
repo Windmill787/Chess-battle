@@ -64,10 +64,12 @@ class Board extends Widget
                     ]);
                     foreach ($figures as $item) {
                         if ($board->x == $item->currentPositionX && $board->y == $item->currentPositionY) {
-                            echo Html::img($item->image, [
-                                'id' => 'figure'.$item->id,
-                                'onclick' => "light(".$item->name.', '.$item->id.")"
-                            ]);
+                            if ($item->status != 'killed') {
+                                echo Html::img($item->image, [
+                                    'id' => 'figure'.$item->id,
+                                    'onclick' => "light(".$item->name.', '.$item->id.")"
+                                ]);
+                            }
                         }
                     }
                     echo Html::endTag('td');
@@ -84,10 +86,12 @@ class Board extends Widget
 
                     foreach ($figures as $item) {
                         if ($board->x == $item->currentPositionX && $board->y == $item->currentPositionY) {
-                            echo Html::img($item->image, [
-                                'id' => 'figure'.$item->id,
-                                'onclick' => "light(".$item->name.', '.$item->id.")"
-                            ]);
+                            if ($item->status != 'killed') {
+                                echo Html::img($item->image, [
+                                    'id' => 'figure' . $item->id,
+                                    'onclick' => "light(" . $item->name . ', ' . $item->id . ")"
+                                ]);
+                            }
                         }
                     }
 

@@ -93,7 +93,8 @@ $this->title = Yii::t('app', 'Play');
                     echo Html::beginForm();
                     echo Html::submitButton('RollBack', [
                         'class' => 'btn btn-primary',
-                        'name' => 'back'
+                        'name' => 'back',
+                        'onclick' => 'unhideAll()'
                     ]);
                     echo Html::endForm();
                     ?>
