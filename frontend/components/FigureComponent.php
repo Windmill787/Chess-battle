@@ -69,6 +69,9 @@ class FigureComponent extends Component implements FigureInterface
     }
 
     public function move() {
+    }
+
+    public function savePosition() {
         $position = PlayPositions::findOne(['figure_id' => $this->id]);
         $position->figure_id = $this->id;
         $position->current_x = $this->currentPositionX;
@@ -78,15 +81,7 @@ class FigureComponent extends Component implements FigureInterface
 
     public function attack()
     {
-        if ($this->color == 'white') {
-            $this->currentPositionX = $this->currentPositionX + $this->attackX;
-            $this->currentPositionY = $this->currentPositionY + $this->attackY;
-            $this->move();
-        } else if ($this->color == 'black') {
-            $this->currentPositionX = $this->currentPositionX - $this->attackX;
-            $this->currentPositionY = $this->currentPositionY - $this->attackY;
-            $this->move();
-        }
+
     }
 
     public function getMoves() {

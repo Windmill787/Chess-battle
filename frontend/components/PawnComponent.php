@@ -28,19 +28,28 @@ class PawnComponent extends FigureComponent
             if ($this->currentPositionX && $this->currentPositionY < 8) {
                 $this->currentPositionX = $this->currentPositionX + $this->moveX;
                 $this->currentPositionY = $this->currentPositionY + $this->moveY;
-                parent::move();
+                $this->savePosition();
             }
         } else if ($this->color == 'black') {
             if ($this->currentPositionX && $this->currentPositionY > 1) {
                 $this->currentPositionX = $this->currentPositionX - $this->moveX;
                 $this->currentPositionY = $this->currentPositionY - $this->moveY;
-                parent::move();
+                $this->savePosition();
             }
         }
     }
 
     public function attack()
     {
+        if ($this->color == 'white') {
+            $this->currentPositionX = $this->currentPositionX + $this->attackX;
+            $this->currentPositionY = $this->currentPositionY + $this->attackY;
+            $this->savePosition();
+        } else if ($this->color == 'black') {
+            $this->currentPositionX = $this->currentPositionX - $this->attackX;
+            $this->currentPositionY = $this->currentPositionY - $this->attackY;
+            $this->savePosition();
+        }
     }
 
     public function setMoves() {
@@ -60,7 +69,7 @@ class PawnComponent extends FigureComponent
                 if (empty($square->figure_id)) {
                     $this->currentPositionX = $this->currentPositionX + $this->moveX;
                     $this->currentPositionY = $this->currentPositionY + $this->moveY + 1;
-                    parent::move();
+                    $this->savePosition();
                 }
             }
         } else if ($this->color == 'black') {
@@ -73,7 +82,7 @@ class PawnComponent extends FigureComponent
                 if (empty($square->figure_id)) {
                     $this->currentPositionX = $this->currentPositionX - $this->moveX;
                     $this->currentPositionY = $this->currentPositionY - $this->moveY - 1;
-                    parent::move();
+                    $this->savePosition();
                 }
             }
         }

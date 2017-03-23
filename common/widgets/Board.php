@@ -11,11 +11,10 @@ namespace common\widgets;
 use yii\helpers\Html;
 use yii\bootstrap\Widget;
 use yii\widgets\Pjax;
-use app\models\PlayPositions;
 
 class Board extends Widget
 {
-    public static function widget($board, $figure)
+    public static function widget($board, $figures)
     {
         Pjax::begin();
 
@@ -63,7 +62,7 @@ class Board extends Widget
                         'align' => 'center',
                         'valign' => 'center'
                     ]);
-                    foreach ($figure as $item) {
+                    foreach ($figures as $item) {
                         if ($board->x == $item->currentPositionX && $board->y == $item->currentPositionY) {
                             echo Html::img($item->image, [
                                 'id' => 'figure'.$item->id,
@@ -83,7 +82,7 @@ class Board extends Widget
                         'valign' => 'center'
                     ]);
 
-                    foreach ($figure as $item) {
+                    foreach ($figures as $item) {
                         if ($board->x == $item->currentPositionX && $board->y == $item->currentPositionY) {
                             echo Html::img($item->image, [
                                 'id' => 'figure'.$item->id,
@@ -102,63 +101,7 @@ class Board extends Widget
         echo Html::endTag('table');
 
         echo Html::beginForm();
-        foreach ($figure as $item) {
-
-            if ($item->color == 'white') {
-                $square = PlayPositions::findOne([
-                    'current_x' => $item->currentPositionX + $item->moveX,
-                    'current_y' => $item->currentPositionY + $item->moveY
-                ]);
-
-                if (empty($square->figure_id)) {
-                    echo Html::submitButton('Move', [
-                        'class' => 'btn btn-primary hidden move',
-                        'name' => 'move' . $item->color . $item->name . $item->number,
-                        'id' => 'move' . $item->name . $item->id
-                    ]);
-                }
-            }
-
-            if ($item->color == 'black') {
-                $square = PlayPositions::findOne([
-                    'current_x' => $item->currentPositionX - $item->moveX,
-                    'current_y' => $item->currentPositionY - $item->moveY
-                ]);
-
-                if (empty($square->figure_id)) {
-                    echo Html::submitButton('Move', [
-                        'class' => 'btn btn-primary hidden move',
-                        'name' => 'move' . $item->color . $item->name . $item->number,
-                        'id' => 'move' . $item->name . $item->id
-                    ]);
-                }
-            }
-
-            $square = PlayPositions::findOne([
-                'current_x' => $item->currentPositionX + $item->moveX,
-                'current_y' => $item->currentPositionY + $item->moveY + 1
-            ]);
-
-            if (empty($square->figure_id)) {
-                if ($item->name == 'pawn' && $item->currentPositionY == $item->startPositionY) {
-
-                    echo Html::submitButton('Move +2', [
-                        'class' => 'btn btn-primary hidden move',
-                        'name' => 'firstMove' . $item->color . $item->name . $item->number,
-                        'id' => 'firstMove' . $item->name . $item->id
-                    ]);
-                }
-            }
-        }
-
-        foreach ($figure as $item) {
-            echo Html::submitButton('Attack', [
-                'class' => 'btn btn-danger hidden move',
-                'name' => 'attack' . $item->color . $item->name . $item->number,
-                'id' => 'attack' . $item->name . $item->id
-            ]);
-        }
-
+        Buttons::widget($figures);
         echo Html::endForm();
 
         Pjax::end();
