@@ -10,9 +10,7 @@ namespace frontend\components;
 
 use app\models\Chessboard;
 use app\models\Figure;
-use app\models\Move;
 use app\models\PlayPositions;
-use app\models\StartPosition;
 use frontend\interfaces\FigureInterface;
 use yii\base\Component;
 
@@ -81,6 +79,18 @@ class FigureComponent extends Component implements FigureInterface
     public function setAttacks() {
 
     }
+    public function attack()
+    {
+        if ($this->color == 'white') {
+            $this->currentPositionX = $this->currentPositionX + $this->attackX;
+            $this->currentPositionY = $this->currentPositionY + $this->attackY;
+            $this->move();
+        } else if ($this->color == 'black') {
+            $this->currentPositionX = $this->currentPositionX - $this->attackX;
+            $this->currentPositionY = $this->currentPositionY - $this->attackY;
+            $this->move();
+        }
+    }
 
     public function move() {
         if ($this->color == 'white') {
@@ -89,16 +99,6 @@ class FigureComponent extends Component implements FigureInterface
         } else if ($this->color == 'black') {
             $this->currentPositionX = $this->currentPositionX - $this->moveX;
             $this->currentPositionY = $this->currentPositionY - $this->moveY;
-        }
-    }
-
-    public function attack() {
-        if ($this->color == 'white') {
-            $this->currentPositionX = $this->currentPositionX + $this->attackX;
-            $this->currentPositionY = $this->currentPositionY + $this->attackY;
-        } else if ($this->color == 'black') {
-            $this->currentPositionX = $this->currentPositionX - $this->attackX;
-            $this->currentPositionY = $this->currentPositionY - $this->attackY;
         }
     }
 }
