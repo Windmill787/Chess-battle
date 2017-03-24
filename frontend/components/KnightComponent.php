@@ -48,4 +48,10 @@ class KnightComponent extends FigureComponent
         $this->moveX = 1;
         $this->moveY = 2;
     }
+
+    public function setAttacks()
+    {
+        $this->attackX = $this->moveX;
+        $this->attackY = $this->moveY;
+    }
 }

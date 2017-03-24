@@ -12,8 +12,6 @@ namespace frontend\components;
 class RookComponent extends FigureComponent
 {
     public $name = 'rook';
-    public $moveX = 1;
-    public $moveY = 0;
 
     public function __construct($color, $number = null, $config = [])
     {

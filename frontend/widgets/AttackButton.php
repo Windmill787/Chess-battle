@@ -15,18 +15,20 @@ use yii\helpers\Html;
 
 class AttackButton extends Widget
 {
-    public static function widget($figure)
-    {
+    public static function widget(FigureComponent $figure) {
         $desiredPosition = $figure->desiredAttackPosition();
 
-        if (empty($desiredPosition->figure_id) == false && $desiredPosition->status == 'active') {
+        if (empty($desiredPosition->figure_id) == false) {
             $desiredFigure = Figure::findOne(['id' => $desiredPosition->figure_id]);
             if ($desiredFigure->color != $figure->color && $desiredFigure->status == 'active') {
-                echo Html::submitButton('A ' . $desiredFigure->name, [
+                echo Html::beginForm();
+                echo Html::submitButton('attack', [
                     'class' => 'btn btn-xs btn-danger hidden move',
                     'name' => 'attack' . $figure->color . $figure->name . $figure->number,
-                    'id' => 'attack' . $figure->name . $figure->id
+                    'id' => 'attack' . $figure->name . $figure->id,
+                    'onclick' => 'hideButtons()'
                 ]);
+                echo Html::endForm();
             }
         }
     }

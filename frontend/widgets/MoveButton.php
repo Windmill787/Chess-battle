@@ -8,23 +8,24 @@
 
 namespace frontend\widgets;
 
-use app\models\Figure;
 use frontend\components\FigureComponent;
 use yii\bootstrap\Widget;
 use yii\helpers\Html;
 
 class MoveButton extends Widget
 {
-    public static function widget($figure)
-    {
+    public static function widget(FigureComponent $figure) {
         $desiredPosition = $figure->desiredMovePosition();
 
-        if (empty($desiredPosition->figure_id) || $desiredPosition->status == 'killed') {
-            echo Html::submitButton('Move', [
+        if (empty($desiredPosition->figure_id)) {
+            echo Html::beginForm();
+            echo Html::submitButton('move', [
                 'class' => 'btn btn-xs btn-primary hidden move',
                 'name' => 'move' . $figure->color . $figure->name . $figure->number,
-                'id' => 'move' . $figure->name . $figure->id
+                'id' => 'move' . $figure->name . $figure->id,
+                'onclick' => 'hideButtons()'
             ]);
+            echo Html::endForm();
         }
     }
 }

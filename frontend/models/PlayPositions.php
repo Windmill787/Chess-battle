@@ -11,7 +11,6 @@ use Yii;
  * @property integer $figure_id
  * @property integer $current_x
  * @property integer $current_y
- * @property string $status
  *
  * @property Figure $figure
  */
@@ -33,7 +32,6 @@ class PlayPositions extends \yii\db\ActiveRecord
         return [
             [['figure_id', 'current_x', 'current_y'], 'required'],
             [['figure_id', 'current_x', 'current_y'], 'integer'],
-            [['status'], 'string', 'max' => 30],
             [['figure_id'], 'exist', 'skipOnError' => true, 'targetClass' => Figure::className(), 'targetAttribute' => ['figure_id' => 'id']],
         ];
     }
@@ -47,8 +45,7 @@ class PlayPositions extends \yii\db\ActiveRecord
             'id' => 'ID',
             'figure_id' => 'Figure ID',
             'current_x' => 'Current X',
-            'current_y' => 'Current Y',
-            'status' => 'Status',
+            'current_y' => 'Current Y'
         ];
     }
 

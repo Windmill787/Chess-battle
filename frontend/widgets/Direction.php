@@ -21,45 +21,34 @@ class Direction extends Widget
 
             if ($board->x == $figure->currentPositionX + $figure->moveX &&
                 $board->y == $figure->currentPositionY + $figure->moveY) {
-                echo Html::beginForm();
                 MoveButton::widget($figure);
-                echo Html::endForm();
             }
 
-                if ($board->x == $figure->currentPositionX + $figure->moveX &&
-                    $board->y == $figure->currentPositionY + $figure->moveY + 1) {
-                    echo Html::beginForm();
-                    FirstMoveButton::widget($figure);
-                    echo Html::endForm();
-                }
+            if ($board->x == $figure->currentPositionX + $figure->moveX &&
+                $board->y == $figure->currentPositionY + $figure->moveY + 1) {
+                FirstMoveButton::widget($figure);
+            }
 
             if ($board->x == $figure->currentPositionX + $figure->attackX &&
                 $board->y == $figure->currentPositionY + $figure->attackY) {
-                echo Html::beginForm();
                 AttackButton::widget($figure);
-                echo Html::endForm();
             }
+
         } else if ($figure->color == 'black') {
 
             if ($board->x == $figure->currentPositionX - $figure->moveX &&
                 $board->y == $figure->currentPositionY - $figure->moveY) {
-                echo Html::beginForm();
                 MoveButton::widget($figure);
-                echo Html::endForm();
+            }
 
-                if ($board->x == $figure->currentPositionX - $figure->moveX &&
-                    $board->y == $figure->currentPositionY - $figure->moveY - 1) {
-                    echo Html::beginForm();
-                    FirstMoveButton::widget($figure);
-                    echo Html::endForm();
-                }
+            if ($board->x == $figure->currentPositionX - $figure->moveX &&
+                $board->y == $figure->currentPositionY - $figure->moveY - 1) {
+                FirstMoveButton::widget($figure);
             }
 
             if ($board->x == $figure->currentPositionX - $figure->attackX &&
                 $board->y == $figure->currentPositionY - $figure->attackY) {
-                echo Html::beginForm();
                 AttackButton::widget($figure);
-                echo Html::endForm();
             }
         }
     }

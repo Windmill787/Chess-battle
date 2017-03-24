@@ -26,6 +26,10 @@ $('#myMoveButton').on('click', function () {
     $('#enemy').countdown('start');
 });
 
+function hideButtons () {
+    $('.move').addClass('hidden')
+}
+
 var pawn = 'pawn';
 var knight = 'knight';
 var bishop = 'bishop';
@@ -44,5 +48,5 @@ function light (figure, id) {
 
 $('th').on('click', function () {
     $('img').css('border','none').css('background-color','inherit');
-    $('.move').addClass('hidden');
+    $('.move').addClass('disabled');
 });
