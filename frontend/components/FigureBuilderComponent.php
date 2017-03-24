@@ -55,20 +55,25 @@ class FigureBuilderComponent extends Component
     }
 
     public static function back($figures) {
-        foreach ($figures as $item) {
-            $position = PlayPositions::findOne(['figure_id' => $item->id]);
-            $position->figure_id = $item->id;
-            $position->current_x = $item->startPositionX;
-            $position->current_y = $item->startPositionY;
+        foreach ($figures as $figure) {
+            $position = PlayPositions::findOne(['figure_id' => $figure->id]);
+            $position->figure_id = $figure->id;
+            $position->current_x = $figure->startPositionX;
+            $position->current_y = $figure->startPositionY;
             $position->save();
         }
     }
 
     public static function resetStatuses() {
         $figures = Figure::find()->all();
-        foreach ($figures as $item) {
-            $item->status = 'active';
-            $item->save();
+        foreach ($figures as $figure) {
+            $figure->status = 'active';
+            $figure->save();
+        }
+        $positions = PlayPositions::find()->all();
+        foreach ($positions as $position) {
+            $position->status = 'active';
+            $position->save();
         }
     }
 }

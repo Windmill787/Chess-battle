@@ -17,54 +17,41 @@ class Buttons extends Widget
 {
     public static function widget($figures) {
 
-        foreach ($figures as $item) {
+        foreach ($figures as $figure) {
 
             // default move
-            $desiredPosition = $item->desiredMovePosition();
+            $desiredPosition = $figure->desiredMovePosition();
 
-            if (empty($desiredPosition->figure_id)) {
+            if (empty($desiredPosition->figure_id) || $desiredPosition->status == 'killed') {
                 echo Html::submitButton('Move', [
                     'class' => 'btn btn-primary hidden move',
-                    'name' => 'move' . $item->color . $item->name . $item->number,
-                    'id' => 'move' . $item->name . $item->id
+                    'name' => 'move' . $figure->color . $figure->name . $figure->number,
+                    'id' => 'move' . $figure->name . $figure->id
                 ]);
 
-                if ($item->name == 'pawn' && $item->currentPositionY == $item->startPositionY) {
-                    $desiredPosition = $item->desiredFirstMovePosition();
-                    if (empty($desiredPosition->figure_id)) {
+                if ($figure->name == 'pawn' && $figure->currentPositionY == $figure->startPositionY) {
+                    $desiredPosition = $figure->desiredFirstMovePosition();
+                    if (empty($desiredPosition->figure_id) || $desiredPosition->status == 'killed') {
                         echo Html::submitButton('Move +2', [
                             'class' => 'btn btn-primary hidden move',
-                            'name' => 'firstMove' . $item->color . $item->name . $item->number,
-                            'id' => 'firstMove' . $item->name . $item->id
+                            'name' => 'firstMove' . $figure->color . $figure->name . $figure->number,
+                            'id' => 'firstMove' . $figure->name . $figure->id
                         ]);
                     }
                 }
             }
 
             // attack move
-            if ($item->color == 'white') {
-                $desiredPosition = $item->desiredAttackPosition();
-                if (empty($desiredPosition->figure_id) == false) {
-                    $figure = Figure::findOne(['id' => $desiredPosition->figure_id]);
-                    if ($figure->color != 'white') {
-                        echo Html::submitButton('Attack ' . $figure->name, [
-                            'class' => 'btn btn-danger hidden move',
-                            'name' => 'attack' . $item->color . $item->name . $item->number,
-                            'id' => 'attack' . $item->name . $item->id
-                        ]);
-                    }
-                }
-            } else if ($item->color == 'black') {
-                $desiredPosition = $item->desiredAttackPosition();
-                if (empty($desiredPosition->figure_id) == false) {
-                    $figure = Figure::findOne(['id' => $desiredPosition->figure_id]);
-                    if ($figure->color != 'black') {
-                        echo Html::submitButton('Attack ' . $figure->name, [
-                            'class' => 'btn btn-danger hidden move',
-                            'name' => 'attack' . $item->color . $item->name . $item->number,
-                            'id' => 'attack' . $item->name . $item->id
-                        ]);
-                    }
+            $desiredPosition = $figure->desiredAttackPosition();
+
+            if (empty($desiredPosition->figure_id) == false && $desiredPosition->status == 'active') {
+                $desiredFigure = Figure::findOne(['id' => $desiredPosition->figure_id]);
+                if ($desiredFigure->color != $figure->color && $desiredFigure->status == 'active') {
+                    echo Html::submitButton('Attack ' . $desiredFigure->name, [
+                        'class' => 'btn btn-danger hidden move',
+                        'name' => 'attack' . $figure->color . $figure->name . $figure->number,
+                        'id' => 'attack' . $figure->name . $figure->id
+                    ]);
                 }
             }
         }

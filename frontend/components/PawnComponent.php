@@ -8,6 +8,7 @@
 
 namespace frontend\components;
 
+use app\models\Figure;
 use app\models\PlayPositions;
 
 class PawnComponent extends FigureComponent
@@ -24,6 +25,11 @@ class PawnComponent extends FigureComponent
 
         if (empty($desiredPosition->figure_id)) {
             parent::move();
+        } else {
+            $figure = Figure::findOne(['id' => $desiredPosition->figure_id]);
+            if ($figure->status == 'killed') {
+                parent::move();
+            }
         }
     }
 
@@ -31,8 +37,11 @@ class PawnComponent extends FigureComponent
         $desiredPosition = $this->desiredAttackPosition();
 
         if (empty($desiredPosition->figure_id) == false) {
-            parent::changeStatus($desiredPosition);
-            parent::attack();
+            $figure = Figure::findOne(['id' => $desiredPosition->figure_id]);
+            if ($figure->status == 'active' && $figure->color != $this->color) {
+                parent::changeStatus($figure);
+                parent::attack();
+            }
         }
     }
 

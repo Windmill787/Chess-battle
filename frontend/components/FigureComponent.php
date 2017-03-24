@@ -68,8 +68,7 @@ class FigureComponent extends Component implements FigureInterface
 
     }
 
-    public function setAttacks()
-    {
+    public function setAttacks() {
         $this->attackX = $this->moveX;
         $this->attackY = $this->moveY;
     }
@@ -82,8 +81,7 @@ class FigureComponent extends Component implements FigureInterface
         $position->save();
     }
 
-    public function attack()
-    {
+    public function attack() {
         if ($this->color == 'white') {
             $this->currentPositionX = $this->currentPositionX + $this->attackX;
             $this->currentPositionY = $this->currentPositionY + $this->attackY;
@@ -109,17 +107,17 @@ class FigureComponent extends Component implements FigureInterface
 
     public function desiredAttackPosition() {
         if ($this->color == 'white') {
-            $desiredPosition = PlayPositions::findOne([
+            $desiredFigure = PlayPositions::findOne([
                 'current_x' => $this->currentPositionX + $this->attackX,
                 'current_y' => $this->currentPositionY + $this->attackY
             ]);
-            return $desiredPosition;
+            return $desiredFigure;
         } else if ($this->color == 'black') {
-            $desiredPosition = PlayPositions::findOne([
+            $desiredFigure = PlayPositions::findOne([
                 'current_x' => $this->currentPositionX - $this->attackX,
                 'current_y' => $this->currentPositionY - $this->attackY
             ]);
-            return $desiredPosition;
+            return $desiredFigure;
         }
     }
 
@@ -139,8 +137,11 @@ class FigureComponent extends Component implements FigureInterface
         }
     }
 
-    public function changeStatus($desiredPosition) {
-        $figure = Figure::findOne(['id' => $desiredPosition->figure_id]);
+    public function changeStatus($figure) {
+        $position = PlayPositions::findOne(['figure_id' => $figure->id]);
+        $position->current_x = 0;
+        $position->current_y = 0;
+        $position->save();
         $figure->status = 'killed';
         $figure->save();
     }
