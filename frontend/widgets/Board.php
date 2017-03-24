@@ -8,13 +8,14 @@
 
 namespace frontend\widgets;
 
+use frontend\components\BoardComponent;
 use yii\helpers\Html;
 use yii\bootstrap\Widget;
 use yii\widgets\Pjax;
 
 class Board extends Widget
 {
-    public static function widget($board, $figures)
+    public static function widget(BoardComponent $board, $figures)
     {
         Pjax::begin();
 
@@ -71,6 +72,7 @@ class Board extends Widget
                                 ]);
                             }
                         }
+                        Direction::widget($board, $figure);
                     }
                     echo Html::endTag('td');
 
@@ -83,7 +85,6 @@ class Board extends Widget
                         'align' => 'center',
                         'valign' => 'center'
                     ]);
-
                     foreach ($figures as $figure) {
                         if ($board->x == $figure->currentPositionX && $board->y == $figure->currentPositionY) {
                             if ($figure->status != 'killed') {
@@ -93,6 +94,7 @@ class Board extends Widget
                                 ]);
                             }
                         }
+                        Direction::widget($board, $figure);
                     }
                     echo Html::endTag('td');
 
@@ -102,12 +104,6 @@ class Board extends Widget
         echo Html::endTag('tr');
 
         echo Html::endTag('table');
-
-        echo Html::beginForm();
-
-        Buttons::widget($figures);
-
-        echo Html::endForm();
 
         Pjax::end();
     }

@@ -8,6 +8,8 @@
 
 namespace frontend\components;
 
+use app\models\Figure;
+
 class BishopComponent extends FigureComponent
 {
     public $name = 'bishop';
@@ -22,6 +24,11 @@ class BishopComponent extends FigureComponent
 
         if (empty($desiredPosition->figure_id)) {
             parent::move();
+        } else {
+            $figure = Figure::findOne(['id' => $desiredPosition->figure_id]);
+            if ($figure->status == 'killed') {
+                parent::move();
+            }
         }
     }
 
@@ -29,8 +36,11 @@ class BishopComponent extends FigureComponent
         $desiredPosition = $this->desiredAttackPosition();
 
         if (empty($desiredPosition->figure_id) == false) {
-            parent::changeStatus($desiredPosition);
-            parent::attack();
+            $figure = Figure::findOne(['id' => $desiredPosition->figure_id]);
+            if ($figure->status == 'active' && $figure->color != $this->color) {
+                parent::changeStatus($figure);
+                parent::attack();
+            }
         }
     }
 

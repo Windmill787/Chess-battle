@@ -137,7 +137,7 @@ class FigureComponent extends Component implements FigureInterface
         }
     }
 
-    public function changeStatus($figure) {
+    public function changeStatus(Figure $figure) {
         $position = PlayPositions::findOne(['figure_id' => $figure->id]);
         $position->current_x = 0;
         $position->current_y = 0;
