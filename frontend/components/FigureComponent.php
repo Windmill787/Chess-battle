@@ -14,7 +14,7 @@ use app\models\PlayPositions;
 use frontend\interfaces\FigureInterface;
 use yii\base\Component;
 
-class FigureComponent extends Component implements FigureInterface
+class FigureComponent extends Component
 {
     public $id;
     public $color;
@@ -28,8 +28,8 @@ class FigureComponent extends Component implements FigureInterface
     public $currentPositionY;
     public $moveX;
     public $moveY;
-    public $attackX;
-    public $attackY;
+    public $attackX = [];
+    public $attackY = [];
 
     public function setImage($color, $name) {
         $image = "/figureImages/".$color.ucfirst($name).".svg";
@@ -69,8 +69,6 @@ class FigureComponent extends Component implements FigureInterface
     }
 
     public function setAttacks() {
-        $this->attackX = $this->moveX;
-        $this->attackY = $this->moveY;
     }
 
     public function savePosition() {
@@ -81,16 +79,11 @@ class FigureComponent extends Component implements FigureInterface
         $position->save();
     }
 
-    public function attack() {
-        if ($this->color == 'white') {
-            $this->currentPositionX = $this->currentPositionX + $this->attackX;
-            $this->currentPositionY = $this->currentPositionY + $this->attackY;
-            $this->savePosition();
-        } else if ($this->color == 'black') {
-            $this->currentPositionX = $this->currentPositionX - $this->attackX;
-            $this->currentPositionY = $this->currentPositionY - $this->attackY;
-            $this->savePosition();
-        }
+    public function attack($figure) {
+        $attackPosition = PlayPositions::findOne(['figure_id' => $figure->id]);
+        $this->currentPositionX = $attackPosition->current_x;
+        $this->currentPositionY = $attackPosition->current_y;
+        $this->savePosition();
     }
 
     public function move() {
@@ -107,17 +100,23 @@ class FigureComponent extends Component implements FigureInterface
 
     public function desiredAttackPosition() {
         if ($this->color == 'white') {
-            $desiredFigure = PlayPositions::findOne([
-                'current_x' => $this->currentPositionX + $this->attackX,
-                'current_y' => $this->currentPositionY + $this->attackY
-            ]);
-            return $desiredFigure;
+            foreach ($this->attackX as $attackX) {
+                foreach ($this->attackY as $attackY) {
+                    return $desiredPosition = PlayPositions::find()->where([
+                        'current_x' => $this->currentPositionX + $attackX,
+                        'current_y' => $this->currentPositionY + $attackY
+                    ])->all();
+                }
+            }
         } else if ($this->color == 'black') {
-            $desiredFigure = PlayPositions::findOne([
-                'current_x' => $this->currentPositionX - $this->attackX,
-                'current_y' => $this->currentPositionY - $this->attackY
-            ]);
-            return $desiredFigure;
+            foreach ($this->attackX as $attackX) {
+                foreach ($this->attackY as $attackY) {
+                    return $desiredPosition = PlayPositions::find()->where([
+                        'current_x' => $this->currentPositionX - $attackX,
+                        'current_y' => $this->currentPositionY - $attackY
+                    ])->all();
+                }
+            }
         }
     }
 

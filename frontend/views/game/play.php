@@ -92,8 +92,7 @@ $this->title = Yii::t('app', 'Play');
                     echo Html::beginForm();
                     echo Html::submitButton('New game', [
                         'class' => 'btn btn-primary',
-                        'name' => 'back',
-                        'onclick' => 'unhideAll()'
+                        'name' => 'back'
                     ]);
                     echo Html::endForm();
                     ?>

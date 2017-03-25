@@ -72,7 +72,7 @@ class Board extends Widget
                                 ]);
                             }
                         }
-                        Direction::widget($board, $figure);
+                        Buttons::widget($board, $figure);
                     }
                     echo Html::endTag('td');
 
@@ -94,7 +94,7 @@ class Board extends Widget
                                 ]);
                             }
                         }
-                        Direction::widget($board, $figure);
+                        Buttons::widget($board, $figure);
                     }
                     echo Html::endTag('td');
 

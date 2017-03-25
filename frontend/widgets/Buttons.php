@@ -13,7 +13,7 @@ use frontend\components\FigureComponent;
 use yii\bootstrap\Widget;
 use yii\helpers\Html;
 
-class Direction extends Widget
+class Buttons extends Widget
 {
     public static function widget(BoardComponent $board, FigureComponent $figure)
     {
@@ -29,9 +29,13 @@ class Direction extends Widget
                 FirstMoveButton::widget($figure);
             }
 
-            if ($board->x == $figure->currentPositionX + $figure->attackX &&
-                $board->y == $figure->currentPositionY + $figure->attackY) {
-                AttackButton::widget($figure);
+            foreach ($figure->attackX as $attackX) {
+                foreach ($figure->attackY as $attackY) {
+                    if ($board->x == $figure->currentPositionX + $attackX &&
+                        $board->y == $figure->currentPositionY + $attackY) {
+                        AttackButton::widget($figure);
+                    }
+                }
             }
 
         } else if ($figure->color == 'black') {
@@ -46,10 +50,15 @@ class Direction extends Widget
                 FirstMoveButton::widget($figure);
             }
 
-            if ($board->x == $figure->currentPositionX - $figure->attackX &&
-                $board->y == $figure->currentPositionY - $figure->attackY) {
-                AttackButton::widget($figure);
+            foreach ($figure->attackX as $attackX) {
+                foreach ($figure->attackY as $attackY) {
+                    if ($board->x == $figure->currentPositionX - $attackX &&
+                        $board->y == $figure->currentPositionY - $attackY) {
+                        AttackButton::widget($figure);
+                    }
+                }
             }
+
         }
     }
 }

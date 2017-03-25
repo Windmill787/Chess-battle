@@ -70,10 +70,5 @@ class FigureBuilderComponent extends Component
             $figure->status = 'active';
             $figure->save();
         }
-        $positions = PlayPositions::find()->all();
-        foreach ($positions as $position) {
-            $position->status = 'active';
-            $position->save();
-        }
     }
 }

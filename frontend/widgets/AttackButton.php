@@ -9,6 +9,7 @@
 namespace frontend\widgets;
 
 use app\models\Figure;
+use app\models\PlayPositions;
 use frontend\components\FigureComponent;
 use yii\bootstrap\Widget;
 use yii\helpers\Html;
@@ -16,19 +17,26 @@ use yii\helpers\Html;
 class AttackButton extends Widget
 {
     public static function widget(FigureComponent $figure) {
-        $desiredPosition = $figure->desiredAttackPosition();
 
-        if (empty($desiredPosition->figure_id) == false) {
-            $desiredFigure = Figure::findOne(['id' => $desiredPosition->figure_id]);
-            if ($desiredFigure->color != $figure->color && $desiredFigure->status == 'active') {
-                echo Html::beginForm();
-                echo Html::submitButton('attack', [
-                    'class' => 'btn btn-xs btn-danger hidden move',
-                    'name' => 'attack' . $figure->color . $figure->name . $figure->number,
-                    'id' => 'attack' . $figure->name . $figure->id,
-                    'onclick' => 'hideButtons()'
+        foreach ($figure->attackX as $attackX) {
+            foreach ($figure->attackY as $attackY) {
+                $desiredPosition = PlayPositions::findOne([
+                    'current_x' => $figure->currentPositionX + $attackX,
+                    'current_y' => $figure->currentPositionY + $attackY
                 ]);
-                echo Html::endForm();
+
+                if (empty($desiredPosition->figure_id) == false) {
+                    $desiredFigure = Figure::findOne(['id' => $desiredPosition->id]);
+
+                    if ($desiredFigure->color != $figure->color && $desiredFigure->status == 'active') {
+                        echo Html::beginForm();
+                        echo Html::submitButton('attack', [
+                            'class' => 'btn btn-xs btn-danger hidden attack attack' . $figure->id,
+                            'name' => 'attack' . $desiredFigure->id
+                        ]);
+                        echo Html::endForm();
+                    }
+                }
             }
         }
     }

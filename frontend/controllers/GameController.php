@@ -11,8 +11,7 @@ namespace frontend\controllers;
 use frontend\components\BoardComponent;
 use app\models\PlayPositions;
 use frontend\components\FigureBuilderComponent;
-use frontend\components\KnightComponent;
-use frontend\components\PawnComponent;
+use app\models\Figure;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -66,10 +65,25 @@ class GameController extends Controller
                 $item->firstMove();
             }
 
-            if (isset($_POST['attack'.$item->color.$item->name.$item->number])) {
-                $item->attack();
-                $this->refresh();
+            foreach ($item->attackX as $attackX) {
+                foreach ($item->attackY as $attackY) {
+
+                    $desiredPosition = PlayPositions::findOne([
+                        'current_x' => $item->currentPositionX + $attackX,
+                        'current_y' => $item->currentPositionY + $attackY
+                    ]);
+
+                    if (empty($desiredPosition->figure_id) == false) {
+                        $desiredFigure = Figure::findOne(['id' => $desiredPosition->id]);
+
+                        if (isset($_POST['attack' . $desiredFigure->id])) {
+                            $item->attack($desiredFigure->id);
+                            $this->refresh();
+                        }
+                    }
+                }
             }
+
         }
 
         // fix this!

@@ -33,15 +33,11 @@ class PawnComponent extends FigureComponent
         }
     }
 
-    public function attack() {
-        $desiredPosition = $this->desiredAttackPosition();
-
-        if (empty($desiredPosition->figure_id) == false) {
-            $figure = Figure::findOne(['id' => $desiredPosition->figure_id]);
-            if ($figure->status == 'active' && $figure->color != $this->color) {
-                parent::changeStatus($figure);
-                parent::attack();
-            }
+    public function attack($id) {
+        $figure = Figure::findOne(['id' => $id]);
+        if ($figure->status == 'active' && $figure->color != $this->color) {
+            parent::attack($figure);
+            parent::changeStatus($figure);
         }
     }
 
@@ -51,8 +47,8 @@ class PawnComponent extends FigureComponent
     }
 
     public function setAttacks() {
-        $this->attackX = 1;
-        $this->attackY = 1;
+        $this->attackX = [-1, 1];
+        $this->attackY = [1];
     }
 
     public function desiredFirstMovePosition() {
