@@ -27,6 +27,7 @@ $('#myMoveButton').on('click', function () {
 });
 
 function hideButtons () {
+    $('.attack').addClass('hidden');
     $('.move').addClass('hidden');
     $('img').addClass('disabled')
 }

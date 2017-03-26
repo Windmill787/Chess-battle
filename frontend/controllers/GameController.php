@@ -59,22 +59,17 @@ class GameController extends Controller
         foreach ($figures as $item) {
             foreach ($item->moveX as $moveX) {
                 foreach ($item->moveY as $moveY) {
-
                     if ($item->color == 'white') {
-                        $desiredPosition = PlayPositions::findOne([
-                            'current_x' => $item->currentPositionX + $moveX,
-                            'current_y' => $item->currentPositionY + $moveY
-                        ]);
+                        $figureMoveX = $item->currentPositionX + $moveX;
+                        $figureMoveY = $item->currentPositionY + $moveY;
+                        if (isset($_POST['move' . $item->id . $figureMoveX . $figureMoveY])) {
+                            $item->move($figureMoveX, $figureMoveY);
+                        }
                     } else if ($item->color == 'black') {
-                        $desiredPosition = PlayPositions::findOne([
-                            'current_x' => $item->currentPositionX - $moveX,
-                            'current_y' => $item->currentPositionY - $moveY
-                        ]);
-                    }
-
-                    if (empty($desiredPosition->figure_id)) {
-                        if (isset($_POST['move' . $item->id . $item->moveCount])) {
-                            $item->move($item->moveCount);
+                        $figureMoveX = $item->currentPositionX - $moveX;
+                        $figureMoveY = $item->currentPositionY - $moveY;
+                        if (isset($_POST['move' . $item->id . $figureMoveX . $figureMoveY])) {
+                            $item->move($figureMoveX, $figureMoveY);
                         }
                     }
                 }
@@ -105,7 +100,6 @@ class GameController extends Controller
                     }
                 }
             }
-
         }
 
         // fix this!
@@ -118,7 +112,6 @@ class GameController extends Controller
         return $this->render('play', [
             'board' => $board,
             'figures' => $figures
-
         ]);
     }
 

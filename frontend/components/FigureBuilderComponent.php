@@ -11,11 +11,13 @@ namespace frontend\components;
 use app\models\Figure;
 use app\models\PlayPositions;
 use yii\base\Component;
+use Yii;
 
 class FigureBuilderComponent extends Component
 {
     public static function build()
     {
+
         // need fix!
         return $figures = [
             $whitePawn1 = new PawnComponent('white', 1),

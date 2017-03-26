@@ -44,6 +44,7 @@ class AttackButton extends Widget
     }
 
     public static function checkFigure($figure, $desiredPosition) {
+
         if (empty($desiredPosition->figure_id) == false) {
             $desiredFigure = Figure::findOne(['id' => $desiredPosition->id]);
 

@@ -70,25 +70,7 @@ return [
                     ],
                 ],
             ],
-        ],
-        'pawn' => [
-            'class' => 'frontend\components\PawnComponent',
-            'color' => 'white',
-            'number' => 1
-        ],
-        /*'Figure' => 'frontend\components\FigureComponent',
-        'Pawn' => 'frontend\components\PawnComponent',*/
-        /*
-        'knight' => \frontend\components\FigureBuilderComponent::build('knight',
-            \frontend\components\KnightComponent::className()),
-        'bishop' => \frontend\components\FigureBuilderComponent::build('bishop',
-            \frontend\components\BishopComponent::className()),
-        'rook' => \frontend\components\FigureBuilderComponent::build('rook',
-            \frontend\components\RookComponent::className()),
-        'king' => \frontend\components\FigureBuilderComponent::build('king',
-            \frontend\components\KingComponent::className()),
-        'queen' => \frontend\components\FigureBuilderComponent::build('queen',
-            \frontend\components\QueenComponent::className()),*/
+        ]
     ],
     'params' => $params,
 ];

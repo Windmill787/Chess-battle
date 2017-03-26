@@ -20,37 +20,51 @@ class MoveButton extends Widget
         foreach ($figure->moveX as $moveX) {
             foreach ($figure->moveY as $moveY) {
                 if ($figure->color == 'white') {
+                    $figureMoveX = $figure->currentPositionX + $moveX;
+                    $figureMoveY = $figure->currentPositionY + $moveY;
+
                     $desiredPosition = PlayPositions::findOne([
-                        'current_x' => $figure->currentPositionX + $moveX,
-                        'current_y' => $figure->currentPositionY + $moveY
+                        'current_x' => $figureMoveX,
+                        'current_y' => $figureMoveY
                     ]);
-                    if ($board->x == $figure->currentPositionX + $moveX &&
-                        $board->y == $figure->currentPositionY + $moveY) {
-                        self::checkPosition($figure, $desiredPosition);
+
+                    if (empty($desiredPosition->figure_id)) {
+                        if ($board->x == $figureMoveX &&
+                            $board->y == $figureMoveY) {
+
+                            echo Html::beginForm();
+                            echo Html::submitButton('move', [
+                                'class' => 'btn btn-xs btn-primary hidden move move' . $figure->id,
+                                'name' => 'move' . $figure->id . $figureMoveX . $figureMoveY,
+                                'onclick' => 'hideButtons()'
+                            ]);
+                            echo Html::endForm();
+                        }
                     }
                 } else if ($figure->color == 'black') {
+                    $figureMoveX = $figure->currentPositionX - $moveX;
+                    $figureMoveY = $figure->currentPositionY - $moveY;
+
                     $desiredPosition = PlayPositions::findOne([
-                        'current_x' => $figure->currentPositionX - $moveX,
-                        'current_y' => $figure->currentPositionY - $moveY
+                        'current_x' => $figureMoveX,
+                        'current_y' => $figureMoveY
                     ]);
-                    if ($board->x == $figure->currentPositionX - $moveX &&
-                        $board->y == $figure->currentPositionY - $moveY) {
-                        self::checkPosition($figure, $desiredPosition);
+
+                    if (empty($desiredPosition->figure_id)) {
+                        if ($board->x == $figureMoveX &&
+                            $board->y == $figureMoveY) {
+
+                            echo Html::beginForm();
+                            echo Html::submitButton('move', [
+                                'class' => 'btn btn-xs btn-primary hidden move move' . $figure->id,
+                                'name' => 'move' . $figure->id . $figureMoveX . $figureMoveY,
+                                'onclick' => 'hideButtons()'
+                            ]);
+                            echo Html::endForm();
+                        }
                     }
                 }
             }
         }
-    }
-
-    public static function checkPosition($figure, $desiredPosition) {
-        if (empty($desiredPosition->figure_id)) {
-                echo Html::beginForm();
-                echo Html::submitButton('move', [
-                    'class' => 'btn btn-xs btn-primary hidden move move' . $figure->id,
-                    'name' => 'move' . $figure->id . $figure->moveCount,
-                    'onclick' => 'hideButtons()'
-                ]);
-                echo Html::endForm();
-            }
     }
 }

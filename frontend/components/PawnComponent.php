@@ -14,15 +14,14 @@ use app\models\PlayPositions;
 class PawnComponent extends FigureComponent
 {
     public $name = 'pawn';
-    public $moveCount = 1;
 
     public function __construct($color, $number = null, $config = [])
     {
         parent::__construct($color, $this->name, $number, $config);
     }
 
-    public function move($count) {
-        parent::move($count);
+    public function move($figureMoveX, $figureMoveY) {
+        parent::move($figureMoveX, $figureMoveY);
     }
 
     public function attack($id) {
@@ -35,47 +34,11 @@ class PawnComponent extends FigureComponent
 
     public function setMoves() {
         $this->moveX = [0];
-        $this->moveY = [1, 2];
+        $this->moveY = [1];
     }
 
     public function setAttacks() {
         $this->attackX = [-1, 1];
         $this->attackY = [1];
     }
-
-    /*public function desiredFirstMovePosition() {
-        if ($this->currentPositionX == $this->startPositionX && $this->currentPositionY == $this->startPositionY) {
-            if ($this->color == 'white') {
-                $desiredPosition = PlayPositions::findOne([
-                    'current_x' => $this->currentPositionX + $this->moveX,
-                    'current_y' => $this->currentPositionY + $this->moveY + 1
-                ]);
-                return $desiredPosition;
-            } else if ($this->color == 'black') {
-                $desiredPosition = PlayPositions::findOne([
-                    'current_x' => $this->currentPositionX - $this->moveX,
-                    'current_y' => $this->currentPositionY - $this->moveY - 1
-                ]);
-                return $desiredPosition;
-            }
-        }
-    }
-
-    public function firstMove() {
-        $desiredPosition = $this->desiredFirstMovePosition();
-
-        if ($this->color == 'white') {
-            if (empty($desiredPosition->figure_id)) {
-                $this->currentPositionX = $this->currentPositionX + $this->moveX;
-                $this->currentPositionY = $this->currentPositionY + $this->moveY + 1;
-                $this->savePosition();
-            }
-        } else if ($this->color == 'black') {
-            if (empty($desiredPosition->figure_id)) {
-                $this->currentPositionX = $this->currentPositionX - $this->moveX;
-                $this->currentPositionY = $this->currentPositionY - $this->moveY - 1;
-                $this->savePosition();
-            }
-        }
-    }*/
 }

@@ -10,8 +10,6 @@ namespace frontend\widgets;
 
 use yii\base\Widget;
 use yii\helpers\Html;
-use app\models\PlayPositions;
-use app\models\Figure;
 
 class BoardSquare extends Widget
 {
@@ -34,7 +32,8 @@ class BoardSquare extends Widget
                     ]);
                 }
             }
-            Buttons::widget($board, $figure);
+            MoveButton::widget($figure, $board);
+            AttackButton::widget($figure, $board);
         }
         echo Html::endTag('td');
     }

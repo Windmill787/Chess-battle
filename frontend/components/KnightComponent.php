@@ -19,33 +19,25 @@ class KnightComponent extends FigureComponent
         parent::__construct($color, $this->name, $number, $config);
     }
 
-    public function move() {
-        $desiredPosition = $this->desiredMovePosition();
-
-        if (empty($desiredPosition->figure_id)) {
-            parent::move();
-        } else {
-            $figure = Figure::findOne(['id' => $desiredPosition->figure_id]);
-            if ($figure->status == 'killed') {
-                parent::move();
-            }
-        }
+    public function move($figureMoveX, $figureMoveY) {
+        parent::move($figureMoveX, $figureMoveY);
     }
 
-    public function attack() {
-        $desiredPosition = $this->desiredAttackPosition();
-
-        if (empty($desiredPosition->figure_id) == false) {
-            $figure = Figure::findOne(['id' => $desiredPosition->figure_id]);
-            if ($figure->status == 'active' && $figure->color != $this->color) {
-                parent::changeStatus($figure);
-                parent::attack();
-            }
+    public function attack($id) {
+        $figure = Figure::findOne(['id' => $id]);
+        if ($figure->status == 'active' && $figure->color != $this->color) {
+            parent::attack($figure);
+            parent::changeStatus($figure);
         }
     }
 
     public function setMoves() {
         $this->moveX = [1, -1];
         $this->moveY = [2, -2];
+    }
+
+    public function setAttacks() {
+        $this->attackX = $this->moveX;
+        $this->attackY = $this->moveY;
     }
 }

@@ -11,7 +11,7 @@ namespace frontend\interfaces;
 
 interface FigureInterface
 {
-    public function move();
+    public function move($figureMoveX, $figureMoveY);
 
-    public function attack();
+    public function attack($figure);
 }

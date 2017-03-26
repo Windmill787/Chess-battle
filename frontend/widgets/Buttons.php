@@ -11,24 +11,10 @@ namespace frontend\widgets;
 use frontend\components\BoardComponent;
 use frontend\components\FigureComponent;
 use yii\bootstrap\Widget;
-use yii\helpers\Html;
 
 class Buttons extends Widget
 {
-    public static function widget($board, $figure)
-    {
-        if ($figure->color == 'white') {
+    public static function widget(BoardComponent $board,FigureComponent $figure) {
 
-            MoveButton::widget($figure, $board);
-
-            AttackButton::widget($figure, $board);
-
-        } else if ($figure->color == 'black') {
-
-            MoveButton::widget($figure, $board);
-
-            AttackButton::widget($figure, $board);
-
-        }
     }
 }

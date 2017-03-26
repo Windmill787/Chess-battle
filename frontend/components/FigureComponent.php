@@ -11,9 +11,10 @@ namespace frontend\components;
 use app\models\Chessboard;
 use app\models\Figure;
 use app\models\PlayPositions;
+use frontend\interfaces\FigureInterface;
 use yii\base\Component;
 
-class FigureComponent extends Component
+class FigureComponent extends Component implements FigureInterface
 {
     public $id;
     public $color;
@@ -27,7 +28,6 @@ class FigureComponent extends Component
     public $currentPositionY;
     public $moveX = [];
     public $moveY = [];
-    public $moveCount;
     public $attackX = [];
     public $attackY = [];
 
@@ -86,20 +86,10 @@ class FigureComponent extends Component
         $this->savePosition();
     }
 
-    public function move($count) {
-        /*foreach ($this->moveX as $moveX) {
-            foreach ($this->moveY as $moveY) {
-                if ($this->color == 'white') {
-                    $this->currentPositionX = $this->currentPositionX + $moveX * $count;
-                    $this->currentPositionY = $this->currentPositionY + $moveY * $count;
-                    $this->savePosition();
-                } else if ($this->color == 'black') {
-                    $this->currentPositionX = $this->currentPositionX - $moveX * $count;
-                    $this->currentPositionY = $this->currentPositionY - $moveY * $count;
-                    $this->savePosition();
-                }
-            }
-        }*/
+    public function move($figureMoveX, $figureMoveY) {
+        $this->currentPositionX = $figureMoveX;
+        $this->currentPositionY = $figureMoveY;
+        $this->savePosition();
     }
 
     public function count() {
