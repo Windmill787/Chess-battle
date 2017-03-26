@@ -29,14 +29,7 @@ class Buttons extends Widget
                 FirstMoveButton::widget($figure);
             }
 
-            foreach ($figure->attackX as $attackX) {
-                foreach ($figure->attackY as $attackY) {
-                    if ($board->x == $figure->currentPositionX + $attackX &&
-                        $board->y == $figure->currentPositionY + $attackY) {
-                        AttackButton::widget($figure);
-                    }
-                }
-            }
+            AttackButton::widget($figure, $board);
 
         } else if ($figure->color == 'black') {
 
@@ -50,14 +43,8 @@ class Buttons extends Widget
                 FirstMoveButton::widget($figure);
             }
 
-            foreach ($figure->attackX as $attackX) {
-                foreach ($figure->attackY as $attackY) {
-                    if ($board->x == $figure->currentPositionX - $attackX &&
-                        $board->y == $figure->currentPositionY - $attackY) {
-                        AttackButton::widget($figure);
-                    }
-                }
-            }
+            AttackButton::widget($figure, $board);
+
 
         }
     }

@@ -68,10 +68,17 @@ class GameController extends Controller
             foreach ($item->attackX as $attackX) {
                 foreach ($item->attackY as $attackY) {
 
-                    $desiredPosition = PlayPositions::findOne([
-                        'current_x' => $item->currentPositionX + $attackX,
-                        'current_y' => $item->currentPositionY + $attackY
-                    ]);
+                    if ($item->color == 'white') {
+                        $desiredPosition = PlayPositions::findOne([
+                            'current_x' => $item->currentPositionX + $attackX,
+                            'current_y' => $item->currentPositionY + $attackY
+                        ]);
+                    } else if ($item->color == 'black') {
+                        $desiredPosition = PlayPositions::findOne([
+                            'current_x' => $item->currentPositionX - $attackX,
+                            'current_y' => $item->currentPositionY - $attackY
+                        ]);
+                    }
 
                     if (empty($desiredPosition->figure_id) == false) {
                         $desiredFigure = Figure::findOne(['id' => $desiredPosition->id]);

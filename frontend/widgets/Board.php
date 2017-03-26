@@ -56,47 +56,11 @@ class Board extends Widget
                 $total = $board->y + $board->x;
                 if ($total % 2 == 0) {
 
-                    echo Html::beginTag('td', [
-                        'height' => 50,
-                        'width' => 50,
-                        'bgcolor' => '#AF5200',
-                        'align' => 'center',
-                        'valign' => 'center'
-                    ]);
-                    foreach ($figures as $figure) {
-                        if ($board->x == $figure->currentPositionX && $board->y == $figure->currentPositionY) {
-                            if ($figure->status != 'killed') {
-                                echo Html::img($figure->image, [
-                                    'id' => 'figure'.$figure->id,
-                                    'onclick' => "light(".$figure->name.', '.$figure->id.")"
-                                ]);
-                            }
-                        }
-                        Buttons::widget($board, $figure);
-                    }
-                    echo Html::endTag('td');
+                    BoardSquare::widget('#AF5200', $board, $figures);
 
                 } else {
 
-                    echo Html::beginTag('td', [
-                        'height' => 50,
-                        'width' => 50,
-                        'bgcolor' => '#FFFFFF',
-                        'align' => 'center',
-                        'valign' => 'center'
-                    ]);
-                    foreach ($figures as $figure) {
-                        if ($board->x == $figure->currentPositionX && $board->y == $figure->currentPositionY) {
-                            if ($figure->status != 'killed') {
-                                echo Html::img($figure->image, [
-                                    'id' => 'figure' . $figure->id,
-                                    'onclick' => "light(" . $figure->name . ', ' . $figure->id . ")"
-                                ]);
-                            }
-                        }
-                        Buttons::widget($board, $figure);
-                    }
-                    echo Html::endTag('td');
+                    BoardSquare::widget('#FFFFFF', $board, $figures);
 
                 }
             }

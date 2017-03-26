@@ -46,10 +46,4 @@ function light (figure, id) {
     $('#move' + figure + id).removeClass('hidden');
     $('#firstMove' + figure + id).removeClass('hidden');
     $('.attack' + id).removeClass('hidden');
-    $('#knight' + figure + id).removeClass('hidden');
 }
-
-$('th').on('click', function () {
-    $('img').css('border','none').css('background-color','inherit');
-    $('.move').addClass('disabled');
-});
