@@ -14,23 +14,15 @@ use app\models\PlayPositions;
 class PawnComponent extends FigureComponent
 {
     public $name = 'pawn';
+    public $moveCount = 1;
 
     public function __construct($color, $number = null, $config = [])
     {
         parent::__construct($color, $this->name, $number, $config);
     }
 
-    public function move() {
-        $desiredPosition = $this->desiredMovePosition();
-
-        if (empty($desiredPosition->figure_id)) {
-            parent::move();
-        } else {
-            $figure = Figure::findOne(['id' => $desiredPosition->figure_id]);
-            if ($figure->status == 'killed') {
-                parent::move();
-            }
-        }
+    public function move($count) {
+        parent::move($count);
     }
 
     public function attack($id) {
@@ -42,8 +34,8 @@ class PawnComponent extends FigureComponent
     }
 
     public function setMoves() {
-        $this->moveX = 0;
-        $this->moveY = 1;
+        $this->moveX = [0];
+        $this->moveY = [1, 2];
     }
 
     public function setAttacks() {
@@ -51,7 +43,7 @@ class PawnComponent extends FigureComponent
         $this->attackY = [1];
     }
 
-    public function desiredFirstMovePosition() {
+    /*public function desiredFirstMovePosition() {
         if ($this->currentPositionX == $this->startPositionX && $this->currentPositionY == $this->startPositionY) {
             if ($this->color == 'white') {
                 $desiredPosition = PlayPositions::findOne([
@@ -85,5 +77,5 @@ class PawnComponent extends FigureComponent
                 $this->savePosition();
             }
         }
-    }
+    }*/
 }

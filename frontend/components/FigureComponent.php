@@ -11,7 +11,6 @@ namespace frontend\components;
 use app\models\Chessboard;
 use app\models\Figure;
 use app\models\PlayPositions;
-use frontend\interfaces\FigureInterface;
 use yii\base\Component;
 
 class FigureComponent extends Component
@@ -26,8 +25,9 @@ class FigureComponent extends Component
     public $startPositionY;
     public $currentPositionX;
     public $currentPositionY;
-    public $moveX;
-    public $moveY;
+    public $moveX = [];
+    public $moveY = [];
+    public $moveCount;
     public $attackX = [];
     public $attackY = [];
 
@@ -86,54 +86,24 @@ class FigureComponent extends Component
         $this->savePosition();
     }
 
-    public function move() {
-        if ($this->color == 'white') {
-            $this->currentPositionX = $this->currentPositionX + $this->moveX;
-            $this->currentPositionY = $this->currentPositionY + $this->moveY;
-            $this->savePosition();
-        } else if ($this->color == 'black') {
-            $this->currentPositionX = $this->currentPositionX - $this->moveX;
-            $this->currentPositionY = $this->currentPositionY - $this->moveY;
-            $this->savePosition();
-        }
-    }
-
-    public function desiredAttackPosition() {
-        if ($this->color == 'white') {
-            foreach ($this->attackX as $attackX) {
-                foreach ($this->attackY as $attackY) {
-                    return $desiredPosition = PlayPositions::find()->where([
-                        'current_x' => $this->currentPositionX + $attackX,
-                        'current_y' => $this->currentPositionY + $attackY
-                    ])->all();
+    public function move($count) {
+        /*foreach ($this->moveX as $moveX) {
+            foreach ($this->moveY as $moveY) {
+                if ($this->color == 'white') {
+                    $this->currentPositionX = $this->currentPositionX + $moveX * $count;
+                    $this->currentPositionY = $this->currentPositionY + $moveY * $count;
+                    $this->savePosition();
+                } else if ($this->color == 'black') {
+                    $this->currentPositionX = $this->currentPositionX - $moveX * $count;
+                    $this->currentPositionY = $this->currentPositionY - $moveY * $count;
+                    $this->savePosition();
                 }
             }
-        } else if ($this->color == 'black') {
-            foreach ($this->attackX as $attackX) {
-                foreach ($this->attackY as $attackY) {
-                    return $desiredPosition = PlayPositions::find()->where([
-                        'current_x' => $this->currentPositionX - $attackX,
-                        'current_y' => $this->currentPositionY - $attackY
-                    ])->all();
-                }
-            }
-        }
+        }*/
     }
 
-    public function desiredMovePosition() {
-        if ($this->color == 'white') {
-            $desiredPosition = PlayPositions::findOne([
-                'current_x' => $this->currentPositionX + $this->moveX,
-                'current_y' => $this->currentPositionY + $this->moveY
-            ]);
-            return $desiredPosition;
-        } else if ($this->color == 'black') {
-            $desiredPosition = PlayPositions::findOne([
-                'current_x' => $this->currentPositionX - $this->moveX,
-                'current_y' => $this->currentPositionY - $this->moveY
-            ]);
-            return $desiredPosition;
-        }
+    public function count() {
+
     }
 
     public function changeStatus(Figure $figure) {

@@ -45,7 +45,7 @@ class KnightComponent extends FigureComponent
     }
 
     public function setMoves() {
-        $this->moveX = 1;
-        $this->moveY = 2;
+        $this->moveX = [1, -1];
+        $this->moveY = [2, -2];
     }
 }

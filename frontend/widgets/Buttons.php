@@ -15,36 +15,19 @@ use yii\helpers\Html;
 
 class Buttons extends Widget
 {
-    public static function widget(BoardComponent $board, FigureComponent $figure)
+    public static function widget($board, $figure)
     {
         if ($figure->color == 'white') {
 
-            if ($board->x == $figure->currentPositionX + $figure->moveX &&
-                $board->y == $figure->currentPositionY + $figure->moveY) {
-                MoveButton::widget($figure);
-            }
-
-            if ($board->x == $figure->currentPositionX + $figure->moveX &&
-                $board->y == $figure->currentPositionY + $figure->moveY + 1) {
-                FirstMoveButton::widget($figure);
-            }
+            MoveButton::widget($figure, $board);
 
             AttackButton::widget($figure, $board);
 
         } else if ($figure->color == 'black') {
 
-            if ($board->x == $figure->currentPositionX - $figure->moveX &&
-                $board->y == $figure->currentPositionY - $figure->moveY) {
-                MoveButton::widget($figure);
-            }
-
-            if ($board->x == $figure->currentPositionX - $figure->moveX &&
-                $board->y == $figure->currentPositionY - $figure->moveY - 1) {
-                FirstMoveButton::widget($figure);
-            }
+            MoveButton::widget($figure, $board);
 
             AttackButton::widget($figure, $board);
-
 
         }
     }

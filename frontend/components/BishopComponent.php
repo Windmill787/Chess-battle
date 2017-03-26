@@ -45,7 +45,7 @@ class BishopComponent extends FigureComponent
     }
 
     public function setMoves() {
-        $this->moveX = 1;
-        $this->moveY = 1;
+        $this->moveX = [1];
+        $this->moveY = [1];
     }
 }

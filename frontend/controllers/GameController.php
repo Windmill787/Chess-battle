@@ -57,12 +57,27 @@ class GameController extends Controller
 
         // fix this!
         foreach ($figures as $item) {
-            if (isset($_POST['move'.$item->color.$item->name.$item->number])) {
-                $item->move();
-            }
+            foreach ($item->moveX as $moveX) {
+                foreach ($item->moveY as $moveY) {
 
-            if (isset($_POST['firstMove'.$item->color.$item->name.$item->number])) {
-                $item->firstMove();
+                    if ($item->color == 'white') {
+                        $desiredPosition = PlayPositions::findOne([
+                            'current_x' => $item->currentPositionX + $moveX,
+                            'current_y' => $item->currentPositionY + $moveY
+                        ]);
+                    } else if ($item->color == 'black') {
+                        $desiredPosition = PlayPositions::findOne([
+                            'current_x' => $item->currentPositionX - $moveX,
+                            'current_y' => $item->currentPositionY - $moveY
+                        ]);
+                    }
+
+                    if (empty($desiredPosition->figure_id)) {
+                        if (isset($_POST['move' . $item->id . $item->moveCount])) {
+                            $item->move($item->moveCount);
+                        }
+                    }
+                }
             }
 
             foreach ($item->attackX as $attackX) {
