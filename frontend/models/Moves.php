@@ -5,23 +5,24 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "start_position".
+ * This is the model class for table "moves".
  *
  * @property integer $id
  * @property integer $figure_id
- * @property integer $start_col
- * @property integer $start_row
+ * @property string $move
+ * @property string $attack
+ * @property string $first_move
  *
  * @property Figure $figure
  */
-class StartPosition extends \yii\db\ActiveRecord
+class Moves extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'start_position';
+        return 'moves';
     }
 
     /**
@@ -30,7 +31,9 @@ class StartPosition extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['figure_id', 'start_col', 'start_row'], 'integer'],
+            [['figure_id', 'move'], 'required'],
+            [['figure_id'], 'integer'],
+            [['move', 'attack', 'first_move'], 'string', 'max' => 255],
             [['figure_id'], 'exist', 'skipOnError' => true, 'targetClass' => Figure::className(), 'targetAttribute' => ['figure_id' => 'id']],
         ];
     }
@@ -43,8 +46,9 @@ class StartPosition extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'figure_id' => 'Figure ID',
-            'start_col' => 'Start Col',
-            'start_row' => 'Start Row',
+            'move' => 'Move',
+            'attack' => 'Attack',
+            'first_move' => 'First Move',
         ];
     }
 

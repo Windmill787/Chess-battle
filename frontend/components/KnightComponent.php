@@ -9,6 +9,7 @@
 namespace frontend\components;
 
 use app\models\Figure;
+use app\models\Moves;
 
 class KnightComponent extends FigureComponent
 {
@@ -31,13 +32,15 @@ class KnightComponent extends FigureComponent
         }
     }
 
-    public function setMoves() {
-        $this->moveX = [1, -1];
-        $this->moveY = [2, -2];
+    public function setMoves()
+    {
+        $allMoves = Moves::findOne(['figure_id' => $this->id]);
+        $this->moves = unserialize($allMoves->move);
     }
 
-    public function setAttacks() {
-        $this->attackX = $this->moveX;
-        $this->attackY = $this->moveY;
+    public function setAttacks()
+    {
+        $allAttacks = Moves::findOne(['figure_id' => $this->id]);
+        $this->attacks = unserialize($allAttacks->attack);
     }
 }

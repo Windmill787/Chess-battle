@@ -8,6 +8,8 @@
 
 namespace frontend\components;
 
+use app\models\Figure;
+use app\models\Moves;
 
 class KingComponent extends FigureComponent
 {
@@ -20,5 +22,29 @@ class KingComponent extends FigureComponent
 
     public function castling() {
 
+    }
+
+    public function move($figureMoveX, $figureMoveY) {
+        parent::move($figureMoveX, $figureMoveY);
+    }
+
+    public function attack($id) {
+        $figure = Figure::findOne(['id' => $id]);
+        if ($figure->status == 'active' && $figure->color != $this->color) {
+            parent::attack($figure);
+            parent::changeStatus($figure);
+        }
+    }
+
+    public function setMoves()
+    {
+        $allMoves = Moves::findOne(['figure_id' => $this->id]);
+        $this->moves = unserialize($allMoves->move);
+    }
+
+    public function setAttacks()
+    {
+        $allAttacks = Moves::findOne(['figure_id' => $this->id]);
+        $this->attacks = unserialize($allAttacks->attack);
     }
 }

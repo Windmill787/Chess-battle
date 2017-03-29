@@ -33,7 +33,7 @@ class BoardSquare extends Widget
                 }
             }
             MoveButton::widget($figure, $board);
-            AttackButton::widget($figure, $board);
+            //AttackButton::widget($figure, $board);
         }
         echo Html::endTag('td');
     }

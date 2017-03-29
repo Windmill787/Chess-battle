@@ -17,7 +17,6 @@ class FigureBuilderComponent extends Component
 {
     public static function build()
     {
-
         // need fix!
         return $figures = [
             $whitePawn1 = new PawnComponent('white', 1),

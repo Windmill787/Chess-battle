@@ -9,6 +9,7 @@
 namespace frontend\components;
 
 use app\models\Figure;
+use app\models\Moves;
 use app\models\PlayPositions;
 
 class PawnComponent extends FigureComponent
@@ -32,13 +33,15 @@ class PawnComponent extends FigureComponent
         }
     }
 
-    public function setMoves() {
-        $this->moveX = [0];
-        $this->moveY = [1];
+    public function setMoves()
+    {
+        $allMoves = Moves::findOne(['figure_id' => $this->id]);
+        $this->moves = unserialize($allMoves->move);
     }
 
-    public function setAttacks() {
-        $this->attackX = [-1, 1];
-        $this->attackY = [1];
+    public function setAttacks()
+    {
+        $allAttacks = Moves::findOne(['figure_id' => $this->id]);
+        $this->attacks = unserialize($allAttacks->attack);
     }
 }

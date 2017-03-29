@@ -12,9 +12,8 @@ use app\models\Chessboard;
 use app\models\Figure;
 use app\models\PlayPositions;
 use frontend\interfaces\FigureInterface;
-use yii\base\Component;
 
-class FigureComponent extends Component implements FigureInterface
+class FigureComponent implements FigureInterface
 {
     public $id;
     public $color;
@@ -26,10 +25,8 @@ class FigureComponent extends Component implements FigureInterface
     public $startPositionY;
     public $currentPositionX;
     public $currentPositionY;
-    public $moveX = [];
-    public $moveY = [];
-    public $attackX = [];
-    public $attackY = [];
+    public $moves = [];
+    public $attacks = [];
 
     public function setImage($color, $name) {
         $image = "/figureImages/".$color.ucfirst($name).".svg";
@@ -49,7 +46,6 @@ class FigureComponent extends Component implements FigureInterface
         $this->setAttacks();
         $this->getCurrentPositions($this->id);
         $this->image = $this->setImage($color, $name);
-        parent::__construct($config);
     }
 
     public function setStartPositions($id) {
@@ -69,6 +65,7 @@ class FigureComponent extends Component implements FigureInterface
     }
 
     public function setAttacks() {
+
     }
 
     public function savePosition() {

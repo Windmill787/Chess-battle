@@ -8,7 +8,7 @@
 
 /* @var $this yii\web\View */
 /* @var $whitePawn \frontend\components\PawnComponent */
-/* @var $board \frontend\components\BoardComponent */
+/* @var $figures \frontend\components\FigureComponent */
 
 use yii\helpers\Html;
 use russ666\widgets\Countdown;
@@ -34,7 +34,14 @@ $this->title = Yii::t('app', 'Play');
                     </div>
                 </h1>
 
-                <?= Board::widget($board, $figures); ?>
+                <?php
+                if ($this->beginCache($figures)) {
+
+                    echo Board::widget($board, $figures);
+
+                    $this->endCache();
+                }
+                ?>
 
                 <h1>
                     <div class="label label-default">

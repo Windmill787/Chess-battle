@@ -57,36 +57,33 @@ class GameController extends Controller
 
         // fix this!
         foreach ($figures as $item) {
-            foreach ($item->moveX as $moveX) {
-                foreach ($item->moveY as $moveY) {
+            foreach ($item->moves as $moves) {
                     if ($item->color == 'white') {
-                        $figureMoveX = $item->currentPositionX + $moveX;
-                        $figureMoveY = $item->currentPositionY + $moveY;
+                        $figureMoveX = $item->currentPositionX + $moves[0];
+                        $figureMoveY = $item->currentPositionY + $moves[1];
                         if (isset($_POST['move' . $item->id . $figureMoveX . $figureMoveY])) {
                             $item->move($figureMoveX, $figureMoveY);
                         }
                     } else if ($item->color == 'black') {
-                        $figureMoveX = $item->currentPositionX - $moveX;
-                        $figureMoveY = $item->currentPositionY - $moveY;
+                        $figureMoveX = $item->currentPositionX - $moves[0];
+                        $figureMoveY = $item->currentPositionY - $moves[1];
                         if (isset($_POST['move' . $item->id . $figureMoveX . $figureMoveY])) {
                             $item->move($figureMoveX, $figureMoveY);
                         }
                     }
-                }
-            }
+            };
 
-            foreach ($item->attackX as $attackX) {
-                foreach ($item->attackY as $attackY) {
-
+            /*foreach ($item->attacks as $attacks) {
+                foreach ($attacks as $attack) {
                     if ($item->color == 'white') {
                         $desiredPosition = PlayPositions::findOne([
-                            'current_x' => $item->currentPositionX + $attackX,
-                            'current_y' => $item->currentPositionY + $attackY
+                            'current_x' => $item->currentPositionX + $attack[0],
+                            'current_y' => $item->currentPositionY + $attack[1]
                         ]);
                     } else if ($item->color == 'black') {
                         $desiredPosition = PlayPositions::findOne([
-                            'current_x' => $item->currentPositionX - $attackX,
-                            'current_y' => $item->currentPositionY - $attackY
+                            'current_x' => $item->currentPositionX - $attack[0],
+                            'current_y' => $item->currentPositionY - $attack[1]
                         ]);
                     }
 
@@ -99,7 +96,7 @@ class GameController extends Controller
                         }
                     }
                 }
-            }
+            }*/
         }
 
         // fix this!

@@ -17,11 +17,10 @@ class MoveButton extends Widget
 {
     public static function widget(FigureComponent $figure, $board) {
 
-        foreach ($figure->moveX as $moveX) {
-            foreach ($figure->moveY as $moveY) {
+        foreach ($figure->moves as $moves) {
                 if ($figure->color == 'white') {
-                    $figureMoveX = $figure->currentPositionX + $moveX;
-                    $figureMoveY = $figure->currentPositionY + $moveY;
+                    $figureMoveX = $figure->currentPositionX + $moves[0];
+                    $figureMoveY = $figure->currentPositionY + $moves[1];
 
                     $desiredPosition = PlayPositions::findOne([
                         'current_x' => $figureMoveX,
@@ -42,8 +41,8 @@ class MoveButton extends Widget
                         }
                     }
                 } else if ($figure->color == 'black') {
-                    $figureMoveX = $figure->currentPositionX - $moveX;
-                    $figureMoveY = $figure->currentPositionY - $moveY;
+                    $figureMoveX = $figure->currentPositionX - $moves[0];
+                    $figureMoveY = $figure->currentPositionY - $moves[1];
 
                     $desiredPosition = PlayPositions::findOne([
                         'current_x' => $figureMoveX,
@@ -64,7 +63,6 @@ class MoveButton extends Widget
                         }
                     }
                 }
-            }
         }
     }
 }
