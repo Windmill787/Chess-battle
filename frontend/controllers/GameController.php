@@ -73,8 +73,7 @@ class GameController extends Controller
                     }
             }
 
-            foreach ($item->attacks as $attacks) {
-                foreach ($attacks as $attack) {
+            foreach ($item->attacks as $attack) {
                     if ($item->color == 'white') {
                         $desiredPosition = PlayPositions::findOne([
                             'current_x' => $item->currentPositionX + $attack[0],
@@ -94,7 +93,6 @@ class GameController extends Controller
                             $item->attack($desiredFigure->id);
                             $this->refresh();
                         }
-                    }
                 }
             }
         }
