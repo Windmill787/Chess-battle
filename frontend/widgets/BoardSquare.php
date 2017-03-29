@@ -32,8 +32,8 @@ class BoardSquare extends Widget
                     ]);
                 }
             }
+            AttackButton::widget($figure, $board);
             MoveButton::widget($figure, $board);
-            //AttackButton::widget($figure, $board);
         }
         echo Html::endTag('td');
     }

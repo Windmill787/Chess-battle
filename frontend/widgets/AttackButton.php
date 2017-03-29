@@ -18,16 +18,14 @@ class AttackButton extends Widget
 {
     public static function widget(FigureComponent $figure, $board) {
 
-        foreach ($figure->attacks as $attacks) {
-            foreach ($attacks as $attack) {
+        foreach ($figure->attacks as $attack) {
                 if ($figure->color == 'white') {
                     $desiredPosition = PlayPositions::findOne([
                         'current_x' => $figure->currentPositionX + $attack[0],
                         'current_y' => $figure->currentPositionY + $attack[1]
                     ]);
                     if ($board->x == $figure->currentPositionX + $attack[0] &&
-                        $board->y == $figure->currentPositionY + $attack[1]
-                    ) {
+                        $board->y == $figure->currentPositionY + $attack[1]) {
                         self::checkFigure($figure, $desiredPosition);
                     }
                 } else if ($figure->color == 'black') {
@@ -36,12 +34,10 @@ class AttackButton extends Widget
                         'current_y' => $figure->currentPositionY - $attack[1]
                     ]);
                     if ($board->x == $figure->currentPositionX - $attack[0] &&
-                        $board->y == $figure->currentPositionY - $attack[1]
-                    ) {
+                        $board->y == $figure->currentPositionY - $attack[1]) {
                         self::checkFigure($figure, $desiredPosition);
                     }
                 }
-            }
         }
     }
 

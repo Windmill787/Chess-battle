@@ -40,7 +40,6 @@ class QueenComponent extends FigureComponent
 
     public function setAttacks()
     {
-        $allAttacks = Moves::findOne(['figure_id' => $this->id]);
-        $this->attacks = unserialize($allAttacks->attack);
+        $this->attacks = $this->moves;
     }
 }

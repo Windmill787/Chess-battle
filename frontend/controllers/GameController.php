@@ -71,9 +71,9 @@ class GameController extends Controller
                             $item->move($figureMoveX, $figureMoveY);
                         }
                     }
-            };
+            }
 
-            /*foreach ($item->attacks as $attacks) {
+            foreach ($item->attacks as $attacks) {
                 foreach ($attacks as $attack) {
                     if ($item->color == 'white') {
                         $desiredPosition = PlayPositions::findOne([
@@ -96,7 +96,7 @@ class GameController extends Controller
                         }
                     }
                 }
-            }*/
+            }
         }
 
         // fix this!
