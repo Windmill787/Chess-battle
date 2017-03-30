@@ -9,6 +9,7 @@
 /* @var $this yii\web\View */
 /* @var $whitePawn \frontend\components\PawnComponent */
 /* @var $figures \frontend\components\FigureComponent */
+/* @var $board \frontend\components\BoardComponent */
 
 use yii\helpers\Html;
 use russ666\widgets\Countdown;
@@ -35,10 +36,12 @@ $this->title = Yii::t('app', 'Play');
                 </h1>
 
                 <?php
-                if ($this->beginCache($figures)) {
+                if ($this->beginCache($figures, ['duration' => 3600])) {
 
-                    echo Board::widget($board, $figures);
-
+                    if ($this->beginCache($board, ['duration' => 3600])) {
+                        echo Board::widget($board, $figures);
+                        $this->endCache();
+                    }
                     $this->endCache();
                 }
                 ?>

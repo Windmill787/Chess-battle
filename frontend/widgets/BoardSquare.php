@@ -36,6 +36,9 @@ class BoardSquare extends Widget
             if ($figure->name == 'pawn') {
                 FirstMoveButton::widget($figure, $board);
             }
+            if ($figure->name == 'king') {
+                CastlingButton::widget($figure, $board);
+            }
         }
         echo Html::endTag('td');
     }

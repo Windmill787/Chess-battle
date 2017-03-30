@@ -73,6 +73,17 @@ class GameController extends Controller
                 }
             }
 
+            if ($figure->name == 'king') {
+                foreach ($figure->castlingMove as $castling) {
+                        $figureMoveX = $figure->currentPositionX + $castling[0];
+                        $figureMoveY = $figure->currentPositionY + $castling[1];
+
+                        if (isset($_POST['cast' . $figure->id . $figureMoveX . $figureMoveY])) {
+                            $figure->castling($figureMoveX, $figureMoveY);
+                        }
+                    }
+            }
+
             foreach ($figure->moves as $moves) {
                 if ($figure->color == 'white') {
                     $figureMoveX = $figure->currentPositionX + $moves[0];
