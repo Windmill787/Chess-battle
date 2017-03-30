@@ -35,7 +35,7 @@ $this->title = Yii::t('app', 'Play');
                 </h1>
 
                 <?php
-                if ($this->beginCache($figures, ['duration' => 3600])) {
+                if ($this->beginCache($figures)) {
 
                     echo Board::widget($board, $figures);
 

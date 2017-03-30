@@ -40,6 +40,7 @@ class m170317_155629_create_moves_table extends Migration
             'CASCADE'
         );
 
+        // add data for columns `id`, `figure_id`, `move`, `attack`, `first_move` of table `moves`
         $this->batchInsert('moves', ['id', 'figure_id', 'move', 'attack', 'first_move'], [
             [1, 1, 'a:1:{i:0;a:2:{i:0;i:0;i:1;i:1;}}', 'a:2:{i:0;a:2:{i:0;i:-1;i:1;i:1;}i:1;a:2:{i:0;i:1;i:1;i:1;}}', 'a:2:{i:0;i:0;i:1;i:2;}'],
             [2, 2, 'a:1:{i:0;a:2:{i:0;i:0;i:1;i:1;}}', 'a:2:{i:0;a:2:{i:0;i:-1;i:1;i:1;}i:1;a:2:{i:0;i:1;i:1;i:1;}}', 'a:2:{i:0;i:0;i:1;i:2;}'],

@@ -40,6 +40,7 @@ class m170318_182119_create_play_positions_table extends Migration
             'CASCADE'
         );
 
+        // add data for columns `id`, `figure_id`, `current_x`, `current_y` of table `play_positions`
         $this->batchInsert('play_positions', ['id', 'figure_id', 'current_x', 'current_y'], [
             [1, 1, 1, 2],
             [2, 2, 2, 2],

@@ -18,6 +18,7 @@ class m170309_203007_create_chessboard_table extends Migration
             'y' => $this->integer(1),
         ]);
 
+        // add data for columns `id`, `x`, `x` of table `chessboard`
         $this->batchInsert('chessboard', ['id', 'x', 'y'], [
             [1, 1, 1],
             [2, 2, 1],

@@ -32,8 +32,10 @@ class BoardSquare extends Widget
                     ]);
                 }
             }
-            AttackButton::widget($figure, $board);
-            MoveButton::widget($figure, $board);
+            Buttons::widget($figure, $board);
+            if ($figure->name == 'pawn') {
+                FirstMoveButton::widget($figure, $board);
+            }
         }
         echo Html::endTag('td');
     }

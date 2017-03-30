@@ -41,6 +41,7 @@ class m170309_203841_create_figure_table extends Migration
             'CASCADE'
         );
 
+        // add data for columns `id`, `color`, `name`, `number`, `start_position`, `status` of table `figure`
         $this->batchInsert('figure', ['id', 'color', 'name', 'number', 'start_position', 'status'], [
             [1, 'white', 'pawn', '1', 9, 'active'],
             [2, 'white', 'pawn', '2', 10, 'active'],

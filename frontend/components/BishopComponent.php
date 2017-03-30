@@ -15,8 +15,7 @@ class BishopComponent extends FigureComponent
 {
     public $name = 'bishop';
 
-    public function __construct($color, $number = null, $config = [])
-    {
+    public function __construct($color, $number = null, $config = []) {
         parent::__construct($color, $this->name, $number, $config);
     }
 
@@ -32,14 +31,12 @@ class BishopComponent extends FigureComponent
         }
     }
 
-    public function setMoves()
-    {
+    public function setMoves() {
         $allMoves = Moves::findOne(['figure_id' => $this->id]);
         $this->moves = unserialize($allMoves->move);
     }
 
-    public function setAttacks()
-    {
+    public function setAttacks() {
         $this->attacks = $this->moves;
     }
 }
