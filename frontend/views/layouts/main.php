@@ -42,13 +42,13 @@ NProgressAsset::register($this);
     $menuItems = [
         ['label' => Yii::t('app', 'Play'), 'url' => ['/game/play']],
         ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']],
-        ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']],
-        ['label' => Yii::t('app', 'Contact'), 'url' => ['/site/contact']]
     ];
+
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => Yii::t('app', 'Signup'), 'url' => ['/site/signup']];
         $menuItems[] = ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']];
     } else {
+        $menuItems[] = ['label' => Yii::t('app', 'Profile'), 'url' => ['/profile/index']];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(

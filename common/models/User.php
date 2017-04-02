@@ -6,16 +6,21 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use nodge\eauth\ErrorException;
 
 /**
  * User model
  *
  * @property integer $id
  * @property string $username
- * @property string $password_hash
- * @property string $password_reset_token
+ * @property string $first_name
+ * @property string $last_name
+ * @property integer $age
+ * @property string $img
  * @property string $email
  * @property string $auth_key
+ * @property string $password_hash
+ * @property string $password_reset_token
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
@@ -26,6 +31,14 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
 
+    /**
+     * @var array EAuth attributes
+     */
+    public $profile;
+
+    public $string;
+    public $image;
+    public $filename;
 
     /**
      * @inheritdoc
@@ -61,7 +74,11 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        if (Yii::$app->getSession()->has('user-'.$id)) {
+            return new self(Yii::$app->getSession()->get('user-'.$id));
+        } else {
+            return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        }
     }
 
     /**
@@ -102,6 +119,28 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * @param \nodge\eauth\ServiceBase $service
+     * @return User
+     * @throws ErrorException
+     */
+    public static function findByEAuth($service) {
+        if (!$service->getIsAuthenticated()) {
+            throw new ErrorException('EAuth user should be authenticated before creating identity.');
+        }
+
+        $id = $service->getServiceName().'-'.$service->getId();
+        $attributes = [
+            'id' => $id,
+            'username' => $service->getAttribute('name'),
+            'authKey' => md5($id),
+            'profile' => $service->getAttributes(),
+        ];
+        $attributes['profile']['service'] = $service->getServiceName();
+        Yii::$app->getSession()->set('user-'.$id, $attributes);
+        return new self($attributes);
+    }
+
+    /**
      * Finds out if password reset token is valid
      *
      * @param string $token password reset token
@@ -132,6 +171,28 @@ class User extends ActiveRecord implements IdentityInterface
     public function getAuthKey()
     {
         return $this->auth_key;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAvatar()
+    {
+        return $this->img;
+    }
+    /**
+     * @inheritdoc
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+    /**
+     * @inheritdoc
+     */
+    public function getCommentatorUrl()
+    {
+        return false;
     }
 
     /**

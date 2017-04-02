@@ -15,12 +15,17 @@ class m130524_201442_init extends Migration
         $this->createTable('{{%user}}', [
             'id' => $this->primaryKey(),
             'username' => $this->string()->notNull()->unique(),
-            'auth_key' => $this->string(32)->notNull(),
-            'password_hash' => $this->string()->notNull(),
-            'password_reset_token' => $this->string()->unique(),
+            'first_name' => $this->string(30)->notNull(),
+            'last_name' => $this->string(30)->notNull(),
+            'age' => $this->integer(3),
+            'img' => $this->string(),
             'email' => $this->string()->notNull()->unique(),
 
+            'password_hash' => $this->string()->notNull(),
+            'password_reset_token' => $this->string()->unique(),
             'status' => $this->smallInteger()->notNull()->defaultValue(10),
+            'auth_key' => $this->string(32)->notNull(),
+
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
         ], $tableOptions);

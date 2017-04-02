@@ -28,11 +28,6 @@ class FigureComponent implements FigureInterface
     public $moves = [];
     public $attacks = [];
 
-    public function setImage($color, $name) {
-        $image = "/figureImages/".$color.ucfirst($name).".svg";
-        return $image;
-    }
-
     public function __construct($color, $name, $number = null, $config = [])
     {
         $figure = Figure::findOne(['color' => $color,'name' => $name,'number' => $number]);
@@ -48,6 +43,10 @@ class FigureComponent implements FigureInterface
         $this->image = $this->setImage($color, $name);
     }
 
+    public function setImage($color, $name) {
+        $image = "/figureImages/".$color.ucfirst($name).".svg";
+        return $image;
+    }
     public function setStartPositions($id) {
         $position = Chessboard::findOne(['id' => $id]);
         $this->startPositionX = $position->x;
