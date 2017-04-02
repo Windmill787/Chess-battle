@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use app\models\SessionFrontendUser;
 use common\models\User;
 use Yii;
 use yii\base\InvalidParamException;
@@ -12,7 +13,7 @@ use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
-use nodge\eauth\ErrorException;
+use nodge\eauth\openid\ControllerBehavior;
 
 /**
  * Site controller
@@ -25,17 +26,21 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
+            'eauth' => [
+                'class' => ControllerBehavior::className(),
+                'only' => ['login'],
+            ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup', 'index'],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['signup', 'error'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -73,7 +78,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $onlineUsers = SessionFrontendUser::find()
+            ->all();
+
+        return $this->render('index', [
+            'onlineUsers' => $onlineUsers
+        ]);
     }
 
     /**

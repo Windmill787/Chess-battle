@@ -26,10 +26,10 @@ class GameController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'preview'],
+                'only' => ['index', 'play'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'preview'],
+                        'actions' => ['index', 'play'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
