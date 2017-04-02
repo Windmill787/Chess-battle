@@ -75,13 +75,13 @@ class GameController extends Controller
 
             if ($figure->name == 'king') {
                 foreach ($figure->castlingMove as $castling) {
-                        $figureMoveX = $figure->currentPositionX + $castling[0];
-                        $figureMoveY = $figure->currentPositionY + $castling[1];
+                    $figureMoveX = $figure->currentPositionX + $castling[0];
+                    $figureMoveY = $figure->currentPositionY + $castling[1];
 
-                        if (isset($_POST['cast' . $figure->id . $figureMoveX . $figureMoveY])) {
-                            $figure->castling($figureMoveX, $figureMoveY);
-                        }
+                    if (isset($_POST['cast' . $figure->id . $figureMoveX . $figureMoveY])) {
+                        $figure->castling($figureMoveX, $figureMoveY);
                     }
+                }
             }
 
             foreach ($figure->moves as $moves) {

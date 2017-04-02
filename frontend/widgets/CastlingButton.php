@@ -8,6 +8,7 @@
 
 namespace frontend\widgets;
 
+use app\models\Figure;
 use frontend\components\KingComponent;
 use yii\base\Widget;
 use app\models\PlayPositions;
@@ -15,27 +16,35 @@ use yii\helpers\Html;
 
 class CastlingButton extends Widget
 {
-    public static function widget(KingComponent $figure, $board)
+    public static function widget(KingComponent $king, $board)
     {
-        foreach ($figure->castlingMove as $castling) {
-                $castlingMoveX = $figure->currentPositionX + $castling[0];
-                $castlingMoveY = $figure->currentPositionY + $castling[1];
+        foreach ($king->castlingMove as $castling) {
+            $castlingMoveX = $king->currentPositionX + $castling[0];
+            $castlingMoveY = $king->currentPositionY + $castling[1];
 
-                if ($castling[0] == 2) {
-                    $figureMoveX = $figure->currentPositionX + $castling[0] - 1;
-                    $figureMoveY = $figure->currentPositionY + $castling[1];
-                } else if ($castling[0] == -2) {
-                    $figureMoveX = $figure->currentPositionX + $castling[0] + 1;
-                    $figureMoveY = $figure->currentPositionY + $castling[1];
-                }
+            if ($castling[0] == 2) {
+                $figureMoveX = $king->currentPositionX + $castling[0] - 1;
+                $figureMoveY = $king->currentPositionY + $castling[1];
 
-                self::displayButton($castlingMoveX, $castlingMoveY,
-                    $figureMoveX, $figureMoveY, $figure, $board);
+                $rook = Figure::findOne(['color' => $king->color, 'number' => 2]);
+
+                self::checkRightPosition($castlingMoveX, $castlingMoveY,
+                    $figureMoveX, $figureMoveY, $king, $board, $rook);
+
+            } else if ($castling[0] == -2) {
+                $figureMoveX = $king->currentPositionX + $castling[0] + 1;
+                $figureMoveY = $king->currentPositionY + $castling[1];
+
+                $rook = Figure::findOne(['color' => $king->color, 'number' => 1]);
+
+                self::checkLeftPosition($castlingMoveX, $castlingMoveY,
+                    $figureMoveX, $figureMoveY, $king, $board, $rook);
             }
+        }
     }
 
-    public static function displayButton($castlingMoveX, $castlingMoveY,
-                                         $figureMoveX, $figureMoveY, $figure, $board) {
+    public static function checkRightPosition($castlingMoveX, $castlingMoveY,
+                                         $figureMoveX, $figureMoveY, $king, $board, $rook) {
         $desiredPosition1 = PlayPositions::findOne([
             'current_x' => $castlingMoveX,
             'current_y' => $castlingMoveY
@@ -47,17 +56,45 @@ class CastlingButton extends Widget
         ]);
 
         if (empty($desiredPosition1->figure_id) && empty($desiredPosition2->figure_id)) {
-            if ($board->x == $castlingMoveX &&
-                $board->y == $castlingMoveY) {
+            self::displayButton($king, $board, $castlingMoveX, $castlingMoveY, $rook);
+        }
+    }
 
-                echo Html::beginForm();
-                echo Html::submitButton('cast', [
-                    'class' => 'btn btn-xs btn-primary hidden move move' . $figure->id,
-                    'name' => 'cast' . $figure->id . $castlingMoveX . $castlingMoveY,
-                    'onclick' => 'hideButtons()'
-                ]);
-                echo Html::endForm();
-            }
+    public static function checkLeftPosition($castlingMoveX, $castlingMoveY,
+                                             $figureMoveX, $figureMoveY, $king, $board, $rook) {
+        $desiredPosition1 = PlayPositions::findOne([
+            'current_x' => $castlingMoveX,
+            'current_y' => $castlingMoveY
+        ]);
+
+        $desiredPosition2 = PlayPositions::findOne([
+            'current_x' => $figureMoveX,
+            'current_y' => $figureMoveY
+        ]);
+
+        $desiredPosition3 = PlayPositions::findOne([
+            'current_x' => $castlingMoveX - 1,
+            'current_y' => $castlingMoveY
+        ]);
+
+        if (empty($desiredPosition1->figure_id)
+            && empty($desiredPosition2->figure_id)
+            && empty($desiredPosition3->figure_id)) {
+            self::displayButton($king, $board, $castlingMoveX, $castlingMoveY, $rook);
+        }
+    }
+
+    public static function displayButton($king, $board, $castlingMoveX, $castlingMoveY, $rook) {
+        if ($board->x == $castlingMoveX &&
+            $board->y == $castlingMoveY) {
+
+            echo Html::beginForm();
+            echo Html::submitButton('cast', [
+                'class' => 'btn btn-xs btn-primary hidden move move' . $king->id,
+                'name' => 'cast' . $king->id . $castlingMoveX . $castlingMoveY . $rook->id,
+                'onclick' => 'hideButtons()'
+            ]);
+            echo Html::endForm();
         }
     }
 }

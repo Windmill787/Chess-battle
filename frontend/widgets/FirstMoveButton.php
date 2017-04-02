@@ -29,12 +29,17 @@ class FirstMoveButton extends Widget
     }
 
     public static function checkPosition($figureMoveX, $figureMoveY, $figure, $board) {
-        $desiredPosition = PlayPositions::findOne([
+        $desiredPosition1 = PlayPositions::findOne([
             'current_x' => $figureMoveX,
             'current_y' => $figureMoveY
         ]);
 
-        if (empty($desiredPosition->figure_id) &&
+        $desiredPosition2 = PlayPositions::findOne([
+            'current_x' => $figureMoveX,
+            'current_y' => $figureMoveY - 1
+        ]);
+
+        if (empty($desiredPosition1->figure_id) && empty($desiredPosition2->figure_id) &&
             $figure->currentPositionX == $figure->startPositionX &&
             $figure->currentPositionY == $figure->startPositionY) {
             if ($board->x == $figureMoveX &&

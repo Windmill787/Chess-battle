@@ -10,6 +10,7 @@ namespace frontend\components;
 
 use app\models\Figure;
 use app\models\Moves;
+use app\models\PlayPositions;
 
 class KingComponent extends FigureComponent
 {

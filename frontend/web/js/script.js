@@ -26,12 +26,6 @@ $('#myMoveButton').on('click', function () {
     $('#enemy').countdown('start');
 });
 
-function hideButtons () {
-    $('.attack').addClass('hidden');
-    $('.move').addClass('hidden');
-    $('img').addClass('disabled')
-}
-
 var pawn = 'pawn';
 var knight = 'knight';
 var bishop = 'bishop';
@@ -46,4 +40,10 @@ function light (figure, id) {
     $('.attack').addClass('hidden');
     $('.move' + id).removeClass('hidden');
     $('.attack' + id).removeClass('hidden');
+}
+
+function hideButtons () {
+    $('.attack').addClass('hidden');
+    $('.move').addClass('hidden');
+    $('img').addClass('disabled');
 }
