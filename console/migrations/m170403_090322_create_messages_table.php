@@ -14,7 +14,7 @@ class m170403_090322_create_messages_table extends Migration
     /**
      * @inheritdoc
      */
-    public function up()
+    public function safeUp()
     {
         $this->createTable('messages', [
             'id' => $this->primaryKey(),
@@ -61,7 +61,7 @@ class m170403_090322_create_messages_table extends Migration
     /**
      * @inheritdoc
      */
-    public function down()
+    public function safeDown()
     {
         // drops foreign key for table `user`
         $this->dropForeignKey(

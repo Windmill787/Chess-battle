@@ -8,6 +8,7 @@
 
 namespace frontend\controllers;
 
+use app\models\Game;
 use frontend\components\BoardComponent;
 use app\models\PlayPositions;
 use frontend\components\FigureBuilderComponent;
@@ -15,6 +16,7 @@ use app\models\Figure;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
 
 class GameController extends Controller
 {
@@ -46,10 +48,10 @@ class GameController extends Controller
 
     /**
      * Displays game play page.
-     *
+     * @param integer $id
      * @return mixed
      */
-    public function actionPlay()
+    public function actionPlay($id)
     {
         $board = new BoardComponent();
 
@@ -131,6 +133,7 @@ class GameController extends Controller
         }
 
         return $this->render('play', [
+            'model' => $this->findModel($id),
             'board' => $board,
             'figures' => $figures
         ]);
@@ -144,5 +147,21 @@ class GameController extends Controller
     public function actionPreview()
     {
         return $this->render('preview');
+    }
+
+    /**
+     * Finds the Game model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Game the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Game::findOne(['game_id' => $id])) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 }

@@ -61,7 +61,7 @@ class ProfileController extends Controller
     {
         $model = $this->findModel();
 
-        if ($model->load(Yii::$app->request->post()) && $model->update()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         } else {
             return $this->render('update', [

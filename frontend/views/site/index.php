@@ -11,9 +11,10 @@ $this->title = Yii::t('app', 'My Yii Application');
 ?>
 <div class="site-index">
 
-    <div class="container">
-        <h2>Users online</h2>
-        <p>Users which you can invite to play:</p>
+    <h2>Users online</h2>
+    <p>Users which you can invite to play:</p>
+    <div class="col-lg-5">
+    <div class="row thumbnail">
         <table class="table">
             <tbody>
             <?php
@@ -32,7 +33,7 @@ $this->title = Yii::t('app', 'My Yii Application');
                     echo $form->field($model, 'status')->hiddenInput(['value' => 'pending'])->label(false) ?>
 
                     <?= Html::submitButton('Invite', [
-                            'class' => 'btn btn-primary'
+                        'class' => 'btn btn-primary'
                     ]);
 
                     ActiveForm::end();
@@ -43,5 +44,6 @@ $this->title = Yii::t('app', 'My Yii Application');
             ?>
             </tbody>
         </table>
+    </div>
     </div>
 </div>

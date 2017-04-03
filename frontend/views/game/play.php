@@ -10,13 +10,14 @@
 /* @var $whitePawn \frontend\components\PawnComponent */
 /* @var $figures \frontend\components\FigureComponent */
 /* @var $board \frontend\components\BoardComponent */
+/* @var $model \app\models\Game */
 
 use yii\helpers\Html;
 use russ666\widgets\Countdown;
 use yii\bootstrap\Modal;
 use frontend\widgets\Board;
 
-$this->title = Yii::t('app', 'Play');
+$this->title = Yii::t('app', 'Play' . $model->id);
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 

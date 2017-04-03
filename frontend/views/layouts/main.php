@@ -40,7 +40,6 @@ NProgressAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => Yii::t('app', 'Play'), 'url' => ['/game/play']],
         ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']],
     ];
 

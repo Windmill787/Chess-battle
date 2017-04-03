@@ -20,11 +20,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <div class="row">
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
+        <div class="col-lg-5">
+            <div class="row thumbnail">
                 <img src="<?= $model->img ?>" alt="No Image"
-                     onerror="this.src = 'http://xn--174-5cd3cgu2f.xn--p1ai/wp-content/uploads/2015/09/noavatar.png'">
+                     onerror="this.src = 'http://xn--174-5cd3cgu2f.xn--p1ai/wp-content/uploads/2015/09/noavatar.png'"
+                     width="200" height="200">
                 <div class="caption">
                     <?= DetailView::widget([
                         'model' => $model,
@@ -39,6 +39,5 @@ $this->params['breadcrumbs'][] = $this->title;
                     <p><a href="update" class="btn btn-primary" role="button"><?=Yii::t('app', 'Update')?></a></p>
                 </div>
             </div>
-        </div>
     </div>
 </div>

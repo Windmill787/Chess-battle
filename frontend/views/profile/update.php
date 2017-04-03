@@ -15,6 +15,7 @@ use yii\helpers\Url;
 /* @var $form yii\widgets\ActiveForm */
 
 $this->title = Yii::t('app', 'Update Profile');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Profile'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="profile-update">
@@ -25,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-lg-5">
             <?php $form = ActiveForm::begin(); ?>
 
-            <?= $form->field($model, 'username') ?>
+            <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
 
             <?= $form->field($model, 'first_name') ?>
 
@@ -33,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?= $form->field($model, 'age') ?>
 
-            <?= $form->field($model, 'img')->fileInput() ?>
+            <?= $form->field($model, 'img')->textInput() ?>
 
             <?= $form->field($model, 'email')->input('email', ['maxlength' => true]) ?>
 

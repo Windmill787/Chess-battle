@@ -64,6 +64,21 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
+            [['username', 'email', 'first_name', 'last_name', 'age'],'filter', 'filter' => 'trim'],
+
+            ['username', 'unique', 'targetClass' => User::className(),
+                'message' => Yii::t('app', 'This Username is already taken')],
+            ['username', 'string', 'min' => 2, 'max' => 20],
+
+            ['first_name', 'string', 'min' => 2, 'max' => 30],
+            ['last_name', 'string', 'min' => 2, 'max' => 30],
+            ['age', 'integer', 'min' => 1, 'max' => 150],
+
+            ['img', 'string'],
+
+            ['email', 'unique', 'targetClass' => User::className(),
+                'message' => Yii::t('app', 'This Email is already used')],
+            ['email', 'email'],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];

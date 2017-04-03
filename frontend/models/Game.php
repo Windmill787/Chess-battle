@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use common\models\User;
+use app\models\PlayPositions;
 
 /**
  * This is the model class for table "game".

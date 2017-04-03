@@ -82,7 +82,7 @@ class SiteController extends Controller
     {
         $model = new Messages();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect('invitations');
+            return $this->render('invitations');
         }
 
         $onlineUsers = SessionFrontendUser::find()
@@ -96,6 +96,25 @@ class SiteController extends Controller
         } else {
             return $this->render('index', [
                 'model' => $model
+            ]);
+        }
+    }
+
+    /**
+     * Displays invitations list.
+     *
+     * @return mixed
+     */
+    public function actionInvitations()
+    {
+        $model = new Game();
+        if ($model->load(Yii::$app->request->post('accept-invite')) && $model->save()) {
+            return $this->redirect('/game/play');
+        } else if ($model->load(Yii::$app->request->post('decline-invite')) && $model->save()) {
+            return $this->redirect('//');
+        } else {
+            return $this->render('invitations', [
+                'model' => $model,
             ]);
         }
     }
@@ -243,22 +262,5 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
-    }
-
-    /**
-     * Displays invitations list.
-     *
-     * @return mixed
-     */
-    public function actionInvitations()
-    {
-        $model = new Game();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect('/game/play');
-        } else {
-            return $this->render('invitations', [
-                'model' => $model,
-            ]);
-        }
     }
 }

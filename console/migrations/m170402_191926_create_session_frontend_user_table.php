@@ -10,7 +10,7 @@ class m170402_191926_create_session_frontend_user_table extends Migration
     /**
      * @inheritdoc
      */
-    public function up()
+    public function safeUp()
     {
         $this->createTable('session_frontend_user', [
             'id' => $this->string(80)->notNull(),
@@ -24,7 +24,7 @@ class m170402_191926_create_session_frontend_user_table extends Migration
     /**
      * @inheritdoc
      */
-    public function down()
+    public function safeDown()
     {
         $this->dropTable('session_frontend_user');
     }

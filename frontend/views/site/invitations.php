@@ -12,11 +12,16 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = Yii::t('app', 'My Yii Application');
+$this->title = Yii::t('app', 'Invitations');
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-invitations">
 
-    <div class="container">
+    <h2>Invitations</h2>
+    <div class="col-lg-5">
+    <div class="row thumbnail">
+        <table class="table">
+            <tbody>
         <?php
         $invitationsFromMe = \app\models\Messages::find()
             ->where(['to_user_id' => Yii::$app->user->id])
@@ -24,13 +29,18 @@ $this->title = Yii::t('app', 'My Yii Application');
             ->all();
         if (empty($invitationsFromMe) == false) { ?>
             You was invited to play by players:
-            <br>
             <?php
             foreach ($invitationsFromMe as $invitation) {
                 $user = \common\models\User::findOne(['id' => $invitation->from_user_id]);
                 echo $user->username;
-                ActiveForm::begin();
+                $form = ActiveForm::begin();
                 ?>
+                <?php
+                echo $form->field($model, 'white_player_id')->hiddenInput(['value' => $user->id])->label(false);
+
+                echo $form->field($model, 'black_player_id')->hiddenInput(['value' => Yii::$app->user->id])->label(false);
+
+                echo $form->field($model, 'play_position_id')->hiddenInput()->label(false) ?>
 
                 <?php $model->black_user_id = Yii::$app->user->id ?>
 
@@ -66,8 +76,6 @@ $this->title = Yii::t('app', 'My Yii Application');
                 ActiveForm::begin();
                 ?>
 
-                <?php $model->black_user_id = Yii::$app->user->id ?>
-
                 <div class="form-group">
                     <?= Html::submitButton('Go to game', [
                         'class' => 'btn btn-primary', 'name' => 'play-button'
@@ -82,5 +90,8 @@ $this->title = Yii::t('app', 'My Yii Application');
         }
 
         ?>
+            </tbody>
+        </table>
+    </div>
     </div>
 </div>
