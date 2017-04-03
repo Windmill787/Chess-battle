@@ -13,7 +13,7 @@ use yii\helpers\Html;
 
 class BoardSquare extends Widget
 {
-    public static function widget($color, $board, $figures) {
+    public static function widget($color, $board, $figures, $whiteUser, $blackUser) {
 
         echo Html::beginTag('td', [
             'height' => 50,
@@ -33,7 +33,7 @@ class BoardSquare extends Widget
                 }
             }
 
-            Buttons::widget($figure, $board);
+            Buttons::widget($figure, $board, $whiteUser, $blackUser);
             /*if ($figure->name == 'pawn') {
                 FirstMoveButton::widget($figure, $board);
             }

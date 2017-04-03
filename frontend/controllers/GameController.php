@@ -9,6 +9,7 @@
 namespace frontend\controllers;
 
 use app\models\Game;
+use common\models\User;
 use frontend\components\BoardComponent;
 use app\models\PlayPositions;
 use frontend\components\FigureBuilderComponent;
@@ -53,6 +54,12 @@ class GameController extends Controller
      */
     public function actionPlay($id)
     {
+        $model = $this->findModel($id);
+
+        $whiteUser = User::findOne(['id' => $model->white_user_id]);
+
+        $blackUser = User::findOne(['id' => $model->black_user_id]);
+
         $board = new BoardComponent();
 
         $figures = FigureBuilderComponent::build();
@@ -133,7 +140,9 @@ class GameController extends Controller
         }
 
         return $this->render('play', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'whiteUser' => $whiteUser,
+            'blackUser' => $blackUser,
             'board' => $board,
             'figures' => $figures
         ]);

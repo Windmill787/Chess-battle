@@ -25,38 +25,16 @@ $this->title = Yii::t('app', 'Play' . $model->id);
         <div class="row thumbnail">
             <div class="caption">
 
-                <h1>
-                    <div class="label label-default">
-                        <?= Countdown::widget([
-                            'id' => 'enemy',
-                            'datetime' => date('Y-m-d H:i:s O', time() + 0),
-                            'format' => '%M:%S'
-                        ])
-                        ?>
-                    </div>
-                </h1>
-
                 <?php
-                if ($this->beginCache($figures, ['duration' => 3600])) {
+                if ($this->beginCache($figures)) {
 
-                    if ($this->beginCache($board, ['duration' => 3600])) {
-                        echo Board::widget($board, $figures);
+                    if ($this->beginCache($board)) {
+                        echo Board::widget($board, $figures, $whiteUser, $blackUser);
                         $this->endCache();
                     }
                     $this->endCache();
                 }
                 ?>
-
-                <h1>
-                    <div class="label label-default">
-                        <?= Countdown::widget([
-                            'id' => 'my',
-                            'datetime' => date('Y-m-d H:i:s O', time() + 0),
-                            'format' => '%M:%S'
-                        ])
-                        ?>
-                    </div>
-                </h1>
 
             </div>
         </div>

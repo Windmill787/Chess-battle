@@ -16,16 +16,16 @@ use app\models\Figure;
 
 class Buttons extends Widget
 {
-    public static function widget(FigureComponent $figure, $board) {
+    public static function widget(FigureComponent $figure, $board, $whiteUser, $blackUser) {
 
         foreach ($figure->moves as $moves) {
-            if ($figure->color == 'white') {
+            if ($figure->color == 'white' && $whiteUser->id == \Yii::$app->user->id) {
 
                 $figureMoveX = $figure->currentPositionX + $moves[0];
                 $figureMoveY = $figure->currentPositionY + $moves[1];
                 self::checkPosition($figureMoveX, $figureMoveY, $figure, $board);
 
-            } else if ($figure->color == 'black') {
+            } else if ($figure->color == 'black' && $blackUser->id == \Yii::$app->user->id) {
 
                 $figureMoveX = $figure->currentPositionX - $moves[0];
                 $figureMoveY = $figure->currentPositionY - $moves[1];
@@ -34,25 +34,26 @@ class Buttons extends Widget
         }
 
         foreach ($figure->attacks as $attack) {
-            $desiredPosition = self::desiredAttackPosition($figure->color, $figure, $attack);
+            $desiredPosition = self::desiredAttackPosition($figure->color, $figure, $attack, $whiteUser, $blackUser);
 
             self::checkFigure($figure, $board, $attack, $desiredPosition);
         }
     }
 
-    public static function desiredAttackPosition($color, $figure, $attack) {
-        if ($color == 'white') {
+    public static function desiredAttackPosition($color, $figure, $attack, $whiteUser, $blackUser) {
+        if ($color == 'white' && $whiteUser->id == \Yii::$app->user->id) {
             $desiredPosition = PlayPositions::findOne([
                 'current_x' => $figure->currentPositionX + $attack[0],
                 'current_y' => $figure->currentPositionY + $attack[1]
             ]);
-        } else if ($color == 'black') {
+            return $desiredPosition;
+        } else if ($color == 'black' && $blackUser->id == \Yii::$app->user->id) {
             $desiredPosition = PlayPositions::findOne([
                 'current_x' => $figure->currentPositionX - $attack[0],
                 'current_y' => $figure->currentPositionY - $attack[1]
             ]);
+            return $desiredPosition;
         }
-        return $desiredPosition;
     }
 
     public static function checkPosition($figureMoveX, $figureMoveY, $figure, $board) {

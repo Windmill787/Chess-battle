@@ -17,6 +17,9 @@ class BoardComponent extends Component
     public $symbolLabel = [
         '','a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'
     ];
+    public $reversedSymbolLabel = [
+        '','h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'
+    ];
     public $y;
     public $x;
 }
