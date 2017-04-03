@@ -1,6 +1,8 @@
 <?php
 namespace frontend\controllers;
 
+use app\models\Game;
+use app\models\Messages;
 use app\models\SessionFrontendUser;
 use common\models\User;
 use Yii;
@@ -78,12 +80,24 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $onlineUsers = SessionFrontendUser::find()
-            ->all();
+        $model = new Messages();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect('invitations');
+        }
 
-        return $this->render('index', [
-            'onlineUsers' => $onlineUsers
-        ]);
+        $onlineUsers = SessionFrontendUser::find()
+            ->where(['is not', 'user_id', null])
+            ->all();
+        if (empty($onlineUsers) == false) {
+            return $this->render('index', [
+                'onlineUsers' => $onlineUsers,
+                'model' => $model
+            ]);
+        } else {
+            return $this->render('index', [
+                'model' => $model
+            ]);
+        }
     }
 
     /**
@@ -118,7 +132,7 @@ class SiteController extends Controller
                     $eauth->cancel();
                 }
             }
-            catch (ErrorException $e) {
+            catch (\ErrorException $e) {
                 // save error to show it later
                 Yii::$app->getSession()->setFlash('error', 'EAuthException: '.$e->getMessage());
 
@@ -229,5 +243,22 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Displays invitations list.
+     *
+     * @return mixed
+     */
+    public function actionInvitations()
+    {
+        $model = new Game();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect('/game/play');
+        } else {
+            return $this->render('invitations', [
+                'model' => $model,
+            ]);
+        }
     }
 }

@@ -33,7 +33,7 @@ NProgressAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::t('app', 'My Company'),
+        'brandLabel' => Yii::t('app', 'Chess'),
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -48,6 +48,7 @@ NProgressAsset::register($this);
         $menuItems[] = ['label' => Yii::t('app', 'Signup'), 'url' => ['/site/signup']];
         $menuItems[] = ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']];
     } else {
+        $menuItems[] = ['label' => Yii::t('app', 'Invitations'), 'url' => ['/site/invitations']];
         $menuItems[] = ['label' => Yii::t('app', 'Profile'), 'url' => ['/profile/index']];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
@@ -78,7 +79,7 @@ NProgressAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; <?= Yii::t('app', 'My Company')?> <?= date('Y') ?> | <?= $this->render('select-language') ?></p>
+        <p class="pull-left">&copy; <?= Yii::t('app', 'Chess')?> <?= date('Y') ?> | <?= $this->render('select-language') ?></p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
