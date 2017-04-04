@@ -81,23 +81,25 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $model = new Messages();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->render('invitations');
         }
 
         $onlineUsers = SessionFrontendUser::find()
             ->where(['is not', 'user_id', null])
+            ->andWhere(['!=', 'user_id', Yii::$app->user->id])
             ->all();
         if (empty($onlineUsers) == false) {
             return $this->render('index', [
                 'onlineUsers' => $onlineUsers,
                 'model' => $model
             ]);
-        } else {
-            return $this->render('index', [
-                'model' => $model
-            ]);
         }
+
+        return $this->render('index', [
+            'model' => $model
+        ]);
     }
 
     /**
@@ -108,15 +110,24 @@ class SiteController extends Controller
     public function actionInvitations()
     {
         $model = new Game();
-        if ($model->load(Yii::$app->request->post('accept-invite')) && $model->save()) {
-            return $this->redirect('/game/play');
-        } else if ($model->load(Yii::$app->request->post('decline-invite')) && $model->save()) {
-            return $this->redirect('//');
-        } else {
-            return $this->render('invitations', [
-                'model' => $model,
-            ]);
+
+        $invitationsToMe = Messages::find()
+            ->where(['to_user_id' => Yii::$app->user->id])
+            ->all();
+
+        $invitationsFromMe = Messages::find()
+            ->where(['from_user_id' => Yii::$app->user->id])
+            ->all();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect('/game/play?id='.$model->id);
         }
+
+        return $this->render('invitations', [
+            'model' => $model,
+            'invitationsToMe' => $invitationsToMe,
+            'invitationsFromMe' => $invitationsFromMe
+        ]);
     }
 
     /**

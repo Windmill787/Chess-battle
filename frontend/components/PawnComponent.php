@@ -17,20 +17,20 @@ class PawnComponent extends FigureComponent
     public $name = 'pawn';
     public $first_move = [];
 
-    public function __construct($color, $number = null, $config = []) {
-        parent::__construct($color, $this->name, $number, $config);
+    public function __construct($color, $number = null, $game_id, $config = []) {
+        parent::__construct($color, $this->name, $number, $game_id, $config);
         $this->setFirstMove();
     }
 
-    public function move($figureMoveX, $figureMoveY) {
-        parent::move($figureMoveX, $figureMoveY);
+    public function move($figureMoveX, $figureMoveY, $game_id) {
+        parent::move($figureMoveX, $figureMoveY, $game_id);
     }
 
-    public function attack($id) {
+    public function attack($id, $game_id) {
         $figure = Figure::findOne(['id' => $id]);
         if ($figure->status == 'active' && $figure->color != $this->color) {
-            parent::attack($figure);
-            parent::changeStatus($figure);
+            parent::attack($figure, $game_id);
+            parent::changeStatus($figure, $game_id);
         }
     }
 

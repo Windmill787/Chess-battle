@@ -75,7 +75,7 @@ class User extends ActiveRecord implements IdentityInterface
             ['last_name', 'string', 'min' => 2, 'max' => 30],
             ['age', 'integer', 'min' => 1, 'max' => 150],
 
-            ['img', 'string'],
+            ['img', 'default', 'value' => 1],
 
             ['email', 'unique', 'targetClass' => User::className(),
                 'message' => Yii::t('app', 'This Email is already used')],

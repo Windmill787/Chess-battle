@@ -16,31 +16,31 @@ use app\models\Figure;
 
 class Buttons extends Widget
 {
-    public static function widget(FigureComponent $figure, $board, $whiteUser, $blackUser) {
+    public static function widget(FigureComponent $figure, $board, $whiteUser, $blackUser, $game_id) {
 
         foreach ($figure->moves as $moves) {
             if ($figure->color == 'white' && $whiteUser->id == \Yii::$app->user->id) {
 
                 $figureMoveX = $figure->currentPositionX + $moves[0];
                 $figureMoveY = $figure->currentPositionY + $moves[1];
-                self::checkPosition($figureMoveX, $figureMoveY, $figure, $board);
+                self::checkPosition($figureMoveX, $figureMoveY, $figure, $board, $game_id);
 
             } else if ($figure->color == 'black' && $blackUser->id == \Yii::$app->user->id) {
 
                 $figureMoveX = $figure->currentPositionX - $moves[0];
                 $figureMoveY = $figure->currentPositionY - $moves[1];
-                self::checkPosition($figureMoveX, $figureMoveY, $figure, $board);
+                self::checkPosition($figureMoveX, $figureMoveY, $figure, $board, $game_id);
             }
         }
 
-        foreach ($figure->attacks as $attack) {
+        /*foreach ($figure->attacks as $attack) {
             $desiredPosition = self::desiredAttackPosition($figure->color, $figure, $attack, $whiteUser, $blackUser);
 
             self::checkFigure($figure, $board, $attack, $desiredPosition);
-        }
+        }*/
     }
 
-    public static function desiredAttackPosition($color, $figure, $attack, $whiteUser, $blackUser) {
+    /*public static function desiredAttackPosition($color, $figure, $attack, $whiteUser, $blackUser) {
         if ($color == 'white' && $whiteUser->id == \Yii::$app->user->id) {
             $desiredPosition = PlayPositions::findOne([
                 'current_x' => $figure->currentPositionX + $attack[0],
@@ -54,13 +54,14 @@ class Buttons extends Widget
             ]);
             return $desiredPosition;
         }
-    }
+    }*/
 
-    public static function checkPosition($figureMoveX, $figureMoveY, $figure, $board) {
+    public static function checkPosition($figureMoveX, $figureMoveY, $figure, $board, $game_id) {
 
         $desiredPosition = PlayPositions::findOne([
-                'current_x' => $figureMoveX,
-                'current_y' => $figureMoveY
+            'game_id' => $game_id,
+            'current_x' => $figureMoveX,
+            'current_y' => $figureMoveY
         ]);
 
         if (empty($desiredPosition->figure_id)) {
@@ -70,7 +71,7 @@ class Buttons extends Widget
                 echo Html::beginForm();
                 echo Html::submitButton('move', [
                     'class' => 'btn btn-xs btn-primary hidden move move' . $figure->id,
-                    'name' => 'move' . $figure->id . $figureMoveX . $figureMoveY,
+                    'name' => 'move' . $figure->id . $figureMoveX . $figureMoveY . $game_id,
                     'onclick' => 'hideButtons()'
                 ]);
                 echo Html::endForm();
@@ -78,7 +79,7 @@ class Buttons extends Widget
         }
     }
 
-    public static function checkFigure($figure, $board, $attack, $desiredPosition) {
+    /*public static function checkFigure($figure, $board, $attack, $desiredPosition) {
 
         if ($figure->color == 'white') {
 
@@ -97,92 +98,6 @@ class Buttons extends Widget
     }
 
     public static function displayAttackButton($figure, $desiredPosition) {
-        if (empty($desiredPosition->figure_id) == false) {
-
-            $desiredFigure = Figure::findOne(['id' => $desiredPosition->id]);
-
-            if ($desiredFigure->color != $figure->color && $desiredFigure->status == 'active') {
-                echo Html::beginForm();
-                echo Html::submitButton('attack', [
-                    'class' => 'btn btn-xs btn-danger hidden attack attack' . $figure->id,
-                    'name' => 'attack' . $desiredFigure->id,
-                    'onclick' => 'hideButtons('.$desiredFigure->id.')'
-                ]);
-                echo Html::endForm();
-            }
-        }
-    }
-
-    /*public static function widget(FigureComponent $figure, $board) {
-
-        foreach ($figure->moves as $moves) {
-
-            $figureMoveXY = self::desiredMovePosition($figure->color, $figure, $moves);
-
-            self::checkPosition($figureMoveXY[0], $figureMoveXY[1], $figure, $board);
-        }
-
-        foreach ($figure->attacks as $attack) {
-
-            $desiredPosition = self::desiredAttackPosition($figure->color, $figure, $attack);
-
-            self::checkFigure($figure, $desiredPosition);
-        }
-    }
-
-    public static function desiredMovePosition($color, $figure, $moves) {
-        if ($color == 'white') {
-
-            $figureMoveX = $figure->currentPositionX + $moves[0];
-            $figureMoveY = $figure->currentPositionY + $moves[1];
-
-        } else if ($color == 'black') {
-
-            $figureMoveX = $figure->currentPositionX - $moves[0];
-            $figureMoveY = $figure->currentPositionY - $moves[1];
-        }
-        return [$figureMoveX, $figureMoveY];
-    }
-
-    public static function desiredAttackPosition($color, $figure, $attack) {
-        if ($color == 'white') {
-            $desiredPosition = PlayPositions::findOne([
-                'current_x' => $figure->currentPositionX + $attack[0],
-                'current_y' => $figure->currentPositionY + $attack[1]
-            ]);
-        } else if ($color == 'black') {
-            $desiredPosition = PlayPositions::findOne([
-                'current_x' => $figure->currentPositionX - $attack[0],
-                'current_y' => $figure->currentPositionY - $attack[1]
-            ]);
-        }
-        return $desiredPosition;
-    }
-
-    public static function checkPosition($figureMoveX, $figureMoveY, $figure, $board) {
-
-        $desiredPosition = PlayPositions::findOne([
-            'current_x' => $figureMoveX,
-            'current_y' => $figureMoveY
-        ]);
-
-        if (empty($desiredPosition->figure_id)) {
-            if ($board->x == $figureMoveX &&
-                $board->y == $figureMoveY) {
-
-                echo Html::beginForm();
-                echo Html::submitButton('move', [
-                    'class' => 'btn btn-xs btn-primary hidden move move' . $figure->id,
-                    'name' => 'move' . $figure->id . $figureMoveX . $figureMoveY,
-                    'onclick' => 'hideButtons()'
-                ]);
-                echo Html::endForm();
-            }
-        }
-    }
-
-    public static function checkFigure($figure, $desiredPosition) {
-
         if (empty($desiredPosition->figure_id) == false) {
 
             $desiredFigure = Figure::findOne(['id' => $desiredPosition->id]);

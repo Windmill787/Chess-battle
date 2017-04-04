@@ -15,7 +15,7 @@ use yii\widgets\Pjax;
 
 class Board extends Widget
 {
-    public static function widget(BoardComponent $board, $figures, $whiteUser, $blackUser)
+    public static function widget(BoardComponent $board, $figures, $whiteUser, $blackUser, $game_id)
     {
 
         if ($whiteUser->id == \Yii::$app->user->id) {
@@ -64,11 +64,11 @@ class Board extends Widget
                     $total = $board->y + $board->x;
                     if ($total % 2 == 0) {
 
-                        BoardSquare::widget('#AF5200', $board, $figures, $whiteUser, $blackUser);
+                        BoardSquare::widget('#AF5200', $board, $figures, $whiteUser, $blackUser, $game_id);
 
                     } else {
 
-                        BoardSquare::widget('#FFFFFF', $board, $figures, $whiteUser, $blackUser);
+                        BoardSquare::widget('#FFFFFF', $board, $figures, $whiteUser, $blackUser, $game_id);
 
                     }
                 }
@@ -106,11 +106,11 @@ class Board extends Widget
                         $total = $board->y + $board->x;
                         if ($total % 2 == 0) {
 
-                            BoardSquare::widget('#AF5200', $board, $figures, $whiteUser, $blackUser);
+                            BoardSquare::widget('#AF5200', $board, $figures, $whiteUser, $blackUser, $game_id);
 
                         } else {
 
-                            BoardSquare::widget('#FFFFFF', $board, $figures, $whiteUser, $blackUser);
+                            BoardSquare::widget('#FFFFFF', $board, $figures, $whiteUser, $blackUser, $game_id);
 
                         }
                     }

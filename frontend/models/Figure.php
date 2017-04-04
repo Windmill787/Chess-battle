@@ -11,13 +11,12 @@ use Yii;
  * @property string $color
  * @property string $name
  * @property string $number
- * @property string $start_position
+ * @property integer $start_position
  * @property string $status
  *
- * @property PlayPosition[] $playPositions
- * @property PlayPosition[] $playPositions0
- * @property PlayPosition[] $playPositions1
- * @property StartPosition[] $startPositions
+ * @property Chessboard $startPosition
+ * @property Moves[] $moves
+ * @property PlayPositions[] $playPositions
  */
 class Figure extends \yii\db\ActiveRecord
 {
@@ -35,10 +34,12 @@ class Figure extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['color'], 'string', 'max' => 5],
+            [['start_position'], 'required'],
+            [['start_position'], 'integer'],
+            [['color', 'number'], 'string', 'max' => 5],
             [['name'], 'string', 'max' => 6],
-            [['number'], 'string', 'max' => 5],
             [['status'], 'string', 'max' => 10],
+            [['start_position'], 'exist', 'skipOnError' => true, 'targetClass' => Chessboard::className(), 'targetAttribute' => ['start_position' => 'id']],
         ];
     }
 
@@ -52,8 +53,25 @@ class Figure extends \yii\db\ActiveRecord
             'color' => 'Color',
             'name' => 'Name',
             'number' => 'Number',
-            'status' => 'Status'
+            'start_position' => 'Start Position',
+            'status' => 'Status',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStartPosition()
+    {
+        return $this->hasOne(Chessboard::className(), ['id' => 'start_position']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMoves()
+    {
+        return $this->hasMany(Moves::className(), ['figure_id' => 'id']);
     }
 
     /**
@@ -61,30 +79,6 @@ class Figure extends \yii\db\ActiveRecord
      */
     public function getPlayPositions()
     {
-        return $this->hasMany(PlayPosition::className(), ['figure_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPlayPositions0()
-    {
-        return $this->hasMany(PlayPosition::className(), ['pawn_up_to' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPlayPositions1()
-    {
-        return $this->hasMany(PlayPosition::className(), ['replaced_to' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getStartPositions()
-    {
-        return $this->hasMany(StartPosition::className(), ['figure_id' => 'id']);
+        return $this->hasMany(PlayPositions::className(), ['figure_id' => 'id']);
     }
 }

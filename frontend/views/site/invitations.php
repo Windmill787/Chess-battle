@@ -8,6 +8,8 @@
 
 /* @var $this yii\web\View */
 /* @var $model \app\models\Game */
+/* @var $invitationsToMe \app\models\Messages */
+/* @var $invitationsFromMe \app\models\Messages */
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -22,61 +24,72 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row thumbnail">
         <table class="table">
             <tbody>
-        <?php
-        $invitationsTOMe = \app\models\Messages::find()
-            ->where(['to_user_id' => Yii::$app->user->id])
-            ->andWhere(['status' => 'pending'])
-            ->all();
-        if (empty($invitationsTOMe) == false) { ?>
+        <?php if (empty($invitationsToMe) == false) { ?>
             You was invited to play by players:
+            <br>
             <?php
-            foreach ($invitationsTOMe as $invitation) {
-                $user = \common\models\User::findOne(['id' => $invitation->from_user_id]);
-                echo $user->username;
-                $form = ActiveForm::begin();
-                ?>
-                <?php
-                echo $form->field($model, 'white_player_id')->hiddenInput(['value' => $user->id])->label(false);
+            foreach ($invitationsToMe as $invitation) {
 
-                echo $form->field($model, 'black_player_id')->hiddenInput(['value' => Yii::$app->user->id])->label(false);
+                if ($invitation->status == 'pending') {
 
-                echo $form->field($model, 'play_position_id')->hiddenInput()->label(false) ?>
+                    $enemy = \common\models\User::findOne(['id' => $invitation->from_user_id]);
+                    echo $enemy->username;
 
-                <?php $model->black_user_id = Yii::$app->user->id ?>
+                    $form = ActiveForm::begin();
 
-                <div class="form-group">
-                    <?= Html::submitButton('Accept', [
-                        'class' => 'btn btn-success', 'name' => 'accept-invite'
-                    ]); ?>
-                    <?= Html::submitButton('Decline', [
-                        'class' => 'btn btn-danger', 'name' => 'decline-invite'
-                    ]); ?>
-                </div>
+                    echo $form->field($model, 'white_user_id')
+                        ->hiddenInput(['value' => $enemy->id])->label(false);
 
-                <?php
-                ActiveForm::end();
+                    echo $form->field($model, 'black_user_id')
+                        ->hiddenInput(['value' => Yii::$app->user->id])->label(false);
+
+                    echo $form->field($model, 'status')
+                        ->hiddenInput(['value' => 'in progress'])->label(false);
+
+                    echo Html::submitButton('Accept', [
+                        'class' => 'btn btn-success'
+                    ]);
+
+                    ActiveForm::end();
+
+
+                    echo Html::tag('th');
+                    echo Html::tag('br');
+
+                } else if ($invitation->status == 'accepted') {
+
+                    $enemy = \common\models\User::findOne(['id' => $invitation->from_user_id]);
+                    echo $enemy->username;
+
+                    $games = \app\models\Game::find()
+                        ->where(['white_user_id' => $enemy->id, 'black_user_id' => Yii::$app->user->id])
+                        ->all();
+
+                    foreach ($games as $game) {
+                        echo Html::a('Go to game', '/game/play?id='.$game->id, [
+                            'class' => 'btn btn-primary'
+                        ]);
+                    }
+                }
             }
         } else {
             echo 'No invitations from another players';
         }
-
-        $invitationsFromMe = \app\models\Messages::find()
-            ->where(['from_user_id' => Yii::$app->user->id])
-            ->all();
+        echo Html::tag('br');
         if (empty($invitationsFromMe) == false) { ?>
             You invited to play with players:
             <br>
             <?php
             foreach ($invitationsFromMe as $invitation) {
-                $user = \common\models\User::findOne(['id' => $invitation->to_user_id]);
-                echo $user->username;
+                $enemy = \common\models\User::findOne(['id' => $invitation->to_user_id]);
+                echo $enemy->username;
 
                 $games = \app\models\Game::find()
-                    ->where(['white_user_id' => Yii::$app->user->id, 'black_user_id' => $user->id])
+                    ->where(['white_user_id' => Yii::$app->user->id, 'black_user_id' => $enemy->id])
                     ->all();
 
                 foreach ($games as $game) {
-                    echo Html::a('Go to game', '/game/play?id='.$game->game_id, [
+                    echo Html::a('Go to game', '/game/play?id='.$game->id, [
                         'class' => 'btn btn-primary'
                     ]);
                 }

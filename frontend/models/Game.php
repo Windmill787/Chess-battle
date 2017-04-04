@@ -4,7 +4,6 @@ namespace app\models;
 
 use Yii;
 use common\models\User;
-use app\models\PlayPositions;
 
 /**
  * This is the model class for table "game".
@@ -12,11 +11,11 @@ use app\models\PlayPositions;
  * @property integer $id
  * @property integer $white_user_id
  * @property integer $black_user_id
- * @property integer $play_position_id
+ * @property string $status
  *
  * @property User $blackUser
- * @property PlayPositions $playPosition
  * @property User $whiteUser
+ * @property PlayPositions[] $playPositions
  */
 class Game extends \yii\db\ActiveRecord
 {
@@ -34,10 +33,10 @@ class Game extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['white_user_id', 'black_user_id', 'play_position_id'], 'required'],
-            [['white_user_id', 'black_user_id', 'play_position_id'], 'integer'],
+            [['white_user_id', 'black_user_id'], 'required'],
+            [['white_user_id', 'black_user_id'], 'integer'],
+            [['status'], 'string', 'max' => 30],
             [['black_user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['black_user_id' => 'id']],
-            [['play_position_id'], 'exist', 'skipOnError' => true, 'targetClass' => PlayPositions::className(), 'targetAttribute' => ['play_position_id' => 'id']],
             [['white_user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['white_user_id' => 'id']],
         ];
     }
@@ -51,7 +50,7 @@ class Game extends \yii\db\ActiveRecord
             'id' => 'ID',
             'white_user_id' => 'White User ID',
             'black_user_id' => 'Black User ID',
-            'play_position_id' => 'Play Position ID',
+            'status' => 'Status',
         ];
     }
 
@@ -66,16 +65,16 @@ class Game extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPlayPosition()
+    public function getWhiteUser()
     {
-        return $this->hasOne(PlayPositions::className(), ['id' => 'play_position_id']);
+        return $this->hasOne(User::className(), ['id' => 'white_user_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getWhiteUser()
+    public function getPlayPositions()
     {
-        return $this->hasOne(User::className(), ['id' => 'white_user_id']);
+        return $this->hasMany(PlayPositions::className(), ['game_id' => 'id']);
     }
 }

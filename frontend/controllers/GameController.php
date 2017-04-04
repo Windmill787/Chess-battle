@@ -62,7 +62,7 @@ class GameController extends Controller
 
         $board = new BoardComponent();
 
-        $figures = FigureBuilderComponent::build();
+        $figures = FigureBuilderComponent::build($id);
 
         // fix this!
         foreach ($figures as $figure) {
@@ -103,8 +103,8 @@ class GameController extends Controller
                     $figureMoveY = $figure->currentPositionY - $moves[1];
                 }
 
-                if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY])) {
-                    $figure->move($figureMoveX, $figureMoveY);
+                if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
+                    $figure->move($figureMoveX, $figureMoveY, $id);
                 }
             }
 
@@ -124,10 +124,10 @@ class GameController extends Controller
                 if (empty($desiredPosition->figure_id) == false) {
                     $desiredFigure = Figure::findOne(['id' => $desiredPosition->id]);
 
-                    if (isset($_POST['attack' . $desiredFigure->id])) {
+                    /*if (isset($_POST['attack' . $desiredFigure->id])) {
                         $figure->attack($desiredFigure->id);
                         $this->refresh();
-                    }
+                    }*/
                 }
             }
         }
@@ -167,7 +167,7 @@ class GameController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Game::findOne(['game_id' => $id])) !== null) {
+        if (($model = Game::findOne(['id' => $id])) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

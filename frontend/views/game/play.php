@@ -7,17 +7,18 @@
  */
 
 /* @var $this yii\web\View */
-/* @var $whitePawn \frontend\components\PawnComponent */
 /* @var $figures \frontend\components\FigureComponent */
 /* @var $board \frontend\components\BoardComponent */
 /* @var $model \app\models\Game */
+/* @var $whiteUser \common\models\User */
+/* @var $blackUser \common\models\User */
 
 use yii\helpers\Html;
 use russ666\widgets\Countdown;
 use yii\bootstrap\Modal;
 use frontend\widgets\Board;
 
-$this->title = Yii::t('app', 'Play' . $model->id);
+$this->title = Yii::t('app', 'Play');
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -25,16 +26,7 @@ $this->title = Yii::t('app', 'Play' . $model->id);
         <div class="row thumbnail">
             <div class="caption">
 
-                <?php
-                if ($this->beginCache($figures)) {
-
-                    if ($this->beginCache($board)) {
-                        echo Board::widget($board, $figures, $whiteUser, $blackUser);
-                        $this->endCache();
-                    }
-                    $this->endCache();
-                }
-                ?>
+                <?= Board::widget($board, $figures, $whiteUser, $blackUser, $model->id); ?>
 
             </div>
         </div>

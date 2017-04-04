@@ -18,7 +18,7 @@ $this->title = Yii::t('app', 'My Yii Application');
         <table class="table">
             <tbody>
             <?php
-            /*if (empty($onlineUsers) == false) {
+            if (empty($onlineUsers) == false) {
                 foreach ($onlineUsers as $onlineUser) {
                     $user = \common\models\User::findOne(['id' => $onlineUser->user_id]);
                     echo Html::beginTag('tr');
@@ -40,7 +40,9 @@ $this->title = Yii::t('app', 'My Yii Application');
                     echo Html::endTag('td');
                     echo Html::endTag('tr');
                 }
-            }*/
+            } else {
+                echo 'No users online now';
+            }
             ?>
             </tbody>
         </table>

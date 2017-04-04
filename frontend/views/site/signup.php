@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?= $form->field($model, 'age') ?>
 
-            <?= $form->field($model, 'img')->fileInput()?>
+            <?= $form->field($model, 'img')->hiddenInput()->label(false) ?>
 
             <?= $form->field($model, 'email') ?>
 
