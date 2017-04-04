@@ -16,7 +16,7 @@ use yii\helpers\Html;
 
 class CastlingButton extends Widget
 {
-    public static function widget(KingComponent $king, $board)
+    public static function widget(KingComponent $king, $board, $whiteUser, $blackUser)
     {
         foreach ($king->castlingMove as $castling) {
             $castlingMoveX = $king->currentPositionX + $castling[0];

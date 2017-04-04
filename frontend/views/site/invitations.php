@@ -23,14 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
         <table class="table">
             <tbody>
         <?php
-        $invitationsFromMe = \app\models\Messages::find()
+        $invitationsTOMe = \app\models\Messages::find()
             ->where(['to_user_id' => Yii::$app->user->id])
             ->andWhere(['status' => 'pending'])
             ->all();
-        if (empty($invitationsFromMe) == false) { ?>
+        if (empty($invitationsTOMe) == false) { ?>
             You was invited to play by players:
             <?php
-            foreach ($invitationsFromMe as $invitation) {
+            foreach ($invitationsTOMe as $invitation) {
                 $user = \common\models\User::findOne(['id' => $invitation->from_user_id]);
                 echo $user->username;
                 $form = ActiveForm::begin();
@@ -60,30 +60,26 @@ $this->params['breadcrumbs'][] = $this->title;
             echo 'No invitations from another players';
         }
 
-        echo '<hr>';
-
-        $invitationsToMe = \app\models\Messages::find()
+        $invitationsFromMe = \app\models\Messages::find()
             ->where(['from_user_id' => Yii::$app->user->id])
-            ->andWhere(['status' => 'pending'])
             ->all();
-        if (empty($invitationsToMe) == false) { ?>
+        if (empty($invitationsFromMe) == false) { ?>
             You invited to play with players:
             <br>
             <?php
-            foreach ($invitationsToMe as $invitation) {
+            foreach ($invitationsFromMe as $invitation) {
                 $user = \common\models\User::findOne(['id' => $invitation->to_user_id]);
                 echo $user->username;
-                ActiveForm::begin();
-                ?>
 
-                <div class="form-group">
-                    <?= Html::submitButton('Go to game', [
-                        'class' => 'btn btn-primary', 'name' => 'play-button'
-                    ]); ?>
-                </div>
+                $games = \app\models\Game::find()
+                    ->where(['white_user_id' => Yii::$app->user->id, 'black_user_id' => $user->id])
+                    ->all();
 
-                <?php
-                ActiveForm::end();
+                foreach ($games as $game) {
+                    echo Html::a('Go to game', '/game/play?id='.$game->game_id, [
+                        'class' => 'btn btn-primary'
+                    ]);
+                }
             }
         } else {
             echo 'No invitations to another players';

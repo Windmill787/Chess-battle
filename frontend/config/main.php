@@ -22,13 +22,6 @@ return [
                 //'useStreamsFallback' => true,
             ],
             'services' => [ // You can change the providers and their classes.
-                'google' => [
-                    // register your app here: https://code.google.com/apis/console/
-                    'class' => 'nodge\eauth\services\GoogleOAuth2Service',
-                    'clientId' => '1060355684369-s08tokc0fmfmtjg7ib3gke3dbtf3ojc3.apps.googleusercontent.com',
-                    'clientSecret' => 'XIfK6fHJ7nReEXbj6kMatIcl',
-                    'title' => 'Google',
-                ],
                 'twitter' => [
                     // register your app here: https://dev.twitter.com/apps/new
                     'class' => 'nodge\eauth\services\TwitterOAuth1Service',

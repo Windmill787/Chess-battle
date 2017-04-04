@@ -15,13 +15,13 @@ use yii\base\Widget;
 
 class FirstMoveButton extends Widget
 {
-    public static function widget(PawnComponent $figure, $board) {
+    public static function widget(PawnComponent $figure, $board, $whiteUser, $blackUser) {
 
-        if ($figure->color == 'white') {
+        if ($figure->color == 'white' && $whiteUser->id == \Yii::$app->user->id) {
             $figureMoveX = $figure->currentPositionX + $figure->first_move[0];
             $figureMoveY = $figure->currentPositionY + $figure->first_move[1];
             self::checkPosition($figureMoveX, $figureMoveY, $figure, $board);
-        } else if ($figure->color == 'black') {
+        } else if ($figure->color == 'black' && $blackUser->id == \Yii::$app->user->id) {
             $figureMoveX = $figure->currentPositionX - $figure->first_move[0];
             $figureMoveY = $figure->currentPositionY - $figure->first_move[1];
             self::checkPosition($figureMoveX, $figureMoveY, $figure, $board);

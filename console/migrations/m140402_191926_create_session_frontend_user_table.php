@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `session_frontend_user`.
  */
-class m170402_191926_create_session_frontend_user_table extends Migration
+class m140402_191926_create_session_frontend_user_table extends Migration
 {
     /**
      * @inheritdoc

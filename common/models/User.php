@@ -35,6 +35,7 @@ class User extends ActiveRecord implements IdentityInterface
      * @var array EAuth attributes
      */
     public $profile;
+    public $authKey;
 
     public $string;
     public $image;

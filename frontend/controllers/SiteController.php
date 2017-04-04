@@ -129,9 +129,7 @@ class SiteController extends Controller
         $serviceName = Yii::$app->getRequest()->getQueryParam('service');
         if (isset($serviceName)) {
 
-            /**
-             * @var $eauth \nodge\eauth\ServiceBase
-             */
+            /** @var $eauth \nodge\eauth\ServiceBase */
 
             $eauth = Yii::$app->get('eauth')->getIdentity($serviceName);
             $eauth->setRedirectUrl(Yii::$app->getUser()->getReturnUrl());
@@ -139,6 +137,7 @@ class SiteController extends Controller
 
             try {
                 if ($eauth->authenticate()) {
+//					var_dump($eauth->getIsAuthenticated(), $eauth->getAttributes()); exit;
 
                     $identity = User::findByEAuth($eauth);
                     Yii::$app->getUser()->login($identity);
@@ -151,12 +150,12 @@ class SiteController extends Controller
                     $eauth->cancel();
                 }
             }
-            catch (\ErrorException $e) {
+            catch (\nodge\eauth\ErrorException $e) {
                 // save error to show it later
                 Yii::$app->getSession()->setFlash('error', 'EAuthException: '.$e->getMessage());
 
                 // close popup window and redirect to cancelUrl
-//              $eauth->cancel();
+//				$eauth->cancel();
                 $eauth->redirect($eauth->getCancelUrl());
             }
         }

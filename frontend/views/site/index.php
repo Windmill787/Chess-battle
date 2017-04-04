@@ -18,7 +18,7 @@ $this->title = Yii::t('app', 'My Yii Application');
         <table class="table">
             <tbody>
             <?php
-            if (isset($onlineUsers)) {
+            /*if (empty($onlineUsers) == false) {
                 foreach ($onlineUsers as $onlineUser) {
                     $user = \common\models\User::findOne(['id' => $onlineUser->user_id]);
                     echo Html::beginTag('tr');
@@ -40,7 +40,7 @@ $this->title = Yii::t('app', 'My Yii Application');
                     echo Html::endTag('td');
                     echo Html::endTag('tr');
                 }
-            }
+            }*/
             ?>
             </tbody>
         </table>
