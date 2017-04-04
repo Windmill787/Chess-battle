@@ -8,6 +8,7 @@
 
 namespace frontend\widgets;
 
+use app\models\Game;
 use frontend\components\FigureComponent;
 use yii\bootstrap\Widget;
 use yii\helpers\Html;
@@ -18,14 +19,16 @@ class Buttons extends Widget
 {
     public static function widget(FigureComponent $figure, $board, $whiteUser, $blackUser, $game_id) {
 
+        $game = Game::findOne(['id' => $game_id]);
+
         foreach ($figure->moves as $moves) {
-            if ($figure->color == 'white' && $whiteUser->id == \Yii::$app->user->id) {
+            if ($figure->color == 'white' && $whiteUser->id == \Yii::$app->user->id && $game->move %2 != 0) {
 
                 $figureMoveX = $figure->currentPositionX + $moves[0];
                 $figureMoveY = $figure->currentPositionY + $moves[1];
                 self::checkPosition($figureMoveX, $figureMoveY, $figure, $board, $game_id);
 
-            } else if ($figure->color == 'black' && $blackUser->id == \Yii::$app->user->id) {
+            } else if ($figure->color == 'black' && $blackUser->id == \Yii::$app->user->id && $game->move %2 == 0) {
 
                 $figureMoveX = $figure->currentPositionX - $moves[0];
                 $figureMoveY = $figure->currentPositionY - $moves[1];

@@ -55,9 +55,9 @@ class FigureBuilderComponent extends Component
         ];
     }
 
-    public static function back($figures) {
+    public static function back($figures, $game_id) {
         foreach ($figures as $figure) {
-            $position = PlayPositions::findOne(['figure_id' => $figure->id]);
+            $position = PlayPositions::findOne(['game_id' => $game_id, 'figure_id' => $figure->id]);
             $position->figure_id = $figure->id;
             $position->current_x = $figure->startPositionX;
             $position->current_y = $figure->startPositionY;

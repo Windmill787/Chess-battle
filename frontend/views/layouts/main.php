@@ -40,13 +40,15 @@ NProgressAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']],
+        ['label' => Yii::t('app', 'Watch'), 'url' => ['/game/watch']],
     ];
 
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => Yii::t('app', 'Signup'), 'url' => ['/site/signup']];
         $menuItems[] = ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']];
     } else {
+
+        $menuItems[] = ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']];
         $menuItems[] = ['label' => Yii::t('app', 'Invitations'), 'url' => ['/site/invitations']];
         $menuItems[] = ['label' => Yii::t('app', 'Profile'), 'url' => ['/profile/index']];
         $menuItems[] = '<li>'

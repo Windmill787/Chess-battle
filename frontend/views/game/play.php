@@ -21,6 +21,7 @@ use frontend\widgets\Board;
 $this->title = Yii::t('app', 'Play');
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
+<div class="game-play">
 
     <div class="col-lg-5">
         <div class="row thumbnail">
@@ -83,6 +84,7 @@ $this->title = Yii::t('app', 'Play');
             </div>
         </div>
     </div>
+</div>
 
 <?php //acceptance tests, jenkins, selenium, driver, config(WebDriver: url, browser(better firefox, chrome), Yii parts, config...
         //fixture-data from tables, -f -fails(codeseption),

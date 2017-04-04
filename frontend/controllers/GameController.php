@@ -29,10 +29,10 @@ class GameController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'play'],
+                'only' => ['index'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'play'],
+                        'actions' => ['index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -77,8 +77,8 @@ class GameController extends Controller
                     $figureMoveY = $figure->currentPositionY - $figure->first_move[1];
                 }
 
-                if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY])) {
-                    $figure->move($figureMoveX, $figureMoveY);
+                if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
+                    $figure->move($figureMoveX, $figureMoveY, $id);
                 }
             }
 
@@ -104,6 +104,8 @@ class GameController extends Controller
                 }
 
                 if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
+                    $model->move = $model->move + 1;
+                    $model->save();
                     $figure->move($figureMoveX, $figureMoveY, $id);
                 }
             }
@@ -124,8 +126,8 @@ class GameController extends Controller
                 if (empty($desiredPosition->figure_id) == false) {
                     $desiredFigure = Figure::findOne(['id' => $desiredPosition->id]);
 
-                    /*if (isset($_POST['attack' . $desiredFigure->id])) {
-                        $figure->attack($desiredFigure->id);
+                    /*if (isset($_POST['attack' . $desiredFigure->id . $id])) {
+                        $figure->attack($desiredFigure->id, $id);
                         $this->refresh();
                     }*/
                 }
@@ -134,7 +136,7 @@ class GameController extends Controller
 
         // fix this!
         if (isset($_POST['back'])) {
-            FigureBuilderComponent::back($figures);
+            FigureBuilderComponent::back($figures, $id);
             FigureBuilderComponent::resetStatuses();
             $this->refresh();
         }
@@ -145,6 +147,20 @@ class GameController extends Controller
             'blackUser' => $blackUser,
             'board' => $board,
             'figures' => $figures
+        ]);
+    }
+
+    /**
+     * Displays watch game page.
+     *
+     * @return mixed
+     */
+    public function actionWatch()
+    {
+        $games = Game::find()->where(['status' => 'in progress'])->all();
+
+        return $this->render('watch', [
+            'games' => $games
         ]);
     }
 

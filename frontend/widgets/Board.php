@@ -17,7 +17,6 @@ class Board extends Widget
 {
     public static function widget(BoardComponent $board, $figures, $whiteUser, $blackUser, $game_id)
     {
-
         if ($whiteUser->id == \Yii::$app->user->id) {
             echo 'Your color is white';
         } else if ($blackUser->id == \Yii::$app->user->id) {
@@ -115,7 +114,50 @@ class Board extends Widget
                         }
                     }
                 }
+            } else {
+
+            foreach ($board->symbolLabel as $label) :
+
+                echo Html::beginTag('th', [
+                    'style' => [
+                        'text-align' => 'center',
+                        'vertical-align' => 'middle'
+                    ]
+                ]);
+                echo Html::encode($label);
+                echo Html::endTag('th');
+            endforeach;
+            echo Html::endTag('tr');
+            echo Html::endTag('tfoot');
+
+            for ($board->y = 8; $board->y >= 1; $board->y--) {
+
+                echo Html::beginTag('tr');
+
+                echo Html::beginTag('th', [
+                    'style' => [
+                        'text-align' => 'center',
+                        'vertical-align' => 'middle'
+                    ]
+                ]);
+                echo Html::encode($board->y);
+                echo Html::endTag('th');
+
+                for ($board->x = 1; $board->x <= 8; $board->x++) {
+
+                    $total = $board->y + $board->x;
+                    if ($total % 2 == 0) {
+
+                        BoardSquare::widget('#AF5200', $board, $figures, $whiteUser, $blackUser, $game_id);
+
+                    } else {
+
+                        BoardSquare::widget('#FFFFFF', $board, $figures, $whiteUser, $blackUser, $game_id);
+
+                    }
+                }
             }
+        }
         echo Html::endTag('tr');
 
         echo Html::endTag('table');

@@ -20,7 +20,8 @@ class m170317_165938_create_game_table extends Migration
             'id' => $this->primaryKey(),
             'white_user_id' => $this->integer(11)->notNull(),
             'black_user_id' => $this->integer(11)->notNull(),
-            'status' => $this->string(30)->notNull()->defaultValue('in progress')
+            'status' => $this->string(30)->notNull()->defaultValue('in progress'),
+            'move' => $this->integer(11)->defaultValue(1)
         ]);
 
         // creates index for column `white_user_id`
