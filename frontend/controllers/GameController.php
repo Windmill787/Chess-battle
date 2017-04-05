@@ -123,34 +123,36 @@ class GameController extends Controller
                 }
 
                 if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
-                    //$model->move = $model->move + 1;
-                    //$model->save();
+                    $model->move = $model->move + 1;
+                    $model->save();
                     $figure->move($figureMoveX, $figureMoveY, $id);
                 }
             }
 
-            foreach ($figure->attacks as $attack) {
+            /*foreach ($figure->attacks as $attack) {
                 if ($figure->color == 'white') {
                     $desiredPosition = PlayPositions::findOne([
+                        'game_id' => $id,
                         'current_x' => $figure->currentPositionX + $attack[0],
                         'current_y' => $figure->currentPositionY + $attack[1]
                     ]);
                 } else if ($figure->color == 'black') {
                     $desiredPosition = PlayPositions::findOne([
+                        'game_id' => $id,
                         'current_x' => $figure->currentPositionX - $attack[0],
                         'current_y' => $figure->currentPositionY - $attack[1]
                     ]);
                 }
 
-                if (empty($desiredPosition->figure_id) == false) {
-                    $desiredFigure = Figure::findOne(['id' => $desiredPosition->id]);
+                $desiredFigure = PlayPositions::findOne([
+                    'game_id' => $id, 'figure_id' => $desiredPosition->figure_id
+                ]);
 
-                    /*if (isset($_POST['attack' . $desiredFigure->id . $id])) {
-                        $figure->attack($desiredFigure->id, $id);
-                        $this->refresh();
-                    }*/
+                if (isset($_POST['attack' . $desiredFigure->id . $id])) {
+                    $figure->attack($desiredFigure->id, $id);
+                    $this->refresh();
                 }
-            }
+            }*/
         }
 
         // fix this!

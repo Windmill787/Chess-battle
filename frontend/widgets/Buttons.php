@@ -37,50 +37,29 @@ class Buttons extends Widget
         }
 
         /*foreach ($figure->attacks as $attack) {
-            $desiredPosition = self::desiredAttackPosition($figure->color, $figure, $attack, $whiteUser, $blackUser);
+            $desiredPosition = self::desiredAttackPosition($figure->color, $figure, $attack, $whiteUser, $blackUser, $game);
 
-            self::checkFigure($figure, $board, $attack, $desiredPosition);
+            self::checkFigure($figure, $board, $attack, $desiredPosition, $game_id);
         }*/
     }
 
-    /*public static function desiredAttackPosition($color, $figure, $attack, $whiteUser, $blackUser) {
-        if ($color == 'white' && $whiteUser->id == \Yii::$app->user->id) {
+    /*public static function desiredAttackPosition($color, $figure, $attack, $whiteUser, $blackUser, $game) {
+        if ($color == 'white' && $whiteUser->id == \Yii::$app->user->id && $game->move %2 != 0) {
             $desiredPosition = PlayPositions::findOne([
+                'game_id' => $game->id,
                 'current_x' => $figure->currentPositionX + $attack[0],
                 'current_y' => $figure->currentPositionY + $attack[1]
             ]);
             return $desiredPosition;
-        } else if ($color == 'black' && $blackUser->id == \Yii::$app->user->id) {
+        } else if ($color == 'black' && $blackUser->id == \Yii::$app->user->id && $game->move %2 == 0) {
             $desiredPosition = PlayPositions::findOne([
+                'game_id' => $game->id,
                 'current_x' => $figure->currentPositionX - $attack[0],
                 'current_y' => $figure->currentPositionY - $attack[1]
             ]);
             return $desiredPosition;
         }
     }*/
-
-    public static function checkPosition($figureMoveX, $figureMoveY, $figure, $board, $game_id) {
-
-        $desiredPosition = PlayPositions::findOne([
-            'game_id' => $game_id,
-            'current_x' => $figureMoveX,
-            'current_y' => $figureMoveY
-        ]);
-
-        if (empty($desiredPosition->figure_id)) {
-            if ($board->x == $figureMoveX &&
-                $board->y == $figureMoveY) {
-
-                echo Html::beginForm();
-                echo Html::submitButton('move', [
-                    'class' => 'btn btn-xs btn-primary hidden move move' . $figure->id,
-                    'name' => 'move' . $figure->id . $figureMoveX . $figureMoveY . $game_id,
-                    'onclick' => 'hideButtons()'
-                ]);
-                echo Html::endForm();
-            }
-        }
-    }
 
     /*public static function checkFigure($figure, $board, $attack, $desiredPosition) {
 
@@ -116,4 +95,27 @@ class Buttons extends Widget
             }
         }
     }*/
+
+    public static function checkPosition($figureMoveX, $figureMoveY, $figure, $board, $game_id) {
+
+        $desiredPosition = PlayPositions::findOne([
+            'game_id' => $game_id,
+            'current_x' => $figureMoveX,
+            'current_y' => $figureMoveY
+        ]);
+
+        if (empty($desiredPosition->figure_id)) {
+            if ($board->x == $figureMoveX &&
+                $board->y == $figureMoveY) {
+
+                echo Html::beginForm();
+                echo Html::submitButton('move', [
+                    'class' => 'btn btn-xs btn-primary hidden move move' . $figure->id,
+                    'name' => 'move' . $figure->id . $figureMoveX . $figureMoveY . $game_id,
+                    'onclick' => 'hideButtons()'
+                ]);
+                echo Html::endForm();
+            }
+        }
+    }
 }

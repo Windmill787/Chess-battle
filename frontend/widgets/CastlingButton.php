@@ -46,7 +46,7 @@ class CastlingButton extends Widget
                     $rook = PlayPositions::findOne(['game_id' => $game_id, 'figure_id' => 13]);
 
                     if ($rook->already_moved == 0) {
-                        self::checkRightPosition($castlingMoveX, $castlingMoveY,
+                        self::checkLeftPosition($castlingMoveX, $castlingMoveY,
                             $figureMoveX, $figureMoveY, $king, $board, $rook, $game_id);
                     }
                 }
@@ -71,7 +71,7 @@ class CastlingButton extends Widget
                     $rook = PlayPositions::findOne(['game_id' => $game_id, 'figure_id' => 29]);
 
                     if ($rook->already_moved == 0) {
-                        self::checkRightPosition($castlingMoveX, $castlingMoveY,
+                        self::checkLeftPosition($castlingMoveX, $castlingMoveY,
                             $figureMoveX, $figureMoveY, $king, $board, $rook, $game_id);
                     }
                 }

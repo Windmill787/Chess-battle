@@ -8,6 +8,7 @@
 
 namespace frontend\widgets;
 
+use app\models\Game;
 use frontend\components\BoardComponent;
 use yii\helpers\Html;
 use yii\bootstrap\Widget;
@@ -23,9 +24,15 @@ class Board extends Widget
             echo 'Your color is black';
         }
 
-        echo Html::beginTag('p');
-        echo $blackUser->username;
-        echo Html::endTag('p');
+        $game = Game::findOne(['id' => $game_id]);
+
+        if ($game->move %2 != 0) {
+            echo '<br>';
+            echo 'white move';
+        } else if ($game->move %2 == 0) {
+            echo '<br>';
+            echo 'black move';
+        }
 
         echo Html::beginTag('table', [
             'class' => 'table-bordered'
@@ -124,9 +131,5 @@ class Board extends Widget
         echo Html::endTag('table');
 
         echo Html::tag('br');
-
-        echo Html::beginTag('p');
-        echo $whiteUser->username;
-        echo Html::endTag('p');
     }
 }
