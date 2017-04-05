@@ -13,6 +13,7 @@ use Yii;
  * @property integer $current_x
  * @property integer $current_y
  * @property string $status
+ * @property integer $already_moved
  *
  * @property Figure $figure
  * @property Game $game
@@ -34,7 +35,7 @@ class PlayPositions extends \yii\db\ActiveRecord
     {
         return [
             [['game_id', 'figure_id', 'current_x', 'current_y'], 'required'],
-            [['game_id', 'figure_id', 'current_x', 'current_y'], 'integer'],
+            [['game_id', 'figure_id', 'current_x', 'current_y', 'already_moved'], 'integer'],
             [['status'], 'string', 'max' => 30],
             [['figure_id'], 'exist', 'skipOnError' => true, 'targetClass' => Figure::className(), 'targetAttribute' => ['figure_id' => 'id']],
             [['game_id'], 'exist', 'skipOnError' => true, 'targetClass' => Game::className(), 'targetAttribute' => ['game_id' => 'id']],
@@ -53,6 +54,7 @@ class PlayPositions extends \yii\db\ActiveRecord
             'current_x' => 'Current X',
             'current_y' => 'Current Y',
             'status' => 'Status',
+            'already_moved' => 'Already Moved',
         ];
     }
 

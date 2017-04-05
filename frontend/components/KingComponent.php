@@ -23,11 +23,26 @@ class KingComponent extends FigureComponent
         $this->setCastling();
     }
 
-    public function castling($figureMoveX, $figureMoveY, $game_id) {
+    public function castling($figureMoveX, $figureMoveY, $rook, $castling,  $game_id) {
+        $rookPosition = PlayPositions::findOne(['id' => $rook]);
+        if ($castling == 2) {
+            $rookPosition->current_x = $figureMoveX - 1;
+            $rookPosition->current_y = $figureMoveY;
+            $rookPosition->save();
+        } else if ($castling == -2) {
+            $rookPosition->current_x = $figureMoveX + 1;
+            $rookPosition->current_y = $figureMoveY;
+            $rookPosition->save();
+        }
         parent::move($figureMoveX, $figureMoveY, $game_id);
     }
 
     public function move($figureMoveX, $figureMoveY, $game_id) {
+        $king = PlayPositions::findOne(['game_id' => $game_id, 'figure_id' => $this->id]);
+        if ($king->already_moved == 0) {
+            $king->already_moved = 1;
+            $king->save();
+        }
         parent::move($figureMoveX, $figureMoveY, $game_id);
     }
 

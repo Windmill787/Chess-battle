@@ -37,16 +37,14 @@ $this->title = Yii::t('app', 'Play');
         <div class="row thumbnail" align="right">
             <div class="caption">
 
-                <div class="form-group">
-                    <?= Html::button(Yii::t('app', 'Me'),
-                        ['class' => 'btn btn-primary', 'id' => 'myMoveButton']) ?>
-
-                    <?= Html::button(Yii::t('app', 'Enemy'),
-                        ['class' => 'btn btn-primary', 'id' => 'enemyMoveButton']) ?>
-                </div>
+                <p>Moves</p>
 
                 <div class="thumbnail">
                     <div class="caption">
+
+                        <?php
+                        
+                        ?>
 
                     </div>
                 </div>

@@ -78,6 +78,8 @@ class GameController extends Controller
                 }
 
                 if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
+                    //$model->move = $model->move + 1;
+                    //$model->save();
                     $figure->move($figureMoveX, $figureMoveY, $id);
                 }
             }
@@ -87,8 +89,25 @@ class GameController extends Controller
                     $figureMoveX = $figure->currentPositionX + $castling[0];
                     $figureMoveY = $figure->currentPositionY + $castling[1];
 
-                    if (isset($_POST['cast' . $figure->id . $figureMoveX . $figureMoveY])) {
-                        $figure->castling($figureMoveX, $figureMoveY);
+                    if ($figure->color == 'white') {
+                        if ($castling[0] == 2) {
+                            $rook = PlayPositions::findOne(['game_id' => $id, 'figure_id' => 14]);
+                        } else if ($castling[0] == -2) {
+                            $rook = PlayPositions::findOne(['game_id' => $id, 'figure_id' => 13]);
+                        }
+                    } else if ($figure->color == 'black') {
+                        if ($castling[0] == 2) {
+                            $rook = PlayPositions::findOne(['game_id' => $id, 'figure_id' => 30]);
+                        } else if ($castling[0] == -2) {
+                            $rook = PlayPositions::findOne(['game_id' => $id, 'figure_id' => 29]);
+                        }
+                    }
+
+                    if (isset($_POST['cast' . $figure->id . $figureMoveX . $figureMoveY . $rook->id . $id])) {
+                        //$model->move = $model->move + 1;
+                        //$model->save();
+                        $figure->castling($figureMoveX, $figureMoveY, $rook->id, $castling[0], $id);
+                        $this->refresh();
                     }
                 }
             }
@@ -104,8 +123,8 @@ class GameController extends Controller
                 }
 
                 if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
-                    $model->move = $model->move + 1;
-                    $model->save();
+                    //$model->move = $model->move + 1;
+                    //$model->save();
                     $figure->move($figureMoveX, $figureMoveY, $id);
                 }
             }
@@ -157,7 +176,11 @@ class GameController extends Controller
      */
     public function actionWatch()
     {
-        $games = Game::find()->where(['status' => 'in progress'])->all();
+        $games = Game::find()
+            ->where(['status' => 'in progress'])
+            ->andWhere(['!=', 'white_user_id', \Yii::$app->user->id])
+            ->andWhere(['!=', 'black_user_id', \Yii::$app->user->id])
+            ->all();
 
         return $this->render('watch', [
             'games' => $games

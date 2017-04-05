@@ -27,7 +27,7 @@ $this->title = Yii::t('app', 'Watch');
                 echo $whiteUser->username.'(white)';
                 echo ' versus ';
                 echo $blackUser->username.'(black)';
-                echo Html::a('Go to game', '/game/play?id='.$game->id, [
+                echo Html::a('Watch', '/game/play?id='.$game->id, [
                     'class' => 'btn btn-primary'
                 ]);
                 echo Html::tag('br');

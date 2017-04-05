@@ -23,56 +23,17 @@ class Board extends Widget
             echo 'Your color is black';
         }
 
+        echo Html::beginTag('p');
+        echo $blackUser->username;
+        echo Html::endTag('p');
+
         echo Html::beginTag('table', [
             'class' => 'table-bordered'
         ]);
         echo Html::beginTag('tfoot');
         echo Html::beginTag('tr');
 
-        if ($whiteUser->id == \Yii::$app->user->id) {
-
-        foreach ($board->symbolLabel as $label) :
-
-            echo Html::beginTag('th', [
-                'style' => [
-                    'text-align' => 'center',
-                    'vertical-align' => 'middle'
-                ]
-            ]);
-            echo Html::encode($label);
-            echo Html::endTag('th');
-        endforeach;
-        echo Html::endTag('tr');
-        echo Html::endTag('tfoot');
-
-            for ($board->y = 8; $board->y >= 1; $board->y--) {
-
-                echo Html::beginTag('tr');
-
-                echo Html::beginTag('th', [
-                    'style' => [
-                        'text-align' => 'center',
-                        'vertical-align' => 'middle'
-                    ]
-                ]);
-                echo Html::encode($board->y);
-                echo Html::endTag('th');
-
-                for ($board->x = 1; $board->x <= 8; $board->x++) {
-
-                    $total = $board->y + $board->x;
-                    if ($total % 2 == 0) {
-
-                        BoardSquare::widget('#AF5200', $board, $figures, $whiteUser, $blackUser, $game_id);
-
-                    } else {
-
-                        BoardSquare::widget('#FFFFFF', $board, $figures, $whiteUser, $blackUser, $game_id);
-
-                    }
-                }
-            }
-        } else if ($blackUser->id == \Yii::$app->user->id) {
+        if ($blackUser->id == \Yii::$app->user->id) {
 
             foreach ($board->reversedSymbolLabel as $label) :
 
@@ -161,5 +122,11 @@ class Board extends Widget
         echo Html::endTag('tr');
 
         echo Html::endTag('table');
+
+        echo Html::tag('br');
+
+        echo Html::beginTag('p');
+        echo $whiteUser->username;
+        echo Html::endTag('p');
     }
 }

@@ -61,6 +61,7 @@ class FigureBuilderComponent extends Component
             $position->figure_id = $figure->id;
             $position->current_x = $figure->startPositionX;
             $position->current_y = $figure->startPositionY;
+            $position->already_moved = 0;
             $position->save();
         }
     }

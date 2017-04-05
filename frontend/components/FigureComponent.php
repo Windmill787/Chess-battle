@@ -27,6 +27,7 @@ class FigureComponent
     public $currentPositionY;
     public $moves = [];
     public $attacks = [];
+    public $alreadyMoved;
 
     public function __construct($color, $name, $number = null, $game_id, $config = [])
     {
@@ -39,7 +40,7 @@ class FigureComponent
         $this->setStartPositions($figure->start_position);
         $this->setMoves();
         $this->setAttacks();
-        $this->getCurrentPositions($this->id, $game_id);
+        $this->setCurrentPositions($this->id, $game_id);
         $this->image = $this->setImage($color, $name);
     }
 
@@ -53,10 +54,11 @@ class FigureComponent
         $this->startPositionY = $position->y;
     }
 
-    public function getCurrentPositions($figure_id, $game_id) {
+    public function setCurrentPositions($figure_id, $game_id) {
         $position = PlayPositions::findOne(['game_id' => $game_id, 'figure_id' => $figure_id]);
         $this->currentPositionX = $position->current_x;
         $this->currentPositionY = $position->current_y;
+        $this->alreadyMoved = $position->already_moved;
     }
 
     public function setMoves() {
