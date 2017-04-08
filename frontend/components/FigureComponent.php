@@ -10,6 +10,7 @@ namespace frontend\components;
 
 use app\models\Chessboard;
 use app\models\Figure;
+use app\models\Moves;
 use app\models\PlayPositions;
 use frontend\interfaces\FigureInterface;
 
@@ -36,7 +37,6 @@ class FigureComponent
         $this->name = $figure->name;
         $this->color = $figure->color;
         $this->number = $figure->number;
-        $this->status = $figure->status;
         $this->setStartPositions($figure->start_position);
         $this->setMoves();
         $this->setAttacks();
@@ -59,14 +59,16 @@ class FigureComponent
         $this->currentPositionX = $position->current_x;
         $this->currentPositionY = $position->current_y;
         $this->alreadyMoved = $position->already_moved;
+        $this->status = $position->status;
     }
 
     public function setMoves() {
-
+        $allMoves = Moves::findOne(['figure_id' => $this->id]);
+        $this->moves = unserialize($allMoves->move);
     }
 
     public function setAttacks() {
-
+        $this->attacks = $this->moves;
     }
 
     public function savePosition($game_id) {
@@ -78,10 +80,10 @@ class FigureComponent
     }
 
     public function attack($figure, $game_id) {
-        $attackPosition = PlayPositions::findOne(['figure_id' => $figure->id]);
-        $this->currentPositionX = $attackPosition->current_x;
-        $this->currentPositionY = $attackPosition->current_y;
+        $this->currentPositionX = $figure->current_x;
+        $this->currentPositionY = $figure->current_y;
         $this->savePosition($game_id);
+        $this->changeStatus($figure);
     }
 
     public function move($figureMoveX, $figureMoveY, $game_id) {
@@ -90,15 +92,9 @@ class FigureComponent
         $this->savePosition($game_id);
     }
 
-    public function count() {
-
-    }
-
-    public function changeStatus(Figure $figure, $game_id) {
-        $position = PlayPositions::findOne(['game_id' => $game_id, 'figure_id' => $figure->id]);
-        $position->current_x = 0;
-        $position->current_y = 0;
-        $position->save();
+    public function changeStatus(PlayPositions $figure) {
+        $figure->current_x = 0;
+        $figure->current_y = 0;
         $figure->status = 'killed';
         $figure->save();
     }

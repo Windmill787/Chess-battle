@@ -16,22 +16,12 @@ use yii\widgets\Pjax;
 
 class Board extends Widget
 {
-    public static function widget(BoardComponent $board, $figures, $whiteUser, $blackUser, $game_id)
+    public static function widget(BoardComponent $board, $figures, $whiteUser, $blackUser, $game)
     {
         if ($whiteUser->id == \Yii::$app->user->id) {
             echo 'Your color is white';
         } else if ($blackUser->id == \Yii::$app->user->id) {
             echo 'Your color is black';
-        }
-
-        $game = Game::findOne(['id' => $game_id]);
-
-        if ($game->move %2 != 0) {
-            echo '<br>';
-            echo 'white move';
-        } else if ($game->move %2 == 0) {
-            echo '<br>';
-            echo 'black move';
         }
 
         echo Html::beginTag('table', [
@@ -73,11 +63,11 @@ class Board extends Widget
                         $total = $board->y + $board->x;
                         if ($total % 2 == 0) {
 
-                            BoardSquare::widget('#AF5200', $board, $figures, $whiteUser, $blackUser, $game_id);
+                            BoardSquare::widget('#AF5200', $board, $figures, $whiteUser, $blackUser, $game);
 
                         } else {
 
-                            BoardSquare::widget('#FFFFFF', $board, $figures, $whiteUser, $blackUser, $game_id);
+                            BoardSquare::widget('#FFFFFF', $board, $figures, $whiteUser, $blackUser, $game);
 
                         }
                     }
@@ -116,11 +106,11 @@ class Board extends Widget
                     $total = $board->y + $board->x;
                     if ($total % 2 == 0) {
 
-                        BoardSquare::widget('#AF5200', $board, $figures, $whiteUser, $blackUser, $game_id);
+                        BoardSquare::widget('#AF5200', $board, $figures, $whiteUser, $blackUser, $game);
 
                     } else {
 
-                        BoardSquare::widget('#FFFFFF', $board, $figures, $whiteUser, $blackUser, $game_id);
+                        BoardSquare::widget('#FFFFFF', $board, $figures, $whiteUser, $blackUser, $game);
 
                     }
                 }

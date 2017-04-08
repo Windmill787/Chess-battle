@@ -27,7 +27,7 @@ $this->title = Yii::t('app', 'Play');
         <div class="row thumbnail">
             <div class="caption">
 
-                <?= Board::widget($board, $figures, $whiteUser, $blackUser, $model->id); ?>
+                <?= Board::widget($board, $figures, $whiteUser, $blackUser, $model); ?>
 
             </div>
         </div>

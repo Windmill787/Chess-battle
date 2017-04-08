@@ -66,8 +66,10 @@ class FigureBuilderComponent extends Component
         }
     }
 
-    public static function resetStatuses() {
-        $figures = Figure::find()->all();
+    public static function resetStatuses($game_id) {
+        $figures = PlayPositions::find()
+            ->where(['game_id' => $game_id, 'status' => 'killed'])
+            ->all();
         foreach ($figures as $figure) {
             $figure->status = 'active';
             $figure->save();

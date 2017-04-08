@@ -67,6 +67,7 @@ class GameController extends Controller
         // fix this!
         foreach ($figures as $figure) {
 
+            // first move
             if ($figure->name == 'pawn') {
                 if ($figure->color == 'white') {
                     $figureMoveX = $figure->currentPositionX + $figure->first_move[0];
@@ -78,12 +79,13 @@ class GameController extends Controller
                 }
 
                 if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
-                    //$model->move = $model->move + 1;
-                    //$model->save();
+                    $model->move = $model->move + 1;
+                    $model->save();
                     $figure->move($figureMoveX, $figureMoveY, $id);
                 }
             }
 
+            // castling
             if ($figure->name == 'king') {
                 foreach ($figure->castlingMove as $castling) {
                     $figureMoveX = $figure->currentPositionX + $castling[0];
@@ -112,14 +114,18 @@ class GameController extends Controller
                 }
             }
 
+            // default moves
             foreach ($figure->moves as $moves) {
                 if ($figure->color == 'white') {
                     $figureMoveX = $figure->currentPositionX + $moves[0];
                     $figureMoveY = $figure->currentPositionY + $moves[1];
 
-                } else if ($figure->color == 'black') {
-                    $figureMoveX = $figure->currentPositionX - $moves[0];
-                    $figureMoveY = $figure->currentPositionY - $moves[1];
+                    /*if ($figure->name == 'bishop') {
+                        for ($i = 1; $i <= 7; $i++) {
+                            $figureMoveX = $figure->currentPositionX + $moves[0] * $i;
+                            $figureMoveY = $figure->currentPositionY + $moves[1] * $i;
+                        }
+                    }*/
                 }
 
                 if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
@@ -129,36 +135,37 @@ class GameController extends Controller
                 }
             }
 
-            /*foreach ($figure->attacks as $attack) {
-                if ($figure->color == 'white') {
-                    $desiredPosition = PlayPositions::findOne([
-                        'game_id' => $id,
-                        'current_x' => $figure->currentPositionX + $attack[0],
-                        'current_y' => $figure->currentPositionY + $attack[1]
-                    ]);
-                } else if ($figure->color == 'black') {
-                    $desiredPosition = PlayPositions::findOne([
-                        'game_id' => $id,
-                        'current_x' => $figure->currentPositionX - $attack[0],
-                        'current_y' => $figure->currentPositionY - $attack[1]
-                    ]);
+            foreach ($figure->attacks as $attack) {
+                $figureAttackX = $figure->currentPositionX + $attack[0];
+                $figureAttackY = $figure->currentPositionY + $attack[1];
+
+                if ($figure->name == 'bishop') {
+                    for ($i = 1; $i <= 7; $i++) {
+                        $figureAttackX = $figure->currentPositionX + $attack[0] * $i;
+                        $figureAttackY = $figure->currentPositionY + $attack[1] * $i;
+                    }
                 }
 
-                $desiredFigure = PlayPositions::findOne([
-                    'game_id' => $id, 'figure_id' => $desiredPosition->figure_id
-                ]);
-
-                if (isset($_POST['attack' . $desiredFigure->id . $id])) {
-                    $figure->attack($desiredFigure->id, $id);
-                    $this->refresh();
+                if (empty($figureAttackX) == false && empty($figureAttackY) == false) {
+                    $desiredFigure = PlayPositions::findOne([
+                        'game_id' => $id,
+                        'current_x' => $figureAttackX,
+                        'current_y' => $figureAttackY
+                    ]);
+                    if (empty($desiredFigure->id) == false) {
+                        if (isset($_POST['attack' . $desiredFigure->figure_id . $id])) {
+                            $figure->attack($desiredFigure, $id);
+                            $this->refresh();
+                        }
+                    }
                 }
-            }*/
+            }
         }
 
         // fix this!
         if (isset($_POST['back'])) {
             FigureBuilderComponent::back($figures, $id);
-            FigureBuilderComponent::resetStatuses();
+            FigureBuilderComponent::resetStatuses($id);
             $this->refresh();
         }
 

@@ -29,23 +29,4 @@ class RookComponent extends FigureComponent
         }
         parent::move($figureMoveX, $figureMoveY, $game_id);
     }
-
-    public function attack($id, $game_id) {
-        $figure = Figure::findOne(['id' => $id]);
-        if ($figure->status == 'active' && $figure->color != $this->color) {
-            parent::attack($figure, $game_id);
-            parent::changeStatus($figure, $game_id);
-        }
-    }
-
-    public function setMoves()
-    {
-        $allMoves = Moves::findOne(['figure_id' => $this->id]);
-        $this->moves = unserialize($allMoves->move);
-    }
-
-    public function setAttacks()
-    {
-        $this->attacks = $this->moves;
-    }
 }

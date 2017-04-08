@@ -22,7 +22,7 @@ class m170318_182119_create_play_positions_table extends Migration
             'figure_id' => $this->integer(11)->notNull(),
             'current_x' => $this->integer(1)->notNull(),
             'current_y' => $this->integer(1)->notNull(),
-            'status' => $this->string(30)->Null(),
+            'status' => $this->string(7)->notNull()->defaultValue('active'),
         ]);
 
         // creates index for column `game_id`

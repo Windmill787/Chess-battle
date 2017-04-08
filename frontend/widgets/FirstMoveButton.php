@@ -16,23 +16,21 @@ use app\models\Game;
 
 class FirstMoveButton extends Widget
 {
-    public static function widget(PawnComponent $figure, $board, $whiteUser, $blackUser, $game_id) {
+    public static function widget(PawnComponent $figure, $board, $whiteUser, $blackUser, $game) {
 
-        $game = Game::findOne(['id' => $game_id]);
-
-        if ($figure->color == 'white' && $whiteUser->id == \Yii::$app->user->id && $game->move %2 != 0) {
+        if ($figure->color == 'white' && $whiteUser->id == \Yii::$app->user->id /*&& $game->move %2 != 0*/) {
             $figureMoveX = $figure->currentPositionX + $figure->first_move[0];
             $figureMoveY = $figure->currentPositionY + $figure->first_move[1];
-            self::checkPosition($figureMoveX, $figureMoveY, $figure, $board, $game_id);
-        } else if ($figure->color == 'black' && $blackUser->id == \Yii::$app->user->id && $game->move %2 == 0) {
+            self::checkPosition($figureMoveX, $figureMoveY, $figure, $board, $game->id);
+        } else if ($figure->color == 'black' && $blackUser->id == \Yii::$app->user->id /*&& $game->move %2 == 0*/) {
             $figureMoveX = $figure->currentPositionX - $figure->first_move[0];
             $figureMoveY = $figure->currentPositionY - $figure->first_move[1];
-            self::checkPosition($figureMoveX, $figureMoveY, $figure, $board, $game_id);
+            self::checkPosition($figureMoveX, $figureMoveY, $figure, $board, $game->id);
         }
     }
 
     public static function checkPosition($figureMoveX, $figureMoveY, $figure, $board, $game_id) {
-        $desiredPosition1 = PlayPositions::findOne([
+        /*$desiredPosition1 = PlayPositions::findOne([
             'game_id' => $game_id,
             'current_x' => $figureMoveX,
             'current_y' => $figureMoveY
@@ -42,9 +40,9 @@ class FirstMoveButton extends Widget
             'game_id' => $game_id,
             'current_x' => $figureMoveX,
             'current_y' => $figureMoveY - 1
-        ]);
+        ]);*/
 
-        if (empty($desiredPosition1->figure_id) && empty($desiredPosition2->figure_id) &&
+        if (
             $figure->currentPositionX == $figure->startPositionX &&
             $figure->currentPositionY == $figure->startPositionY) {
             if ($board->x == $figureMoveX &&
