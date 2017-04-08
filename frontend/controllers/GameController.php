@@ -119,13 +119,9 @@ class GameController extends Controller
                 if ($figure->color == 'white') {
                     $figureMoveX = $figure->currentPositionX + $moves[0];
                     $figureMoveY = $figure->currentPositionY + $moves[1];
-
-                    /*if ($figure->name == 'bishop') {
-                        for ($i = 1; $i <= 7; $i++) {
-                            $figureMoveX = $figure->currentPositionX + $moves[0] * $i;
-                            $figureMoveY = $figure->currentPositionY + $moves[1] * $i;
-                        }
-                    }*/
+                } else if ($figure->color == 'black') {
+                    $figureMoveX = $figure->currentPositionX - $moves[0];
+                    $figureMoveY = $figure->currentPositionY - $moves[1];
                 }
 
                 if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
@@ -136,14 +132,12 @@ class GameController extends Controller
             }
 
             foreach ($figure->attacks as $attack) {
-                $figureAttackX = $figure->currentPositionX + $attack[0];
-                $figureAttackY = $figure->currentPositionY + $attack[1];
-
-                if ($figure->name == 'bishop') {
-                    for ($i = 1; $i <= 7; $i++) {
-                        $figureAttackX = $figure->currentPositionX + $attack[0] * $i;
-                        $figureAttackY = $figure->currentPositionY + $attack[1] * $i;
-                    }
+                if ($figure->color == 'white') {
+                    $figureAttackX = $figure->currentPositionX + $attack[0];
+                    $figureAttackY = $figure->currentPositionY + $attack[1];
+                } else if ($figure->color == 'black') {
+                    $figureAttackX = $figure->currentPositionX - $attack[0];
+                    $figureAttackY = $figure->currentPositionY - $attack[1];
                 }
 
                 if (empty($figureAttackX) == false && empty($figureAttackY) == false) {
@@ -153,7 +147,7 @@ class GameController extends Controller
                         'current_y' => $figureAttackY
                     ]);
                     if (empty($desiredFigure->id) == false) {
-                        if (isset($_POST['attack' . $desiredFigure->figure_id . $id])) {
+                        if (isset($_POST['attack' . $desiredFigure->figure_id . $figure->id . $id])) {
                             $figure->attack($desiredFigure, $id);
                             $this->refresh();
                         }

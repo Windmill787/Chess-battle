@@ -8,11 +8,9 @@
 
 namespace frontend\widgets;
 
-use app\models\Game;
 use frontend\components\BoardComponent;
 use yii\helpers\Html;
 use yii\bootstrap\Widget;
-use yii\widgets\Pjax;
 
 class Board extends Widget
 {

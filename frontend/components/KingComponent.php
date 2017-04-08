@@ -16,11 +16,18 @@ class KingComponent extends FigureComponent
 {
     public $name = 'king';
     public $castlingMove = [];
+    public $check;
 
     public function __construct($color, $game_id, $config = [])
     {
         parent::__construct($color, $this->name, null, $game_id, $config);
-        $this->setCastling();
+        $this->setCastlingMove();
+        $this->check = 0;
+    }
+
+    public function setCastlingMove() {
+        $allMoves = Moves::findOne(['figure_id' => $this->id]);
+        $this->castlingMove = unserialize($allMoves->first_move);
     }
 
     public function castling($figureMoveX, $figureMoveY, $rook, $castling,  $game_id) {
@@ -44,10 +51,5 @@ class KingComponent extends FigureComponent
             $king->save();
         }
         parent::move($figureMoveX, $figureMoveY, $game_id);
-    }
-
-    public function setCastling() {
-        $allMoves = Moves::findOne(['figure_id' => $this->id]);
-        $this->castlingMove = unserialize($allMoves->first_move);
     }
 }
