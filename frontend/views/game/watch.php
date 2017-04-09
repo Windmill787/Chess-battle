@@ -8,6 +8,7 @@
 
 use yii\helpers\Html;
 use common\models\User;
+use yii\widgets\Pjax;
 
 $this->title = Yii::t('app', 'Watch');
 //$this->params['breadcrumbs'][] = $this->title;
@@ -24,13 +25,17 @@ $this->title = Yii::t('app', 'Watch');
                 $whiteUser = User::findOne(['id' => $game->white_user_id]);
 
                 $blackUser = User::findOne(['id' => $game->black_user_id]);
-                echo $whiteUser->username.'(white)';
-                echo ' versus ';
-                echo $blackUser->username.'(black)';
-                echo Html::a('Watch', '/game/play?id='.$game->id, [
-                    'class' => 'btn btn-primary'
-                ]);
-                echo Html::tag('br');
+                if (Yii::$app->user->id == null ||
+                    Yii::$app->user->id != $whiteUser->id &&
+                    Yii::$app->user->id != $blackUser->id) {
+                    echo $whiteUser->username . '(white)';
+                    echo ' versus ';
+                    echo $blackUser->username . '(black)';
+                    echo Html::a('Watch', '/game/play?id=' . $game->id, [
+                        'class' => 'btn btn-primary'
+                    ]);
+                    echo Html::tag('br');
+                }
             }
 
             ?>

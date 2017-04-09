@@ -14,9 +14,9 @@
 /* @var $blackUser \common\models\User */
 
 use yii\helpers\Html;
-use russ666\widgets\Countdown;
 use yii\bootstrap\Modal;
 use frontend\widgets\Board;
+use yii\widgets\Pjax;
 
 $this->title = Yii::t('app', 'Play');
 //$this->params['breadcrumbs'][] = $this->title;

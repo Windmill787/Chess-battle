@@ -36,7 +36,7 @@ class BoardSquare extends Widget
 
             Buttons::widget($figures, $figure, $board, $whiteUser, $blackUser, $game);
             if ($figure->name == 'pawn') {
-                FirstMoveButton::widget($figure, $board, $whiteUser, $blackUser, $game);
+                FirstMoveButton::widget($figures, $figure, $board, $whiteUser, $blackUser, $game);
             }
             if ($figure->name == 'king') {
                 CastlingButton::widget($figures, $figure, $board, $whiteUser, $blackUser, $game);

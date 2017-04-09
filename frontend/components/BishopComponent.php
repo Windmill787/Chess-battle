@@ -18,4 +18,10 @@ class BishopComponent extends FigureComponent
     public function __construct($color, $number = null, $game_id, $config = []) {
         parent::__construct($color, $this->name, $number, $game_id, $config);
     }
+
+    public function setMoves()
+    {
+        $allMoves = Moves::findOne(['figure_id' => $this->id]);
+        $this->moves = unserialize($allMoves->move);
+    }
 }

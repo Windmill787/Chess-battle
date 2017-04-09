@@ -117,8 +117,22 @@ class GameController extends Controller
             // default moves
             foreach ($figure->moves as $moves) {
                 if ($figure->color == 'white') {
-                    $figureMoveX = $figure->currentPositionX + $moves[0];
-                    $figureMoveY = $figure->currentPositionY + $moves[1];
+                    if ($figure->name == 'bishop' ||
+                        $figure->name == 'queen' ||
+                        $figure->name == 'rook') {
+                        for ($i = 1; $i <= 8; $i++) {
+                            $figureMoveX = $figure->currentPositionX + $moves[0] * $i;
+                            $figureMoveY = $figure->currentPositionY + $moves[1] * $i;
+                            if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
+                                $model->move = $model->move + 1;
+                                $model->save();
+                                $figure->move($figureMoveX, $figureMoveY, $id);
+                            }
+                        }
+                    } else {
+                        $figureMoveX = $figure->currentPositionX + $moves[0];
+                        $figureMoveY = $figure->currentPositionY + $moves[1];
+                    }
                 } else if ($figure->color == 'black') {
                     $figureMoveX = $figure->currentPositionX - $moves[0];
                     $figureMoveY = $figure->currentPositionY - $moves[1];
@@ -181,8 +195,6 @@ class GameController extends Controller
     {
         $games = Game::find()
             ->where(['status' => 'in progress'])
-            ->andWhere(['!=', 'white_user_id', \Yii::$app->user->id])
-            ->andWhere(['!=', 'black_user_id', \Yii::$app->user->id])
             ->all();
 
         return $this->render('watch', [
