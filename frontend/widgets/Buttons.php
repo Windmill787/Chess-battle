@@ -19,16 +19,17 @@ class Buttons extends Widget
 {
     public static function widget($figures, $figure, $board, $whiteUser, $blackUser, $game) {
 
-        if ($figure->name == 'king' && $figure->check == 1) {
+        if ($figure->name == 'king' && $figure->status == 'inCheck') {
             foreach ($figure->moves as $moves) {
-                if ($figure->color == 'white' && $whiteUser->id == \Yii::$app->user->id/* && $game->move %2 != 0*/) {
+                if ($figure->color == 'black'/* && $whiteUser->id == \Yii::$app->user->id && $game->move %2 != 0*/) {
 
-                    $figureMoveX = $figure->currentPositionX + $moves[0];
-                    $figureMoveY = $figure->currentPositionY + $moves[1];
+                    $figureMoveX = $figure->currentPositionX - $moves[0];
+                    $figureMoveY = $figure->currentPositionY - $moves[1];
 
                     foreach ($figures as $item) {
                         foreach ($item->attacks as $itemAttack) {
-                            if ($itemAttack[0] != $figureMoveX && $itemAttack[1] != $figureMoveY) {
+                            if ($itemAttack[0] == $figure->currentPositionX &&
+                                $itemAttack[1] == $figure->currentPositionY) {
                                 self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
                             }
                         }

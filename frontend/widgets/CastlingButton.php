@@ -17,9 +17,8 @@ use app\models\Game;
 
 class CastlingButton extends Widget
 {
-    public static function widget(KingComponent $king, $board, $whiteUser, $blackUser, $game_id)
+    public static function widget($figures, KingComponent $king, $board, $whiteUser, $blackUser, $game)
     {
-        $game = Game::findOne(['id' => $game_id]);
 
         foreach ($king->castlingMove as $castling) {
             $castlingMoveX = $king->currentPositionX + $castling[0];
@@ -33,21 +32,21 @@ class CastlingButton extends Widget
                     $figureMoveX = $king->currentPositionX + $castling[0] - 1;
                     $figureMoveY = $king->currentPositionY + $castling[1];
 
-                    $rook = PlayPositions::findOne(['game_id' => $game_id, 'figure_id' => 14]);
+                    $rook = PlayPositions::findOne(['game_id' => $game->id, 'figure_id' => 14]);
 
                     if ($rook->already_moved == 0) {
-                        self::checkRightPosition($castlingMoveX, $castlingMoveY,
-                            $figureMoveX, $figureMoveY, $king, $board, $rook, $game_id);
+                        self::checkRightPosition($figures, $castlingMoveX, $castlingMoveY,
+                            $figureMoveX, $figureMoveY, $king, $board, $rook, $game->id);
                     }
                 } else if ($castling[0] == -2) {
                     $figureMoveX = $king->currentPositionX + $castling[0] + 1;
                     $figureMoveY = $king->currentPositionY + $castling[1];
 
-                    $rook = PlayPositions::findOne(['game_id' => $game_id, 'figure_id' => 13]);
+                    $rook = PlayPositions::findOne(['game_id' => $game->id, 'figure_id' => 13]);
 
                     if ($rook->already_moved == 0) {
-                        self::checkLeftPosition($castlingMoveX, $castlingMoveY,
-                            $figureMoveX, $figureMoveY, $king, $board, $rook, $game_id);
+                        self::checkLeftPosition($figures, $castlingMoveX, $castlingMoveY,
+                            $figureMoveX, $figureMoveY, $king, $board, $rook, $game->id);
                     }
                 }
             } else if ($king->color == 'black' && $blackUser->id == \Yii::$app->user->id
@@ -58,69 +57,87 @@ class CastlingButton extends Widget
                     $figureMoveX = $king->currentPositionX + $castling[0] - 1;
                     $figureMoveY = $king->currentPositionY + $castling[1];
 
-                    $rook = PlayPositions::findOne(['game_id' => $game_id, 'figure_id' => 30]);
+                    $rook = PlayPositions::findOne(['game_id' => $game->id, 'figure_id' => 30]);
 
                     if ($rook->already_moved == 0) {
-                        self::checkRightPosition($castlingMoveX, $castlingMoveY,
-                            $figureMoveX, $figureMoveY, $king, $board, $rook, $game_id);
+                        self::checkRightPosition($figures, $castlingMoveX, $castlingMoveY,
+                            $figureMoveX, $figureMoveY, $king, $board, $rook, $game->id);
                     }
                 } else if ($castling[0] == -2) {
                     $figureMoveX = $king->currentPositionX + $castling[0] + 1;
                     $figureMoveY = $king->currentPositionY + $castling[1];
 
-                    $rook = PlayPositions::findOne(['game_id' => $game_id, 'figure_id' => 29]);
+                    $rook = PlayPositions::findOne(['game_id' => $game->id, 'figure_id' => 29]);
 
                     if ($rook->already_moved == 0) {
-                        self::checkLeftPosition($castlingMoveX, $castlingMoveY,
-                            $figureMoveX, $figureMoveY, $king, $board, $rook, $game_id);
+                        self::checkLeftPosition($figures, $castlingMoveX, $castlingMoveY,
+                            $figureMoveX, $figureMoveY, $king, $board, $rook, $game->id);
                     }
                 }
             }
         }
     }
 
-    public static function checkRightPosition($castlingMoveX, $castlingMoveY,
+    public static function checkRightFigures($figures, $figureMoveX, $figureMoveY, $castlingMoveX, $castlingMoveY) {
+        foreach ($figures as $figure) {
+            if ($figure->currentPositionX == $figureMoveX &&
+                $figure->currentPositionY == $figureMoveY) {
+
+                return $figure;
+            }
+        }
+
+        foreach ($figures as $figure) {
+            if ($figure->currentPositionX == $castlingMoveX &&
+                $figure->currentPositionY == $castlingMoveY) {
+
+                return $figure;
+            }
+        }
+    }
+
+    public static function checkLeftFigures($figures, $figureMoveX, $figureMoveY, $castlingMoveX, $castlingMoveY) {
+        foreach ($figures as $figure) {
+            if ($figure->currentPositionX == $figureMoveX &&
+                $figure->currentPositionY == $figureMoveY) {
+
+                return $figure;
+            }
+        }
+
+        foreach ($figures as $figure) {
+            if ($figure->currentPositionX == $castlingMoveX &&
+                $figure->currentPositionY == $castlingMoveY) {
+
+                return $figure;
+            }
+        }
+
+        foreach ($figures as $figure) {
+            if ($figure->currentPositionX == $castlingMoveX - 1 &&
+                $figure->currentPositionY == $castlingMoveY) {
+
+                return $figure;
+            }
+        }
+    }
+
+    public static function checkRightPosition($figures, $castlingMoveX, $castlingMoveY,
                                          $figureMoveX, $figureMoveY, $king, $board, $rook, $game_id) {
-        $desiredPosition1 = PlayPositions::findOne([
-            'game_id' => $game_id,
-            'current_x' => $castlingMoveX,
-            'current_y' => $castlingMoveY
-        ]);
 
-        $desiredPosition2 = PlayPositions::findOne([
-            'game_id' => $game_id,
-            'current_x' => $figureMoveX,
-            'current_y' => $figureMoveY
-        ]);
+        $figuresOnRight = self::checkRightFigures($figures, $figureMoveX, $figureMoveY, $castlingMoveX, $castlingMoveY);
 
-        if (empty($desiredPosition1->figure_id) && empty($desiredPosition2->figure_id)) {
+        if (empty($figuresOnRight)) {
             self::displayButton($king, $board, $castlingMoveX, $castlingMoveY, $rook, $game_id);
         }
     }
 
-    public static function checkLeftPosition($castlingMoveX, $castlingMoveY,
+    public static function checkLeftPosition($figures, $castlingMoveX, $castlingMoveY,
                                              $figureMoveX, $figureMoveY, $king, $board, $rook, $game_id) {
-        $desiredPosition1 = PlayPositions::findOne([
-            'game_id' => $game_id,
-            'current_x' => $castlingMoveX,
-            'current_y' => $castlingMoveY
-        ]);
 
-        $desiredPosition2 = PlayPositions::findOne([
-            'game_id' => $game_id,
-            'current_x' => $figureMoveX,
-            'current_y' => $figureMoveY
-        ]);
+        $figuresOnLeft = self::checkLeftFigures($figures, $figureMoveX, $figureMoveY, $castlingMoveX, $castlingMoveY);
 
-        $desiredPosition3 = PlayPositions::findOne([
-            'game_id' => $game_id,
-            'current_x' => $castlingMoveX - 1,
-            'current_y' => $castlingMoveY
-        ]);
-
-        if (empty($desiredPosition1->figure_id)
-            && empty($desiredPosition2->figure_id)
-            && empty($desiredPosition3->figure_id)) {
+        if (empty($figuresOnLeft)) {
             self::displayButton($king, $board, $castlingMoveX, $castlingMoveY, $rook, $game_id);
         }
     }

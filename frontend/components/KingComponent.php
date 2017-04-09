@@ -16,13 +16,11 @@ class KingComponent extends FigureComponent
 {
     public $name = 'king';
     public $castlingMove = [];
-    public $check;
 
     public function __construct($color, $game_id, $config = [])
     {
         parent::__construct($color, $this->name, null, $game_id, $config);
         $this->setCastlingMove();
-        $this->check = 0;
     }
 
     public function setCastlingMove() {
