@@ -78,10 +78,11 @@ class GameController extends Controller
                     $figureMoveY = $figure->currentPositionY - $figure->first_move[1];
                 }
 
-                if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
+                if (isset($_POST['firstMove' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
                     $model->move = $model->move + 1;
                     $model->save();
                     $figure->move($figureMoveX, $figureMoveY, $id);
+                    $this->refresh();
                 }
             }
 
@@ -127,6 +128,7 @@ class GameController extends Controller
                                 $model->move = $model->move + 1;
                                 $model->save();
                                 $figure->move($figureMoveX, $figureMoveY, $id);
+                                $this->refresh();
                             }
                         }
                     } else {
@@ -142,6 +144,7 @@ class GameController extends Controller
                     $model->move = $model->move + 1;
                     $model->save();
                     $figure->move($figureMoveX, $figureMoveY, $id);
+                    $this->refresh();
                 }
             }
 

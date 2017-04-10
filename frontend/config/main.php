@@ -34,12 +34,6 @@ return [
                     'clientId' => '939717799494106',
                     'clientSecret' => 'd6c7a90a92f5dd8904a7a20e03e22d4e',
                 ],
-                'github' => [
-                    // register your app here: https://github.com/settings/applications
-                    'class' => 'nodge\eauth\services\GitHubOAuth2Service',
-                    'clientId' => 'fd6fc691a1f324b611a8',
-                    'clientSecret' => 'd7f0602baabb438762ecbeb117955b43a15801aa',
-                ],
                 'vkontakte' => [
                     // register your app here: https://vk.com/editapp?act=create&site=1
                     'class' => 'nodge\eauth\services\VKontakteOAuth2Service',
@@ -58,8 +52,8 @@ return [
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
         ],
         'session' => [
-                'class' => '\frontend\components\CustomDbSession',
-                'sessionTable' => 'session_frontend_user',
+            'class' => '\frontend\components\CustomDbSession',
+            'sessionTable' => 'session_frontend_user',
             'name' => 'advanced-frontend',
         ],
         'assetManager' => [

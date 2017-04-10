@@ -8,14 +8,15 @@
 
 namespace frontend\widgets;
 
+use frontend\components\BishopComponent;
 use yii\bootstrap\Widget;
 use yii\helpers\Html;
 use yii\widgets\Pjax;
 
 class Buttons extends Widget
 {
-    public static function widget($figures, $figure, $board, $whiteUser, $blackUser, $game) {
-
+    public static function widget($figures, $figure, $board, $whiteUser, $blackUser, $game)
+    {
         if ($figure->name == 'king' && $figure->status == 'inCheck') {
             foreach ($figure->moves as $moves) {
                 if ($figure->color == 'black'/* && $whiteUser->id == \Yii::$app->user->id && $game->move %2 != 0*/) {
@@ -41,28 +42,53 @@ class Buttons extends Widget
                     /*&& $whiteUser->id == \Yii::$app->user->id
                     && $game->move %2 != 0*/) {
 
-
                     if ($figure->name == 'bishop' ||
                         $figure->name == 'queen' ||
                         $figure->name == 'rook') {
                         for ($i = 1; $i <= 8; $i++) {
                             $figureMoveX = $figure->currentPositionX + $moves[0] * $i;
                             $figureMoveY = $figure->currentPositionY + $moves[1] * $i;
+
                             self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+
+                            foreach ($figures as $item) {
+                                if ($figureMoveX == $item->currentPositionX &&
+                                    $figureMoveY == $item->currentPositionY) {
+
+                                    break 2;
+                                }
+                            }
                         }
                     } else {
                         $figureMoveX = $figure->currentPositionX + $moves[0];
                         $figureMoveY = $figure->currentPositionY + $moves[1];
-
                         self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
                     }
                 } else if ($figure->color == 'black'
                     /*&& $blackUser->id == \Yii::$app->user->id
                     && $game->move %2 == 0*/) {
 
-                    $figureMoveX = $figure->currentPositionX - $moves[0];
-                    $figureMoveY = $figure->currentPositionY - $moves[1];
-                    self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                    if ($figure->name == 'bishop' ||
+                        $figure->name == 'queen' ||
+                        $figure->name == 'rook') {
+                        for ($i = 1; $i <= 8; $i++) {
+                            $figureMoveX = $figure->currentPositionX - $moves[0] * $i;
+                            $figureMoveY = $figure->currentPositionY - $moves[1] * $i;
+                            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+
+                            foreach ($figures as $item) {
+                                if ($figureMoveX == $item->currentPositionX &&
+                                    $figureMoveY == $item->currentPositionY) {
+
+                                    break 2;
+                                }
+                            }
+                        }
+                    } else {
+                        $figureMoveX = $figure->currentPositionX - $moves[0];
+                        $figureMoveY = $figure->currentPositionY - $moves[1];
+                        self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                    }
                 }
 
             }
@@ -110,6 +136,7 @@ class Buttons extends Widget
                 $figure->currentPositionY == $figureMoveY) {
 
                 return $figure;
+                break;
             }
         }
     }

@@ -60,7 +60,7 @@ class FirstMoveButton extends Widget
                 echo Html::beginForm();
                 echo Html::submitButton('move', [
                     'class' => 'btn btn-xs btn-primary hidden move move' . $figure->id,
-                    'name' => 'move' . $figure->id . $figureMoveX . $figureMoveY . $game_id,
+                    'name' => 'firstMove' . $figure->id . $figureMoveX . $figureMoveY . $game_id,
                     'onclick' => 'hideButtons()'
                 ]);
                 echo Html::endForm();
