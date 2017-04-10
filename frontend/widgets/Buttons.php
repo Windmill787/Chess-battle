@@ -97,13 +97,51 @@ class Buttons extends Widget
                 if ($figure->color == 'white'
                     /*&& $whiteUser->id == \Yii::$app->user->id && $game->move %2 != 0*/) {
 
-                    $figureAttackX = $figure->currentPositionX + $attack[0];
-                    $figureAttackY = $figure->currentPositionY + $attack[1];
-                    self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
+                    if ($figure->name == 'bishop' ||
+                        $figure->name == 'queen' ||
+                        $figure->name == 'rook') {
+                        for ($i = 1; $i <= 8; $i++) {
+                            $figureMoveX = $figure->currentPositionX + $attack[0] * $i;
+                            $figureMoveY = $figure->currentPositionY + $attack[1] * $i;
+
+                            self::checkEnemyFigure($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+
+                            foreach ($figures as $item) {
+                                if ($figureMoveX == $item->currentPositionX &&
+                                    $figureMoveY == $item->currentPositionY) {
+
+                                    break 2;
+                                }
+                            }
+                        }
+                    } else {
+                        $figureAttackX = $figure->currentPositionX + $attack[0];
+                        $figureAttackY = $figure->currentPositionY + $attack[1];
+                        self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
+                    }
                 } else if ($figure->color == 'black') {
-                    $figureAttackX = $figure->currentPositionX - $attack[0];
-                    $figureAttackY = $figure->currentPositionY - $attack[1];
-                    self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
+                    if ($figure->name == 'bishop' ||
+                        $figure->name == 'queen' ||
+                        $figure->name == 'rook') {
+                        for ($i = 1; $i <= 8; $i++) {
+                            $figureMoveX = $figure->currentPositionX - $attack[0] * $i;
+                            $figureMoveY = $figure->currentPositionY - $attack[1] * $i;
+
+                            self::checkEnemyFigure($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+
+                            foreach ($figures as $item) {
+                                if ($figureMoveX == $item->currentPositionX &&
+                                    $figureMoveY == $item->currentPositionY) {
+
+                                    break 2;
+                                }
+                            }
+                        }
+                    } else {
+                        $figureAttackX = $figure->currentPositionX - $attack[0];
+                        $figureAttackY = $figure->currentPositionY - $attack[1];
+                        self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
+                    }
                 }
 
             }
