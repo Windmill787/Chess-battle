@@ -8,7 +8,6 @@
 
 namespace frontend\widgets;
 
-use frontend\components\FigureComponent;
 use frontend\components\KingComponent;
 use yii\bootstrap\Widget;
 use yii\helpers\Html;
@@ -179,9 +178,16 @@ class Buttons extends Widget
                         $figure->name == 'rook'
                     ) {
                         for ($i = 1; $i <= 8; $i++) {
-                            if ($figure->currentPositionX - $attack[0] * $i == $figureMoveX &&
-                                $figure->currentPositionY - $attack[1] * $i == $figureMoveY) {
-                                return $figure;
+                            foreach ($figures as $item) {
+                                if ($figure->currentPositionX - $attack[0] * $i == $item->currentPositionX &&
+                                    $figure->currentPositionY - $attack[1] * $i == $item->currentPositionY) {
+
+                                    break 2;
+                                } else if ($figure->currentPositionX - $attack[0] * $i == $figureMoveX &&
+                                        $figure->currentPositionY - $attack[1] * $i == $figureMoveY) {
+
+                                        return $figure;
+                                    }
                             }
                         }
                     } else {
