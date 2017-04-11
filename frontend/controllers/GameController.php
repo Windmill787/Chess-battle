@@ -14,6 +14,9 @@ use frontend\components\BoardComponent;
 use app\models\PlayPositions;
 use frontend\components\FigureBuilderComponent;
 use app\models\Figure;
+use frontend\components\FigureComponent;
+use frontend\components\KingComponent;
+use frontend\components\PawnComponent;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -64,10 +67,11 @@ class GameController extends Controller
 
         $figures = FigureBuilderComponent::build($id);
 
-        // fix this!
         foreach ($figures as $figure) {
 
-            // first move
+            /**
+             * @var $figure PawnComponent
+             */
             if ($figure->name == 'pawn') {
                 if ($figure->color == 'white') {
                     $figureMoveX = $figure->currentPositionX + $figure->first_move[0];
@@ -86,7 +90,9 @@ class GameController extends Controller
                 }
             }
 
-            // castling
+            /**
+             * @var $figure KingComponent
+             */
             if ($figure->name == 'king') {
                 foreach ($figure->castlingMove as $castling) {
                     $figureMoveX = $figure->currentPositionX + $castling[0];
@@ -115,7 +121,9 @@ class GameController extends Controller
                 }
             }
 
-            // default moves
+            /**
+             * @var $figure FigureComponent
+             */
             foreach ($figure->moves as $moves) {
                 if ($figure->color == 'white') {
                     if ($figure->name == 'bishop' ||
@@ -136,8 +144,23 @@ class GameController extends Controller
                         $figureMoveY = $figure->currentPositionY + $moves[1];
                     }
                 } else if ($figure->color == 'black') {
-                    $figureMoveX = $figure->currentPositionX - $moves[0];
-                    $figureMoveY = $figure->currentPositionY - $moves[1];
+                    if ($figure->name == 'bishop' ||
+                        $figure->name == 'queen' ||
+                        $figure->name == 'rook') {
+                        for ($i = 1; $i <= 8; $i++) {
+                            $figureMoveX = $figure->currentPositionX - $moves[0] * $i;
+                            $figureMoveY = $figure->currentPositionY - $moves[1] * $i;
+                            if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
+                                $model->move = $model->move + 1;
+                                $model->save();
+                                $figure->move($figureMoveX, $figureMoveY, $id);
+                                $this->refresh();
+                            }
+                        }
+                    } else {
+                        $figureMoveX = $figure->currentPositionX - $moves[0];
+                        $figureMoveY = $figure->currentPositionY - $moves[1];
+                    }
                 }
 
                 if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
@@ -173,7 +196,6 @@ class GameController extends Controller
             }
         }
 
-        // fix this!
         if (isset($_POST['back'])) {
             FigureBuilderComponent::back($figures, $id);
             FigureBuilderComponent::resetStatuses($id);

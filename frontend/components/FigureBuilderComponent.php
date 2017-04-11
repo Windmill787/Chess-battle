@@ -9,6 +9,7 @@
 namespace frontend\components;
 
 use app\models\Figure;
+use app\models\Game;
 use app\models\PlayPositions;
 use yii\base\Component;
 use Yii;
@@ -56,6 +57,9 @@ class FigureBuilderComponent extends Component
     }
 
     public static function back($figures, $game_id) {
+        $game = Game::findOne($game_id);
+        $game->move = 1;
+        $game->save();
         foreach ($figures as $figure) {
             $position = PlayPositions::findOne(['game_id' => $game_id, 'figure_id' => $figure->id]);
             $position->figure_id = $figure->id;

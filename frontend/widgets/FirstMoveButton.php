@@ -22,7 +22,7 @@ class FirstMoveButton extends Widget
             $figureMoveX = $figure->currentPositionX + $figure->first_move[0];
             $figureMoveY = $figure->currentPositionY + $figure->first_move[1];
             self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game->id);
-        } else if ($figure->color == 'black' && $blackUser->id == \Yii::$app->user->id /*&& $game->move %2 == 0*/) {
+        } else if ($figure->color == 'black' /*&& $blackUser->id == \Yii::$app->user->id && $game->move %2 == 0*/) {
             $figureMoveX = $figure->currentPositionX - $figure->first_move[0];
             $figureMoveY = $figure->currentPositionY - $figure->first_move[1];
             self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game->id);
