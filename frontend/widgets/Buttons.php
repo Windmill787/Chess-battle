@@ -175,12 +175,14 @@ class Buttons extends Widget
 
                     if ($figure->name == 'bishop' ||
                         $figure->name == 'queen' ||
-                        $figure->name == 'rook'
+                        $figure->name == 'rook' &&
+                        $figure->status == 'active'
                     ) {
                         for ($i = 1; $i <= 8; $i++) {
                             foreach ($figures as $item) {
                                 if ($figure->currentPositionX - $attack[0] * $i == $item->currentPositionX &&
-                                    $figure->currentPositionY - $attack[1] * $i == $item->currentPositionY) {
+                                    $figure->currentPositionY - $attack[1] * $i == $item->currentPositionY &&
+                                    $item->name != $king->name) {
 
                                     break 2;
                                 } else if ($figure->currentPositionX - $attack[0] * $i == $figureMoveX &&

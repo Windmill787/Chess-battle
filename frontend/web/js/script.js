@@ -43,7 +43,8 @@ function light (figure, id) {
 }
 
 function hideButtons () {
-    $('.attack').addClass('hidden');
-    $('.move').addClass('hidden');
-    $('img').addClass('disabled');
+    $('.attack').addClass('hidden').addClass('disabled');
+    $('.move').addClass('hidden').addClass('disabled').click(function () {
+        $(".move").attr("disabled", true);
+    });
 }

@@ -104,5 +104,18 @@ return [
     'Game' => 'Игра',
     'Play' => 'Играть',
     'Offer Draw' => 'Предложить Ничью',
-    'Are you sure you want to logout?' => 'Вы уверены что хотите выйти?'
+    'Are you sure you want to logout?' => 'Вы уверены что хотите выйти?',
+    'Watch' => 'Смотреть',
+    'New Game' => 'Новая Игра',
+    'White Player' => 'Игрок Белыми',
+    'Black Player' => 'Игрок Черными',
+    'Watch Matches' => 'Смотреть Матчи',
+    'You can watch current matches' => 'Вы можете смотреть текущие матчи',
+    'Chess' => 'Шахматы',
+    'Users Online' => 'Пользователи онлайн',
+    'Users which you can invite to play' => 'Пользователи которых Вы можете пригласить играть',
+    'No current matches' => 'Нет текущих матчей',
+    'User Name' => 'Имя Пользователя',
+    'No users online' => 'Нет онлайн пользователей',
+    'Invite' => 'Пригласить'
 ];
