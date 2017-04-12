@@ -1,8 +1,11 @@
 <?php
 namespace frontend\controllers;
 
+use app\models\Chessboard;
+use app\models\Figure;
 use app\models\Game;
 use app\models\Messages;
+use app\models\PlayPositions;
 use app\models\SessionFrontendUser;
 use common\models\User;
 use Yii;
@@ -16,6 +19,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use nodge\eauth\openid\ControllerBehavior;
+use yii\base\Model;
 
 /**
  * Site controller
@@ -120,7 +124,21 @@ class SiteController extends Controller
             ->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect('/game/play?id='.$model->id);
+
+            for ($i = 1; $i <= 32; $i++) {
+                $playPosition = new PlayPositions();
+                $figure = Figure::findOne($i);
+                $startPosition = Chessboard::findOne($figure->start_position);
+                $playPosition->game_id = $model->id;
+                $playPosition->figure_id = $figure->id;
+                $playPosition->current_x = $startPosition->x;
+                $playPosition->current_y = $startPosition->y;
+                $playPosition->status = 'active';
+                $playPosition->already_moved = 0;
+                $playPosition->save();
+            }
+
+            return $this->redirect('//game/play?id='.$model->id);
         }
 
         return $this->render('invitations', [

@@ -8,6 +8,7 @@
 
 /* @var $this yii\web\View */
 /* @var $model \app\models\Game */
+/* @var $playPosition \app\models\PlayPositions */
 /* @var $invitationsToMe \app\models\Messages */
 /* @var $invitationsFromMe \app\models\Messages */
 
@@ -19,21 +20,35 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-invitations">
 
-    <h2>Invitations</h2>
+    <h2><?= Yii::t('app', 'Invitations');?></h2>
+    <p><?= Yii::t('app', 'You was invited to play by players'); ?></p>
     <div class="col-lg-5">
-    <div class="row thumbnail">
-        <table class="table">
-            <tbody>
-        <?php if (empty($invitationsToMe) == false) { ?>
-            You was invited to play by players:
-            <br>
+        <div class="row thumbnail">
+            <div class="caption">
+                <table class="table table-bordered">
             <?php
+
+            if (empty($invitationsToMe) == false) {
+            echo Html::beginTag('thead');
+            echo Html::beginTag('tr');
+            echo Html::beginTag('td');
+            echo Yii::t('app', 'User Name');
+            echo Html::endTag('td');
+            echo Html::beginTag('td');
+                echo Yii::t('app', 'Decision');
+                echo Html::endTag('td');
+            echo Html::endTag('tr');
+            echo Html::endTag('thead');
             foreach ($invitationsToMe as $invitation) {
 
                 if ($invitation->status == 'pending') {
 
                     $enemy = \common\models\User::findOne(['id' => $invitation->from_user_id]);
-                    echo $enemy->username;
+
+                    echo Html::beginTag('tbody');
+                    echo Html::beginTag('tr');
+                    echo Html::beginTag('td');
+                    echo Html::encode($enemy->username);
 
                     $form = ActiveForm::begin();
 
@@ -46,33 +61,39 @@ $this->params['breadcrumbs'][] = $this->title;
                     echo $form->field($model, 'status')
                         ->hiddenInput(['value' => 'in progress'])->label(false);
 
-                    echo Html::submitButton('Accept', [
+                    echo Html::endTag('td');
+
+                    echo Html::beginTag('td');
+                    echo Html::submitButton(Yii::t('app', 'Accept'), [
                         'class' => 'btn btn-success'
+                    ]);
+
+                    echo Html::submitButton(Yii::t('app', 'Decline'), [
+                        'class' => 'btn btn-danger'
                     ]);
 
                     ActiveForm::end();
 
-
-                    echo Html::tag('th');
-                    echo Html::tag('br');
-
-                } else if ($invitation->status == 'accepted') {
-
-                    $enemy = \common\models\User::findOne(['id' => $invitation->from_user_id]);
-                    echo $enemy->username;
-
-                    $games = \app\models\Game::find()
-                        ->where(['white_user_id' => $enemy->id, 'black_user_id' => Yii::$app->user->id])
-                        ->all();
-
-                    foreach ($games as $game) {
-                        echo Html::a('Go to game', '/game/play?id='.$game->id, [
-                            'class' => 'btn btn-primary'
-                        ]);
-                    }
+                    echo Html::endTag('tr');
+                    echo Html::endTag('tbody');
                 }
+//                } else if ($invitation->status == 'accepted') {
+//
+//                    $enemy = \common\models\User::findOne(['id' => $invitation->from_user_id]);
+//                    echo $enemy->username;
+//
+//                    $games = \app\models\Game::find()
+//                        ->where(['white_user_id' => $enemy->id, 'black_user_id' => Yii::$app->user->id])
+//                        ->all();
+//
+//                    foreach ($games as $game) {
+//                        echo Html::a('Go to game', '/game/play?id='.$game->id, [
+//                            'class' => 'btn btn-primary'
+//                        ]);
+//                    }
+//                }
             }
-        } else {
+        } /*else {
             echo 'No invitations from another players';
         }
         echo Html::tag('br');
@@ -96,11 +117,11 @@ $this->params['breadcrumbs'][] = $this->title;
             }
         } else {
             echo 'No invitations to another players';
-        }
+        }*/
 
         ?>
-            </tbody>
         </table>
+            </div>
     </div>
     </div>
 </div>

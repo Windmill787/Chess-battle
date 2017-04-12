@@ -44,11 +44,11 @@ $this->title = Yii::t('app', 'Watch');
                             echo Html::beginTag('tbody');
                             echo Html::beginTag('tr');
                             echo Html::beginTag('td');
-                            echo $whiteUser->username;
+                            echo Html::encode($whiteUser->username);
                             echo Html::endTag('td');
 
                             echo Html::beginTag('td');
-                            echo $blackUser->username;
+                            echo Html::encode($blackUser->username);
                             echo Html::endTag('td');
 
                             echo Html::beginTag('td');
