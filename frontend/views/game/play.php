@@ -12,6 +12,7 @@
 /* @var $model \app\models\Game */
 /* @var $whiteUser \common\models\User */
 /* @var $blackUser \common\models\User */
+/* @var $history \app\models\History */
 
 use yii\helpers\Html;
 use yii\bootstrap\Modal;
@@ -36,14 +37,35 @@ $this->title = Yii::t('app', 'Play');
     <div class="col-lg-7">
         <div class="row thumbnail" align="right">
             <div class="caption">
-
-                <p>Moves</p>
-
                 <div class="thumbnail">
                     <div class="caption">
 
                         <?php
-                        
+                        echo Html::beginTag('p');
+                        echo Html::encode(Yii::t('app', 'Moves'));
+                        echo Html::endTag('p');
+                        echo Html::beginTag('table', [
+                            'class' => 'table table-condensed'
+                        ]);
+                        foreach ($history as $item) {
+                            $figure = \app\models\Figure::findOne($item->figure_id);
+                            echo Html::beginTag('tbody');
+                            echo Html::beginTag('tr');
+                            echo Html::beginTag('td');
+                            echo Html::encode($figure->name);
+                            echo Html::endTag('td');
+
+                            echo Html::beginTag('td');
+                            echo Html::encode($item->to_x);
+                            echo Html::endTag('td');
+
+                            echo Html::beginTag('td');
+                            echo Html::encode($item->to_y);
+                            echo Html::endTag('td');
+                            echo Html::endTag('tr');
+                            echo Html::endTag('tbody');
+                        }
+                        echo Html::endTag('table');
                         ?>
 
                     </div>

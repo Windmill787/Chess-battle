@@ -9,6 +9,7 @@
 namespace frontend\controllers;
 
 use app\models\Game;
+use app\models\History;
 use common\models\User;
 use frontend\components\BoardComponent;
 use app\models\PlayPositions;
@@ -91,6 +92,10 @@ class GameController extends Controller
         $board = new BoardComponent();
 
         $figures = FigureBuilderComponent::build($id);
+
+        $history = History::find()
+            ->where(['game_id' => $model->id])
+            ->all();
 
         foreach ($figures as $figure) {
 
@@ -232,7 +237,8 @@ class GameController extends Controller
             'whiteUser' => $whiteUser,
             'blackUser' => $blackUser,
             'board' => $board,
-            'figures' => $figures
+            'figures' => $figures,
+            'history' => $history
         ]);
     }
 

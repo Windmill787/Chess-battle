@@ -10,6 +10,7 @@ namespace frontend\components;
 
 use app\models\Chessboard;
 use app\models\Figure;
+use app\models\History;
 use app\models\Moves;
 use app\models\PlayPositions;
 use frontend\interfaces\FigureInterface;
@@ -87,6 +88,7 @@ class FigureComponent
     }
 
     public function move($figureMoveX, $figureMoveY, $game_id) {
+        $this->saveInHistory($figureMoveX, $figureMoveY, $game_id);
         $this->currentPositionX = $figureMoveX;
         $this->currentPositionY = $figureMoveY;
         $this->savePosition($game_id);
@@ -97,5 +99,16 @@ class FigureComponent
         $figure->current_y = 0;
         $figure->status = 'killed';
         $figure->save();
+    }
+
+    public function saveInHistory($figureMoveX, $figureMoveY, $game_id) {
+        $history = new History();
+        $history->game_id = $game_id;
+        $history->figure_id = $this->id;
+        $history->from_x = $this->currentPositionX;
+        $history->from_y = $this->currentPositionY;
+        $history->to_x = $figureMoveX;
+        $history->to_y = $figureMoveY;
+        $history->save();
     }
 }

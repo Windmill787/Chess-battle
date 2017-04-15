@@ -9,11 +9,21 @@
 /* @var $this yii\web\View */
 /* @var $games \app\models\Game */
 /* @var $pages \yii\data\Pagination */
+/* @var $whiteUser User */
+/* @var $blackUser User */
 
 use yii\helpers\Html;
 use common\models\User;
+use yii\widgets\Pjax;
 
 $this->title = Yii::t('app', 'Watch');
+
+$script = <<< JS
+$(document).ready(function() {
+setInterval(function(){ $("#refreshButton").click(); }, 7000);
+});
+JS;
+$this->registerJs($script);
 ?>
 <div class="game-watch">
 
@@ -75,14 +85,11 @@ $this->title = Yii::t('app', 'Watch');
                         'pagination' => $pages,
                     ]);
                 } else {
-                    echo Html::beginTag('tbody');
-                    echo Html::beginTag('tr');
-                    echo Html::beginTag('td');
-                    echo Yii::t('app', 'No current matches');
-                    echo Html::endTag('td');
-                    echo Html::endTag('tr');
-                    echo Html::endTag('tbody');
+                    echo Html::encode(Yii::t('app', 'No current matches'));
                 }
+                Pjax::begin(); ?>
+                <?= Html::a("Refresh", ['game/watch'], ['class' => 'btn btn-lg btn-primary hidden', 'id' => 'refreshButton']) ?>
+                <?php Pjax::end();
                 ?>
             </div>
         </div>

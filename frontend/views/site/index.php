@@ -4,11 +4,20 @@
 /* @var $onlineUsers \app\models\SessionFrontendUser */
 /* @var $model \app\models\Messages */
 /* @var $games \app\models\Game */
+/* @var $pages \yii\data\Pagination */
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
 
 $this->title = Yii::t('app', 'Home');
+
+$script = <<< JS
+$(document).ready(function() {
+setInterval(function(){ $("#refreshButton").click(); }, 7000);
+});
+JS;
+$this->registerJs($script);
 ?>
 <div class="site-index">
 
@@ -20,15 +29,14 @@ $this->title = Yii::t('app', 'Home');
                 <table class="table table-bordered">
                     <?php
 
-                    echo Html::beginTag('thead');
-                    echo Html::beginTag('tr');
-                    echo Html::beginTag('td');
-                    echo Yii::t('app', 'User Name');
-                    echo Html::endTag('td');
-                    echo Html::endTag('tr');
-                    echo Html::endTag('thead');
-
                     if (empty($onlineUsers) == false) {
+                        echo Html::beginTag('thead');
+                        echo Html::beginTag('tr');
+                        echo Html::beginTag('td');
+                        echo Yii::t('app', 'User Name');
+                        echo Html::endTag('td');
+                        echo Html::endTag('tr');
+                        echo Html::endTag('thead');
                         foreach ($onlineUsers as $onlineUser) {
                             $user = \common\models\User::findOne(['id' => $onlineUser->user_id]);
                             echo Html::beginTag('tbody');
@@ -67,6 +75,9 @@ $this->title = Yii::t('app', 'Home');
                         echo Html::endTag('tr');
                         echo Html::endTag('tbody');
                     }
+                    Pjax::begin(); ?>
+                    <?= Html::a("Refresh", ['site/index'], ['class' => 'btn btn-lg btn-primary hidden', 'id' => 'refreshButton']) ?>
+                    <?php Pjax::end();
                     ?>
                 </table>
             </div>

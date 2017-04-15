@@ -88,13 +88,12 @@ class SiteController extends Controller
         $model = new Messages();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->render('index');
+            return $this->redirect('/game/index');
         }
 
         $query = SessionFrontendUser::find()
-            //            ->where(['is not', 'user_id', null])
-//            ->andWhere(['!=', 'user_id', Yii::$app->user->id])
-        ;
+            ->where(['is not', 'user_id', null])
+            ->andWhere(['!=', 'user_id', Yii::$app->user->id]);
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 10]);
         $onlineUsers = $query->offset($pages->offset)

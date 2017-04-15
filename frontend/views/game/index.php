@@ -79,7 +79,7 @@ $this->registerJs($script);
                     echo Html::beginTag('tbody');
                     echo Html::beginTag('tr');
                     echo Html::beginTag('td');
-                    echo Yii::t('app', 'No current started matches');
+                    echo Yii::t('app', 'No current started matches or noone has not accepted your invite');
                     echo Html::endTag('td');
                     echo Html::endTag('tr');
                     echo Html::endTag('tbody');
