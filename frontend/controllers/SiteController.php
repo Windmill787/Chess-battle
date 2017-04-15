@@ -10,6 +10,7 @@ use app\models\SessionFrontendUser;
 use common\models\User;
 use Yii;
 use yii\base\InvalidParamException;
+use yii\data\Pagination;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -87,17 +88,24 @@ class SiteController extends Controller
         $model = new Messages();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->render('invitations');
+            return $this->render('index');
         }
 
-        $onlineUsers = SessionFrontendUser::find()
-            ->where(['is not', 'user_id', null])
-            ->andWhere(['!=', 'user_id', Yii::$app->user->id])
+        $query = SessionFrontendUser::find()
+            //            ->where(['is not', 'user_id', null])
+//            ->andWhere(['!=', 'user_id', Yii::$app->user->id])
+        ;
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 10]);
+        $onlineUsers = $query->offset($pages->offset)
+            ->limit($pages->limit)
             ->all();
+
         if (empty($onlineUsers) == false) {
             return $this->render('index', [
                 'onlineUsers' => $onlineUsers,
-                'model' => $model
+                'model' => $model,
+                'pages' => $pages
             ]);
         }
 
@@ -115,8 +123,11 @@ class SiteController extends Controller
     {
         $model = new Game();
 
-        $invitationsToMe = Messages::find()
-            ->where(['to_user_id' => Yii::$app->user->id])
+        $query = Messages::find()->where(['to_user_id' => Yii::$app->user->id]);
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 10]);
+        $invitationsToMe = $query->offset($pages->offset)
+            ->limit($pages->limit)
             ->all();
 
         $invitationsFromMe = Messages::find()
@@ -138,13 +149,20 @@ class SiteController extends Controller
                 $playPosition->save();
             }
 
-            return $this->redirect('//game/play?id='.$model->id);
+            return $this->redirect('/game/play?id='.$model->id);
+        }
+
+        foreach ($invitationsToMe as $invitation) {
+            if ($invitation->load(Yii::$app->request->post()) && $invitation->save()) {
+                return $this->refresh();
+            }
         }
 
         return $this->render('invitations', [
             'model' => $model,
             'invitationsToMe' => $invitationsToMe,
-            'invitationsFromMe' => $invitationsFromMe
+            'invitationsFromMe' => $invitationsFromMe,
+            'pages' => $pages,
         ]);
     }
 

@@ -117,5 +117,10 @@ return [
     'No current matches' => 'Нет текущих матчей',
     'User Name' => 'Имя Пользователя',
     'No users online' => 'Нет онлайн пользователей',
-    'Invite' => 'Пригласить'
+    'Invite' => 'Пригласить',
+    'Invitations' => 'Приглашения',
+    'Accept' => 'Принять',
+    'Decline' => 'Отклонить',
+    'You was invited to play' => 'Вам было предложено сыграть',
+    'Decision' => 'Решение'
 ];

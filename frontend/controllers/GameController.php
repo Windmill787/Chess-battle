@@ -17,6 +17,7 @@ use app\models\Figure;
 use frontend\components\FigureComponent;
 use frontend\components\KingComponent;
 use frontend\components\PawnComponent;
+use yii\data\Pagination;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -48,6 +49,30 @@ class GameController extends Controller
                 ],
             ],
         ];
+    }
+
+    /**
+     * Displays game index page.
+     *
+     * @return mixed
+     */
+    public function actionIndex()
+    {
+        $query = Game::find()
+            ->where(['status' => 'in progress'])
+            ->andWhere(['white_user_id' => \Yii::$app->user->id])
+            ->orWhere(['black_user_id' => \Yii::$app->user->id])
+        ;
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 10]);
+        $games = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+
+        return $this->render('index', [
+            'games' => $games,
+            'pages' => $pages,
+        ]);
     }
 
     /**
@@ -218,23 +243,17 @@ class GameController extends Controller
      */
     public function actionWatch()
     {
-        $games = Game::find()
-            ->where(['status' => 'in progress'])
+        $query = Game::find()->where(['status' => 'in progress']);
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 10]);
+        $games = $query->offset($pages->offset)
+            ->limit($pages->limit)
             ->all();
 
         return $this->render('watch', [
-            'games' => $games
+            'games' => $games,
+            'pages' => $pages,
         ]);
-    }
-
-    /**
-     * Displays game preview page.
-     *
-     * @return mixed
-     */
-    public function actionPreview()
-    {
-        return $this->render('preview');
     }
 
     /**

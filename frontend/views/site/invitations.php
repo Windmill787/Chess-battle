@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="site-invitations">
 
     <h2><?= Yii::t('app', 'Invitations');?></h2>
-    <p><?= Yii::t('app', 'You was invited to play by players'); ?></p>
+    <p><?= Yii::t('app', 'You was invited to play'); ?></p>
     <div class="col-lg-5">
         <div class="row thumbnail">
             <div class="caption">
@@ -29,55 +29,96 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php
 
             if (empty($invitationsToMe) == false) {
-            echo Html::beginTag('thead');
-            echo Html::beginTag('tr');
-            echo Html::beginTag('td');
-            echo Yii::t('app', 'User Name');
-            echo Html::endTag('td');
-            echo Html::beginTag('td');
+                echo Html::beginTag('thead');
+                echo Html::beginTag('tr');
+                echo Html::beginTag('td');
+                echo Yii::t('app', 'User Name');
+                echo Html::endTag('td');
+                echo Html::beginTag('td', [
+                    'colspan' => 2,
+                    'align' => 'center'
+                ]);
                 echo Yii::t('app', 'Decision');
                 echo Html::endTag('td');
-            echo Html::endTag('tr');
-            echo Html::endTag('thead');
-            foreach ($invitationsToMe as $invitation) {
+                echo Html::endTag('tr');
+                echo Html::endTag('thead');
+                foreach ($invitationsToMe as $invitation) {
 
-                if ($invitation->status == 'pending') {
+                    if ($invitation->status == 'pending') {
 
-                    $enemy = \common\models\User::findOne(['id' => $invitation->from_user_id]);
+                        $enemy = \common\models\User::findOne([
+                            'id' => $invitation->from_user_id
+                        ]);
 
-                    echo Html::beginTag('tbody');
-                    echo Html::beginTag('tr');
-                    echo Html::beginTag('td');
-                    echo Html::encode($enemy->username);
+                        echo Html::beginTag('tbody');
+                        echo Html::beginTag('tr');
+                        echo Html::beginTag('td');
+                        echo Html::encode($enemy->username);
+                        echo Html::endTag('td');
 
-                    $form = ActiveForm::begin();
+                        echo Html::beginTag('td', [
+                            'align' => 'center'
+                        ]);
+                        $form = ActiveForm::begin();
 
-                    echo $form->field($model, 'white_user_id')
-                        ->hiddenInput(['value' => $enemy->id])->label(false);
+                        echo $form->field($model, 'white_user_id')
+                            ->hiddenInput(['value' => $enemy->id])->label(false);
 
-                    echo $form->field($model, 'black_user_id')
-                        ->hiddenInput(['value' => Yii::$app->user->id])->label(false);
+                        echo $form->field($model, 'black_user_id')
+                            ->hiddenInput(['value' => Yii::$app->user->id])->label(false);
 
-                    echo $form->field($model, 'status')
-                        ->hiddenInput(['value' => 'in progress'])->label(false);
+                        echo $form->field($model, 'status')
+                            ->hiddenInput(['value' => 'in progress'])->label(false);
 
-                    echo Html::endTag('td');
+                        echo $form->field($invitation, 'id')
+                            ->hiddenInput(['value' => $invitation->id])->label(false);
 
-                    echo Html::beginTag('td');
-                    echo Html::submitButton(Yii::t('app', 'Accept'), [
-                        'class' => 'btn btn-success'
-                    ]);
+                        echo $form->field($invitation, 'from_user_id')
+                            ->hiddenInput(['value' => $enemy->id])->label(false);
 
-                    echo Html::submitButton(Yii::t('app', 'Decline'), [
-                        'class' => 'btn btn-danger'
-                    ]);
+                        echo $form->field($invitation, 'to_user_id')
+                            ->hiddenInput(['value' => Yii::$app->user->id])->label(false);
 
-                    ActiveForm::end();
+                        echo $form->field($invitation, 'status')
+                            ->hiddenInput(['value' => 'accepted'])->label(false);
 
-                    echo Html::endTag('tr');
-                    echo Html::endTag('tbody');
-                }
-//                } else if ($invitation->status == 'accepted') {
+                        echo Html::submitButton(Yii::t('app', 'Accept'), [
+                            'class' => 'btn btn-success'
+                        ]);
+
+                        ActiveForm::end();
+
+                        echo Html::endTag('td');
+
+                        echo Html::beginTag('td', [
+                            'align' => 'center'
+                        ]);
+                        $form = ActiveForm::begin();
+
+                        echo $form->field($invitation, 'id')
+                            ->hiddenInput(['value' => $invitation->id])->label(false);
+
+                        echo $form->field($invitation, 'from_user_id')
+                            ->hiddenInput(['value' => $enemy->id])->label(false);
+
+                        echo $form->field($invitation, 'to_user_id')
+                            ->hiddenInput(['value' => Yii::$app->user->id])->label(false);
+
+                        echo $form->field($invitation, 'status')
+                            ->hiddenInput(['value' => 'declined'])->label(false);
+
+                        echo Html::submitButton(Yii::t('app', 'Decline'), [
+                            'class' => 'btn btn-danger',
+                        ]);
+
+                        ActiveForm::end();
+
+                        echo Html::endTag('td');
+
+                        echo Html::endTag('tr');
+                        echo Html::endTag('tbody');
+                    }
+//                else if ($invitation->status == 'accepted') {
 //
 //                    $enemy = \common\models\User::findOne(['id' => $invitation->from_user_id]);
 //                    echo $enemy->username;
@@ -93,6 +134,9 @@ $this->params['breadcrumbs'][] = $this->title;
 //                    }
 //                }
             }
+                echo \yii\widgets\LinkPager::widget([
+                    'pagination' => $pages,
+                ]);
         } /*else {
             echo 'No invitations from another players';
         }

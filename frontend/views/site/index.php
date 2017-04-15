@@ -55,6 +55,9 @@ $this->title = Yii::t('app', 'Home');
                             echo Html::endTag('tr');
                             echo Html::endTag('tbody');
                         }
+                        echo \yii\widgets\LinkPager::widget([
+                            'pagination' => $pages,
+                        ]);
                     } else {
                         echo Html::beginTag('tbody');
                         echo Html::beginTag('tr');

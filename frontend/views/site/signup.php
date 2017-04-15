@@ -8,16 +8,17 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 $this->title = Yii::t('app', 'Signup');
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-registration">
+<div class="site-registration text-center">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p><?= Yii::t('app', 'Please fill out the following fields to signup:'); ?></p>
 
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="thumbnail">
+                <div class="caption">
 
             <?php $form = ActiveForm::begin([
                 'id' => 'form-registration',
@@ -48,6 +49,8 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
             <?php ActiveForm::end(); ?>
+                </div>
+            </div>
         </div>
     </div>
 </div>
