@@ -18,7 +18,7 @@ $this->title = Yii::t('app', 'My matches');
 
 $script = <<< JS
 $(document).ready(function() {
-setInterval(function(){ $("#refreshButton").click(); }, 7000);
+setInterval(function(){ $("#refreshButton").click(); }, 2000);
 });
 JS;
 $this->registerJs($script);
@@ -31,6 +31,9 @@ $this->registerJs($script);
         <div class="row thumbnail">
             <div class="caption">
                 <?php
+                Pjax::begin();
+                echo Html::a("Refresh", ['game/index'], ['class' => 'btn btn-lg btn-primary hidden', 'id' => 'refreshButton']);
+
                 if (empty($games) == false) {
                     echo Html::beginTag('table', [
                         'class' => 'table table-bordered'
@@ -84,9 +87,7 @@ $this->registerJs($script);
                     echo Html::endTag('tr');
                     echo Html::endTag('tbody');
                 }
-                Pjax::begin(); ?>
-                <?= Html::a("Refresh", ['game/index'], ['class' => 'btn btn-lg btn-primary hidden', 'id' => 'refreshButton']) ?>
-                <?php Pjax::end();
+                Pjax::end();
                 ?>
             </div>
         </div>

@@ -62,8 +62,8 @@ class GameController extends Controller
         $query = Game::find()
             ->where(['status' => 'in progress'])
             ->andWhere(['white_user_id' => \Yii::$app->user->id])
-            ->orWhere(['black_user_id' => \Yii::$app->user->id])
-        ;
+            ->orWhere(['black_user_id' => \Yii::$app->user->id]);
+
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 10]);
         $games = $query->offset($pages->offset)

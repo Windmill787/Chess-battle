@@ -48,3 +48,6 @@ function hideButtons () {
         $(".move").attr("disabled", true);
     });
 }
+
+var objDiv = document.getElementById("thumbnail-history");
+objDiv.scrollTop = objDiv.scrollHeight;

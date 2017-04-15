@@ -20,7 +20,6 @@ use frontend\widgets\Board;
 use yii\widgets\Pjax;
 
 $this->title = Yii::t('app', 'Play');
-//$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="game-play">
 
@@ -37,33 +36,50 @@ $this->title = Yii::t('app', 'Play');
     <div class="col-lg-7">
         <div class="row thumbnail" align="right">
             <div class="caption">
+                <?php
+                echo Html::beginTag('p');
+                echo Html::encode(Yii::t('app', 'Moves'));
+                echo Html::endTag('p');
+                ?>
                 <div class="thumbnail">
-                    <div class="caption">
+                    <div class="caption pre-scrollable thumbnail-history" id="thumbnail-history">
 
                         <?php
-                        echo Html::beginTag('p');
-                        echo Html::encode(Yii::t('app', 'Moves'));
-                        echo Html::endTag('p');
                         echo Html::beginTag('table', [
-                            'class' => 'table table-condensed'
+                            'class' => 'table table-condensed table-hover'
                         ]);
-                        foreach ($history as $item) {
-                            $figure = \app\models\Figure::findOne($item->figure_id);
-                            echo Html::beginTag('tbody');
+                        if (empty($history) == false) {
+                            echo Html::beginTag('thead');
                             echo Html::beginTag('tr');
                             echo Html::beginTag('td');
-                            echo Html::encode($figure->name);
+                            echo Yii::t('app', 'Figure');
                             echo Html::endTag('td');
-
                             echo Html::beginTag('td');
-                            echo Html::encode($item->to_x);
+                            echo Yii::t('app', 'X');
                             echo Html::endTag('td');
-
                             echo Html::beginTag('td');
-                            echo Html::encode($item->to_y);
+                            echo Yii::t('app', 'Y');
                             echo Html::endTag('td');
                             echo Html::endTag('tr');
-                            echo Html::endTag('tbody');
+                            echo Html::endTag('thead');
+                            foreach ($history as $item) {
+                                $figure = \app\models\Figure::findOne($item->figure_id);
+                                echo Html::beginTag('tbody');
+                                echo Html::beginTag('tr');
+                                echo Html::beginTag('td');
+                                echo Html::encode($figure->name);
+                                echo Html::endTag('td');
+
+                                echo Html::beginTag('td');
+                                echo Html::encode($item->to_x);
+                                echo Html::endTag('td');
+
+                                echo Html::beginTag('td');
+                                echo Html::encode($item->to_y);
+                                echo Html::endTag('td');
+                                echo Html::endTag('tr');
+                                echo Html::endTag('tbody');
+                            }
                         }
                         echo Html::endTag('table');
                         ?>
@@ -71,9 +87,7 @@ $this->title = Yii::t('app', 'Play');
                     </div>
                 </div>
 
-                <div class="form-group">
-
-                    <?php Modal::begin([
+                    <?php /*Modal::begin([
                         'header' => '<h2 align="center">You lose!</h2>',
                         'toggleButton' => [
                             'label' => Yii::t('app', 'Resign'),
@@ -84,11 +98,8 @@ $this->title = Yii::t('app', 'Play');
                     echo 'You lose';
                     echo Html::button(Yii::t('app', 'Back'),
                         ['class' => 'btn btn-primary']);
-                    Modal::end();
+                    Modal::end();*/
                     ?>
-
-                    <?= Html::button(Yii::t('app', 'Offer Draw'),
-                        ['class' => 'btn btn-primary', 'id' => 'drawButton']) ?>
 
                     <?php
                     echo Html::beginForm();
@@ -98,8 +109,6 @@ $this->title = Yii::t('app', 'Play');
                     ]);
                     echo Html::endForm();
                     ?>
-
-                </div>
 
             </div>
         </div>

@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $script = <<< JS
 $(document).ready(function() {
-setInterval(function(){ $("#refreshButton").click(); }, 7000);
+setInterval(function(){ $("#refreshButton").click(); }, 2000);
 });
 JS;
 $this->registerJs($script);
@@ -35,6 +35,9 @@ $this->registerJs($script);
         <div class="row thumbnail">
             <div class="caption">
                     <?php
+                    Pjax::begin();
+                    echo Html::a("Refresh", ['site/invitations'], ['class' => 'btn btn-lg btn-primary hidden', 'id' => 'refreshButton']);
+
                     if (empty($invitationsToMe) == false) {
 
                         foreach ($invitationsToMe as $invitation) {
@@ -148,8 +151,6 @@ $this->registerJs($script);
                         echo Html::encode(Yii::t('app', 'No invitations from another players'));
                     }
 
-                    Pjax::begin();
-                    echo Html::a("Refresh", ['site/invitations'], ['class' => 'btn btn-lg btn-primary hidden', 'id' => 'refreshButton']);
                     Pjax::end();
                     ?>
             </div>

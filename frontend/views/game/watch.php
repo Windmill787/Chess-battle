@@ -20,7 +20,7 @@ $this->title = Yii::t('app', 'Watch');
 
 $script = <<< JS
 $(document).ready(function() {
-setInterval(function(){ $("#refreshButton").click(); }, 7000);
+setInterval(function(){ $("#refreshButton").click(); }, 2000);
 });
 JS;
 $this->registerJs($script);
@@ -33,6 +33,9 @@ $this->registerJs($script);
         <div class="row thumbnail">
             <div class="caption">
                 <?php
+                Pjax::begin();
+                echo Html::a("Refresh", ['game/watch'], ['class' => 'btn btn-lg btn-primary hidden', 'id' => 'refreshButton']);
+
                 foreach ($games as $game) {
                     $whiteUser = User::findOne(['id' => $game->white_user_id]);
 
@@ -87,9 +90,7 @@ $this->registerJs($script);
                 } else {
                     echo Html::encode(Yii::t('app', 'No current matches'));
                 }
-                Pjax::begin(); ?>
-                <?= Html::a("Refresh", ['game/watch'], ['class' => 'btn btn-lg btn-primary hidden', 'id' => 'refreshButton']) ?>
-                <?php Pjax::end();
+                Pjax::end();
                 ?>
             </div>
         </div>
