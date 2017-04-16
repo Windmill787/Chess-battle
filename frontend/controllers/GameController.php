@@ -10,6 +10,7 @@ namespace frontend\controllers;
 
 use app\models\Game;
 use app\models\History;
+use app\models\HistorySearch;
 use common\models\User;
 use frontend\components\BoardComponent;
 use app\models\PlayPositions;

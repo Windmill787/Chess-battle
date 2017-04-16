@@ -29,11 +29,12 @@ $this->registerJs($script);
                     <?php
                     Pjax::begin();
                     echo Html::a("Refresh", ['site/index'], ['class' => 'btn btn-lg btn-primary hidden', 'id' => 'refreshButton']);
-                    echo Html::beginTag('table', [
-                        'class' => 'table table-bordered'
-                    ]);
+
                     if (empty($onlineUsers) == false) {
 
+                        echo Html::beginTag('table', [
+                            'class' => 'table table-bordered'
+                        ]);
                         echo Html::beginTag('thead');
                         echo Html::beginTag('tr');
                         echo Html::beginTag('td');
@@ -76,9 +77,7 @@ $this->registerJs($script);
                     } else {
                         echo Html::encode(Yii::t('app', 'No users online'));
                     }
-                    ?>
-
-                    <?php Pjax::end(); ?>
+                    Pjax::end(); ?>
             </div>
         </div>
     </div>

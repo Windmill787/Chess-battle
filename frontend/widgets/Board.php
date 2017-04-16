@@ -8,6 +8,7 @@
 
 namespace frontend\widgets;
 
+use common\models\User;
 use frontend\components\BoardComponent;
 use yii\helpers\Html;
 use yii\bootstrap\Widget;
@@ -16,12 +17,6 @@ class Board extends Widget
 {
     public static function widget(BoardComponent $board, $figures, $whiteUser, $blackUser, $game)
     {
-        if ($whiteUser->id == \Yii::$app->user->id) {
-            echo 'Your color is white';
-        } else if ($blackUser->id == \Yii::$app->user->id) {
-            echo 'Your color is black';
-        }
-
         echo Html::beginTag('table', [
             'class' => 'table-bordered'
         ]);
@@ -29,6 +24,8 @@ class Board extends Widget
         echo Html::beginTag('tr');
 
         if ($blackUser->id == \Yii::$app->user->id) {
+
+            PhotoAndName::enemyPhoto($whiteUser, $whiteUser, $blackUser);
 
             foreach ($board->reversedSymbolLabel as $label) :
 
@@ -48,9 +45,9 @@ class Board extends Widget
                     echo Html::beginTag('tr');
 
                     echo Html::beginTag('th', [
+                        'width' => 20,
                         'style' => [
-                            'text-align' => 'center',
-                            'vertical-align' => 'middle'
+                            'text-align' => 'center'
                         ]
                     ]);
                     echo Html::encode($board->y);
@@ -72,12 +69,14 @@ class Board extends Widget
                 }
             } else {
 
+            PhotoAndName::enemyPhoto($blackUser, $whiteUser, $blackUser);
+
             foreach ($board->symbolLabel as $label) :
 
                 echo Html::beginTag('th', [
+                    'width' => 20,
                     'style' => [
-                        'text-align' => 'center',
-                        'vertical-align' => 'middle'
+                        'text-align' => 'center'
                     ]
                 ]);
                 echo Html::encode($label);
@@ -118,6 +117,6 @@ class Board extends Widget
 
         echo Html::endTag('table');
 
-        echo Html::tag('br');
+        PhotoAndName::myPhoto($whiteUser, $blackUser);
     }
 }

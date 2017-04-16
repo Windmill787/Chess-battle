@@ -15,7 +15,7 @@
 /* @var $history \app\models\History */
 
 use yii\helpers\Html;
-use yii\bootstrap\Modal;
+use yii\grid\GridView;
 use frontend\widgets\Board;
 use yii\widgets\Pjax;
 
@@ -45,33 +45,25 @@ $this->title = Yii::t('app', 'Play');
                     <div class="caption pre-scrollable thumbnail-history" id="thumbnail-history">
 
                         <?php
+
                         echo Html::beginTag('table', [
                             'class' => 'table table-condensed table-hover'
                         ]);
                         if (empty($history) == false) {
-                            echo Html::beginTag('thead');
-                            echo Html::beginTag('tr');
-                            echo Html::beginTag('td');
-                            echo Yii::t('app', 'Figure');
-                            echo Html::endTag('td');
-                            echo Html::beginTag('td');
-                            echo Yii::t('app', 'X');
-                            echo Html::endTag('td');
-                            echo Html::beginTag('td');
-                            echo Yii::t('app', 'Y');
-                            echo Html::endTag('td');
-                            echo Html::endTag('tr');
-                            echo Html::endTag('thead');
                             foreach ($history as $item) {
                                 $figure = \app\models\Figure::findOne($item->figure_id);
                                 echo Html::beginTag('tbody');
                                 echo Html::beginTag('tr');
                                 echo Html::beginTag('td');
+                                echo Html::encode($item->id);
+                                echo Html::endTag('td');
+
+                                echo Html::beginTag('td');
                                 echo Html::encode($figure->name);
                                 echo Html::endTag('td');
 
                                 echo Html::beginTag('td');
-                                echo Html::encode($item->to_x);
+                                echo Html::encode($board->symbolLabel[$item->to_x]);
                                 echo Html::endTag('td');
 
                                 echo Html::beginTag('td');

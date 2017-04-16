@@ -37,7 +37,11 @@ function light (figure, id) {
     $('img').css('border','none').css('background-color','inherit');
     $('#figure' + id).css('border','2px solid #F0E68C').css('background-color','#F0E68C');
     $('.move').addClass('hidden');
-    $('.attack').addClass('hidden');
+    $('.attack')
+        .addClass('hidden')
+        .css('position', 'absolute')
+        .css('margin-top', -10)
+        .css('margin-left', -22.5);
     $('.move' + id).removeClass('hidden');
     $('.attack' + id).removeClass('hidden');
 }
