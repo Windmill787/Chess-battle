@@ -17,123 +17,148 @@ class Buttons extends Widget
 {
     public static function widget($figures, $figure, $board, $whiteUser, $blackUser, $game)
     {
-        foreach ($figure->moves as $moves) {
-            if ($figure->color == 'white'
-                /*&& $whiteUser->id == \Yii::$app->user->id
-                && $game->move %2 != 0*/) {
+            //moves
+            foreach ($figure->moves as $moves) {
+                if ($figure->color == 'white'
+                    /*&& $whiteUser->id == \Yii::$app->user->id
+                    && $game->move %2 != 0*/
+                ) {
 
-                if ($figure->name == 'king') {
+                    if ($figure->name == 'king') {
+                        $figureMoveX = $figure->currentPositionX + $moves[0];
+                        $figureMoveY = $figure->currentPositionY + $moves[1];
 
-                    $figureMoveX = $figure->currentPositionX + $moves[0];
-                    $figureMoveY = $figure->currentPositionY + $moves[1];
+                        $anyFigureAttack = self::checkKingMovePosition($figures, $figure, $figureMoveX, $figureMoveY);
 
-                    $anyFigureAttack = self::checkKingMovePosition($figures, $figure, $figureMoveX, $figureMoveY);
+                        if (empty($anyFigureAttack)) {
+                            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                        }
+                    } else if ($figure->name == 'bishop' ||
+                        $figure->name == 'queen' ||
+                        $figure->name == 'rook'
+                    ) {
+                        for ($i = 1; $i <= 8; $i++) {
+                            $figureMoveX = $figure->currentPositionX + $moves[0] * $i;
+                            $figureMoveY = $figure->currentPositionY + $moves[1] * $i;
 
-                    if (empty($anyFigureAttack)) {
+                            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+
+                            foreach ($figures as $item) {
+                                if ($figureMoveX == $item->currentPositionX &&
+                                    $figureMoveY == $item->currentPositionY
+                                ) {
+
+                                    break 2;
+                                }
+                            }
+                        }
+                    } else {
+                        $figureMoveX = $figure->currentPositionX + $moves[0];
+                        $figureMoveY = $figure->currentPositionY + $moves[1];
                         self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
                     }
-                } else if ($figure->name == 'bishop' ||
-                    $figure->name == 'queen' ||
-                    $figure->name == 'rook') {
-                    for ($i = 1; $i <= 8; $i++) {
-                        $figureMoveX = $figure->currentPositionX + $moves[0] * $i;
-                        $figureMoveY = $figure->currentPositionY + $moves[1] * $i;
+                } else if ($figure->color == 'black'
+                    /*&& $blackUser->id == \Yii::$app->user->id
+                    && $game->move %2 == 0*/
+                ) {
 
+                    if ($figure->name == 'bishop' ||
+                        $figure->name == 'queen' ||
+                        $figure->name == 'rook'
+                    ) {
+                        for ($i = 1; $i <= 8; $i++) {
+                            $figureMoveX = $figure->currentPositionX - $moves[0] * $i;
+                            $figureMoveY = $figure->currentPositionY - $moves[1] * $i;
+                            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+
+                            foreach ($figures as $item) {
+                                if ($figureMoveX == $item->currentPositionX &&
+                                    $figureMoveY == $item->currentPositionY
+                                ) {
+
+                                    break 2;
+                                }
+                            }
+                        }
+                    } else {
+                        $figureMoveX = $figure->currentPositionX - $moves[0];
+                        $figureMoveY = $figure->currentPositionY - $moves[1];
                         self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
-
-                        foreach ($figures as $item) {
-                            if ($figureMoveX == $item->currentPositionX &&
-                                $figureMoveY == $item->currentPositionY) {
-
-                                break 2;
-                            }
-                        }
                     }
-                } else {
-                    $figureMoveX = $figure->currentPositionX + $moves[0];
-                    $figureMoveY = $figure->currentPositionY + $moves[1];
-                    self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
-                }
-            } else if ($figure->color == 'black'
-                /*&& $blackUser->id == \Yii::$app->user->id
-                && $game->move %2 == 0*/) {
-
-                if ($figure->name == 'bishop' ||
-                    $figure->name == 'queen' ||
-                    $figure->name == 'rook') {
-                    for ($i = 1; $i <= 8; $i++) {
-                        $figureMoveX = $figure->currentPositionX - $moves[0] * $i;
-                        $figureMoveY = $figure->currentPositionY - $moves[1] * $i;
-                        self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
-
-                        foreach ($figures as $item) {
-                            if ($figureMoveX == $item->currentPositionX &&
-                                $figureMoveY == $item->currentPositionY) {
-
-                                break 2;
-                            }
-                        }
-                    }
-                } else {
-                    $figureMoveX = $figure->currentPositionX - $moves[0];
-                    $figureMoveY = $figure->currentPositionY - $moves[1];
-                    self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
-                }
-            }
-        }
-
-        foreach ($figure->attacks as $attack) {
-            if ($figure->color == 'white'
-                /*&& $whiteUser->id == \Yii::$app->user->id && $game->move %2 != 0*/) {
-
-                if ($figure->name == 'bishop' ||
-                    $figure->name == 'queen' ||
-                    $figure->name == 'rook') {
-                    for ($i = 1; $i <= 8; $i++) {
-                        $figureAttackX = $figure->currentPositionX + $attack[0] * $i;
-                        $figureAttackY = $figure->currentPositionY + $attack[1] * $i;
-
-                        self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
-
-                        foreach ($figures as $item) {
-                            if ($figureAttackX == $item->currentPositionX &&
-                                $figureAttackY == $item->currentPositionY) {
-
-                                break 2;
-                            }
-                        }
-                    }
-                } else {
-                    $figureAttackX = $figure->currentPositionX + $attack[0];
-                    $figureAttackY = $figure->currentPositionY + $attack[1];
-                    self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
-                }
-            } else if ($figure->color == 'black') {
-                if ($figure->name == 'bishop' ||
-                    $figure->name == 'queen' ||
-                    $figure->name == 'rook') {
-                    for ($i = 1; $i <= 8; $i++) {
-                        $figureAttackX = $figure->currentPositionX - $attack[0] * $i;
-                        $figureAttackY = $figure->currentPositionY - $attack[1] * $i;
-
-                        self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
-
-                        foreach ($figures as $item) {
-                            if ($figureAttackX == $item->currentPositionX &&
-                                $figureAttackY == $item->currentPositionY) {
-
-                                break 2;
-                            }
-                        }
-                    }
-                } else {
-                    $figureAttackX = $figure->currentPositionX - $attack[0];
-                    $figureAttackY = $figure->currentPositionY - $attack[1];
-                    self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
                 }
             }
 
-        }
+            foreach ($figure->attacks as $attack) {
+                if ($figure->color == 'white'
+                    /*&& $whiteUser->id == \Yii::$app->user->id && $game->move %2 != 0*/
+                ) {
+
+                    if ($figure->name == 'bishop' ||
+                        $figure->name == 'queen' ||
+                        $figure->name == 'rook'
+                    ) {
+                        for ($i = 1; $i <= 8; $i++) {
+                            $figureAttackX = $figure->currentPositionX + $attack[0] * $i;
+                            $figureAttackY = $figure->currentPositionY + $attack[1] * $i;
+
+                            self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
+
+                            foreach ($figures as $item) {
+                                if ($figureAttackX == $item->currentPositionX &&
+                                    $figureAttackY == $item->currentPositionY
+                                ) {
+                                    break 2;
+                                }
+                            }
+                        }
+                    } else {
+                        $figureAttackX = $figure->currentPositionX + $attack[0];
+                        $figureAttackY = $figure->currentPositionY + $attack[1];
+                        self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
+                    }
+                } else if ($figure->color == 'black') {
+                    if ($figure->name == 'bishop' ||
+                        $figure->name == 'queen' ||
+                        $figure->name == 'rook'
+                    ) {
+                        for ($i = 1; $i <= 8; $i++) {
+                            $figureAttackX = $figure->currentPositionX - $attack[0] * $i;
+                            $figureAttackY = $figure->currentPositionY - $attack[1] * $i;
+
+                            self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
+
+                            foreach ($figures as $item) {
+                                if ($item->name == 'king' && $item->color != $figure->color) {
+                                    if ($figureAttackX == $item->currentPositionX &&
+                                        $figureAttackY == $item->currentPositionY
+                                    ) {
+                                        $item->check = true;
+                                        break 3;
+                                    }
+                                }
+                                if ($figureAttackX == $item->currentPositionX &&
+                                    $figureAttackY == $item->currentPositionY
+                                ) {
+                                    break 2;
+                                }
+                            }
+                        }
+                    } else {
+                        $figureAttackX = $figure->currentPositionX - $attack[0];
+                        $figureAttackY = $figure->currentPositionY - $attack[1];
+                        self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
+                        foreach ($figures as $item) {
+                            if ($item->name == 'king' && $item->color != $figure->color) {
+                                if ($figureAttackX == $item->currentPositionX &&
+                                    $figureAttackY == $item->currentPositionY
+                                ) {
+                                    $item->check = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
     }
 
     public static function checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game)
@@ -210,7 +235,6 @@ class Buttons extends Widget
 
         if (empty($anyFigure) && $board->x == $figureMoveX && $board->y == $figureMoveY) {
 
-            Pjax::begin();
             echo Html::beginForm();
             echo Html::submitButton('move', [
                 'class' => 'btn btn-xs btn-primary hidden move move' . $figure->id,
@@ -218,7 +242,6 @@ class Buttons extends Widget
                 'onclick' => 'hideButtons()'
             ]);
             echo Html::endForm();
-            Pjax::end();
         }
     }
 }

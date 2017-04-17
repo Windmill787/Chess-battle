@@ -18,7 +18,7 @@ class FirstMoveButton extends Widget
 {
     public static function widget($figures, PawnComponent $figure, $board, $whiteUser, $blackUser, $game) {
 
-        if ($figure->color == 'white' && $whiteUser->id == \Yii::$app->user->id /*&& $game->move %2 != 0*/) {
+        if ($figure->color == 'white' /*&& $whiteUser->id == \Yii::$app->user->id && $game->move %2 != 0*/) {
             $figureMoveX = $figure->currentPositionX + $figure->first_move[0];
             $figureMoveY = $figure->currentPositionY + $figure->first_move[1];
             self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game->id);
@@ -29,29 +29,36 @@ class FirstMoveButton extends Widget
         }
     }
 
-    public static function checkFigure($figures, $figureMoveX, $figureMoveY) {
-        foreach ($figures as $figure) {
-            if ($figure->currentPositionX == $figureMoveX &&
-                $figure->currentPositionY == $figureMoveY) {
+    public static function checkFigure($figures, $figure, $figureMoveX, $figureMoveY) {
+        foreach ($figures as $item) {
+            if ($figure->color == 'white') {
+                if ($item->currentPositionX == $figureMoveX &&
+                    $item->currentPositionY == $figureMoveY - 1
+                ) {
 
-                return $figure;
+                    return $item;
+                }
+            } else if ($figure->color == 'black') {
+                if ($item->currentPositionX == $figureMoveX &&
+                    $item->currentPositionY == $figureMoveY + 1
+                ) {
+
+                    return $item;
+                }
             }
-        }
+            if ($item->currentPositionX == $figureMoveX &&
+                $item->currentPositionY == $figureMoveY) {
 
-        foreach ($figures as $figure) {
-            if ($figure->currentPositionX == $figureMoveX &&
-                $figure->currentPositionY == $figureMoveY - 1) {
-
-                return $figure;
+                return $item;
             }
         }
     }
 
     public static function checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game_id) {
 
-        $figureOnPosition = self::checkFigure($figures, $figureMoveX, $figureMoveY);
+        $figuresOnPosition = self::checkFigure($figures, $figure, $figureMoveX, $figureMoveY);
 
-        if (empty($figureOnPosition) &&
+        if (empty($figuresOnPosition) &&
             $figure->currentPositionX == $figure->startPositionX &&
             $figure->currentPositionY == $figure->startPositionY) {
             if ($board->x == $figureMoveX &&

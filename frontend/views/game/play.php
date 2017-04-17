@@ -94,6 +94,7 @@ $this->title = Yii::t('app', 'Play');
                     ?>
 
                     <?php
+                    print_r($figures[15]->check);
                     echo Html::beginForm();
                     echo Html::submitButton('New game', [
                         'class' => 'btn btn-primary',

@@ -34,13 +34,19 @@ class BoardSquare extends Widget
                 }
             }
 
-            Buttons::widget($figures, $figure, $board, $whiteUser, $blackUser, $game);
+            foreach ($figures as $item) {
+                if ($item->name == 'king' && $item->check == true) {
+                    break;
+                }
+            }
             if ($figure->name == 'pawn') {
                 FirstMoveButton::widget($figures, $figure, $board, $whiteUser, $blackUser, $game);
             }
             if ($figure->name == 'king') {
                 CastlingButton::widget($figures, $figure, $board, $whiteUser, $blackUser, $game);
             }
+            Buttons::widget($figures, $figure, $board, $whiteUser, $blackUser, $game);
+
         }
         echo Html::endTag('td');
     }
