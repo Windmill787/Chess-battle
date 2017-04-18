@@ -23,7 +23,7 @@ $this->title = Yii::t('app', 'Play');
 ?>
 <div class="game-play">
 
-    <div class="col-lg-5">
+    <div class="col-lg-6">
         <div class="row thumbnail">
             <div class="caption">
 
@@ -33,7 +33,7 @@ $this->title = Yii::t('app', 'Play');
         </div>
     </div>
 
-    <div class="col-lg-7">
+    <div class="col-lg-6">
         <div class="row thumbnail" align="right">
             <div class="caption">
                 <?php
@@ -54,9 +54,6 @@ $this->title = Yii::t('app', 'Play');
                                 $figure = \app\models\Figure::findOne($item->figure_id);
                                 echo Html::beginTag('tbody');
                                 echo Html::beginTag('tr');
-                                echo Html::beginTag('td');
-                                echo Html::encode($item->id);
-                                echo Html::endTag('td');
 
                                 echo Html::beginTag('td');
                                 echo Html::encode($figure->name);

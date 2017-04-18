@@ -85,6 +85,7 @@ class FigureComponent
         $this->currentPositionY = $figure->current_y;
         $this->savePosition($game_id);
         $this->changeStatus($figure);
+        $this->saveInHistory($this->currentPositionX, $this->currentPositionY, $game_id);
     }
 
     public function move($figureMoveX, $figureMoveY, $game_id) {

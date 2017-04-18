@@ -8,15 +8,43 @@
 
 namespace frontend\widgets;
 
+use app\models\PlayPositions;
 use frontend\components\KingComponent;
 use yii\bootstrap\Widget;
 use yii\helpers\Html;
-use yii\widgets\Pjax;
 
 class Buttons extends Widget
 {
     public static function widget($figures, $figure, $board, $whiteUser, $blackUser, $game)
     {
+
+        if ($figures[15]->check == true) {
+            if ($figure->name == 'king' && $figure->id == 16) {
+                foreach ($figure->moves as $moves) {
+                    $figureMoveX = $figure->currentPositionX + $moves[0];
+                    $figureMoveY = $figure->currentPositionY + $moves[1];
+
+                    $anyFigureAttack = self::checkKingMovePosition($figures, $figure, $figureMoveX, $figureMoveY);
+
+                    if (empty($anyFigureAttack)) {
+                        self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                    }
+                }
+            }
+        } else if ($figures[31]->check == true) {
+            if ($figure->name == 'king' && $figure->id == 32) {
+                foreach ($figure->moves as $moves) {
+                    $figureMoveX = $figure->currentPositionX - $moves[0];
+                    $figureMoveY = $figure->currentPositionY - $moves[1];
+
+                    $anyFigureAttack = self::checkKingMovePosition($figures, $figure, $figureMoveX, $figureMoveY);
+
+                    if (empty($anyFigureAttack)) {
+                        self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                    }
+                }
+            }
+        } else {
             //moves
             foreach ($figure->moves as $moves) {
                 if ($figure->color == 'white'
@@ -128,14 +156,6 @@ class Buttons extends Widget
                             self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
 
                             foreach ($figures as $item) {
-                                if ($item->name == 'king' && $item->color != $figure->color) {
-                                    if ($figureAttackX == $item->currentPositionX &&
-                                        $figureAttackY == $item->currentPositionY
-                                    ) {
-                                        $item->check = true;
-                                        break 3;
-                                    }
-                                }
                                 if ($figureAttackX == $item->currentPositionX &&
                                     $figureAttackY == $item->currentPositionY
                                 ) {
@@ -147,18 +167,10 @@ class Buttons extends Widget
                         $figureAttackX = $figure->currentPositionX - $attack[0];
                         $figureAttackY = $figure->currentPositionY - $attack[1];
                         self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
-                        foreach ($figures as $item) {
-                            if ($item->name == 'king' && $item->color != $figure->color) {
-                                if ($figureAttackX == $item->currentPositionX &&
-                                    $figureAttackY == $item->currentPositionY
-                                ) {
-                                    $item->check = true;
-                                }
-                            }
-                        }
                     }
                 }
             }
+        }
     }
 
     public static function checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game)

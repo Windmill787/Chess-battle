@@ -19,7 +19,7 @@ class FigureBuilderComponent extends Component
     public static function build($game_id)
     {
         // need fix!
-        return $figures = [
+        return [
             $whitePawn1 = new PawnComponent('white', 1, $game_id),
             $whitePawn2 = new PawnComponent('white', 2, $game_id),
             $whitePawn3 = new PawnComponent('white', 3, $game_id),

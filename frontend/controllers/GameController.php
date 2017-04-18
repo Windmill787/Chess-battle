@@ -92,7 +92,7 @@ class GameController extends Controller
 
         $board = new BoardComponent();
 
-        $figures = FigureBuilderComponent::build($id);
+        $figures = \Yii::$container->get('figures')->build($id);
 
         $history = History::find()
             ->where(['game_id' => $model->id])
@@ -209,6 +209,14 @@ class GameController extends Controller
                 } else if ($figure->color == 'black') {
                     $figureAttackX = $figure->currentPositionX - $attack[0];
                     $figureAttackY = $figure->currentPositionY - $attack[1];
+
+                    $king = $figures[15];
+
+                    if ($figureAttackX == $king->currentPositionX &&
+                        $figureAttackY == $king->currentPositionY
+                    ) {
+                        $king->check = true;
+                    }
                 }
 
                 if (empty($figureAttackX) == false && empty($figureAttackY) == false) {

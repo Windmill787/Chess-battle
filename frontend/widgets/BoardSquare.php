@@ -15,10 +15,9 @@ class BoardSquare extends Widget
 {
     public static function widget($color, $board, $figures, $whiteUser, $blackUser, $game)
     {
-
         echo Html::beginTag('td', [
-            'height' => 50,
-            'width' => 50,
+            'height' => 60,
+            'width' => 60,
             'bgcolor' => $color,
             'align' => 'center',
             'valign' => 'center'
@@ -34,11 +33,6 @@ class BoardSquare extends Widget
                 }
             }
 
-            foreach ($figures as $item) {
-                if ($item->name == 'king' && $item->check == true) {
-                    break;
-                }
-            }
             if ($figure->name == 'pawn') {
                 FirstMoveButton::widget($figures, $figure, $board, $whiteUser, $blackUser, $game);
             }
@@ -46,7 +40,6 @@ class BoardSquare extends Widget
                 CastlingButton::widget($figures, $figure, $board, $whiteUser, $blackUser, $game);
             }
             Buttons::widget($figures, $figure, $board, $whiteUser, $blackUser, $game);
-
         }
         echo Html::endTag('td');
     }
