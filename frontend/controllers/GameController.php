@@ -92,7 +92,7 @@ class GameController extends Controller
 
         $board = new BoardComponent();
 
-        $figures = \Yii::$container->get('figures')->build($id);
+        $figures = \Yii::$container->get('figures', [], [$model->id]);
 
         $history = History::find()
             ->where(['game_id' => $model->id])
@@ -113,10 +113,10 @@ class GameController extends Controller
                     $figureMoveY = $figure->currentPositionY - $figure->first_move[1];
                 }
 
-                if (isset($_POST['firstMove' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
+                if (isset($_POST['firstMove' . $figure->id . $figureMoveX . $figureMoveY . $model->id])) {
                     $model->move = $model->move + 1;
                     $model->save();
-                    $figure->move($figureMoveX, $figureMoveY, $id);
+                    $figure->move($figureMoveX, $figureMoveY, $model->id);
                     $this->refresh();
                 }
             }
@@ -131,22 +131,22 @@ class GameController extends Controller
 
                     if ($figure->color == 'white') {
                         if ($castling[0] == 2) {
-                            $rook = PlayPositions::findOne(['game_id' => $id, 'figure_id' => 14]);
+                            $rook = PlayPositions::findOne(['game_id' => $model->id, 'figure_id' => 14]);
                         } else if ($castling[0] == -2) {
-                            $rook = PlayPositions::findOne(['game_id' => $id, 'figure_id' => 13]);
+                            $rook = PlayPositions::findOne(['game_id' => $model->id, 'figure_id' => 13]);
                         }
                     } else if ($figure->color == 'black') {
                         if ($castling[0] == 2) {
-                            $rook = PlayPositions::findOne(['game_id' => $id, 'figure_id' => 30]);
+                            $rook = PlayPositions::findOne(['game_id' => $model->id, 'figure_id' => 30]);
                         } else if ($castling[0] == -2) {
-                            $rook = PlayPositions::findOne(['game_id' => $id, 'figure_id' => 29]);
+                            $rook = PlayPositions::findOne(['game_id' => $model->id, 'figure_id' => 29]);
                         }
                     }
 
-                    if (isset($_POST['cast' . $figure->id . $figureMoveX . $figureMoveY . $rook->id . $id])) {
+                    if (isset($_POST['cast' . $figure->id . $figureMoveX . $figureMoveY . $rook->id . $model->id])) {
                         //$model->move = $model->move + 1;
                         //$model->save();
-                        $figure->castling($figureMoveX, $figureMoveY, $rook->id, $castling[0], $id);
+                        $figure->castling($figureMoveX, $figureMoveY, $rook->id, $castling[0], $model->id);
                         $this->refresh();
                     }
                 }
@@ -163,10 +163,10 @@ class GameController extends Controller
                         for ($i = 1; $i <= 8; $i++) {
                             $figureMoveX = $figure->currentPositionX + $moves[0] * $i;
                             $figureMoveY = $figure->currentPositionY + $moves[1] * $i;
-                            if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
+                            if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $model->id])) {
                                 $model->move = $model->move + 1;
                                 $model->save();
-                                $figure->move($figureMoveX, $figureMoveY, $id);
+                                $figure->move($figureMoveX, $figureMoveY, $model->id);
                                 $this->refresh();
                             }
                         }
@@ -181,10 +181,10 @@ class GameController extends Controller
                         for ($i = 1; $i <= 8; $i++) {
                             $figureMoveX = $figure->currentPositionX - $moves[0] * $i;
                             $figureMoveY = $figure->currentPositionY - $moves[1] * $i;
-                            if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
+                            if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $model->id])) {
                                 $model->move = $model->move + 1;
                                 $model->save();
-                                $figure->move($figureMoveX, $figureMoveY, $id);
+                                $figure->move($figureMoveX, $figureMoveY, $model->id);
                                 $this->refresh();
                             }
                         }
@@ -194,10 +194,10 @@ class GameController extends Controller
                     }
                 }
 
-                if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $id])) {
+                if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $model->id])) {
                     $model->move = $model->move + 1;
                     $model->save();
-                    $figure->move($figureMoveX, $figureMoveY, $id);
+                    $figure->move($figureMoveX, $figureMoveY, $model->id);
                     $this->refresh();
                 }
             }
@@ -221,13 +221,13 @@ class GameController extends Controller
 
                 if (empty($figureAttackX) == false && empty($figureAttackY) == false) {
                     $desiredFigure = PlayPositions::findOne([
-                        'game_id' => $id,
+                        'game_id' => $model->id,
                         'current_x' => $figureAttackX,
                         'current_y' => $figureAttackY
                     ]);
                     if (empty($desiredFigure->id) == false) {
-                        if (isset($_POST['attack' . $desiredFigure->figure_id . $figure->id . $id])) {
-                            $figure->attack($desiredFigure, $id);
+                        if (isset($_POST['attack' . $desiredFigure->figure_id . $figure->id . $model->id])) {
+                            $figure->attack($desiredFigure, $model->id);
                             $this->refresh();
                         }
                     }
@@ -236,8 +236,8 @@ class GameController extends Controller
         }
 
         if (isset($_POST['back'])) {
-            FigureBuilderComponent::back($figures, $id);
-            FigureBuilderComponent::resetStatuses($id);
+            FigureBuilderComponent::back($figures, $model->id);
+            FigureBuilderComponent::resetStatuses($model->id);
             $this->refresh();
         }
 

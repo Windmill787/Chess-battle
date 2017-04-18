@@ -17,7 +17,6 @@ class Buttons extends Widget
 {
     public static function widget($figures, $figure, $board, $whiteUser, $blackUser, $game)
     {
-
         if ($figures[15]->check == true) {
             if ($figure->name == 'king' && $figure->id == 16) {
                 foreach ($figure->moves as $moves) {
@@ -121,7 +120,16 @@ class Buttons extends Widget
                     /*&& $whiteUser->id == \Yii::$app->user->id && $game->move %2 != 0*/
                 ) {
 
-                    if ($figure->name == 'bishop' ||
+                    if ($figure->name == 'king') {
+                        $figureMoveX = $figure->currentPositionX + $attack[0];
+                        $figureMoveY = $figure->currentPositionY + $attack[1];
+
+                        $anyFigureAttack = self::checkKingAttackPosition($figures, $figure, $figureMoveX, $figureMoveY);
+
+                        if (empty($anyFigureAttack)) {
+                            self::checkEnemyFigure($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                        }
+                    } else if ($figure->name == 'bishop' ||
                         $figure->name == 'queen' ||
                         $figure->name == 'rook'
                     ) {
@@ -223,10 +231,46 @@ class Buttons extends Widget
 
                                     break 2;
                                 } else if ($figure->currentPositionX - $attack[0] * $i == $figureMoveX &&
-                                        $figure->currentPositionY - $attack[1] * $i == $figureMoveY) {
+                                    $figure->currentPositionY - $attack[1] * $i == $figureMoveY) {
 
-                                        return $figure;
-                                    }
+                                    return $figure;
+                                }
+                            }
+                        }
+                    } else {
+                        if ($figureMoveX == $figure->currentPositionX - $attack[0]  &&
+                            $figureMoveY == $figure->currentPositionY - $attack[1]) {
+
+                            return $figure;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static function checkKingAttackPosition($figures, KingComponent $king, $figureMoveX, $figureMoveY) {
+        foreach ($figures as $figure) {
+            if ($figure->color != $king->color) {
+                foreach ($figure->attacks as $attack) {
+
+                    if ($figure->name == 'bishop' ||
+                        $figure->name == 'queen' ||
+                        $figure->name == 'rook' &&
+                        $figure->status == 'active'
+                    ) {
+                        for ($i = 1; $i <= 8; $i++) {
+                            foreach ($figures as $item) {
+                                if ($figure->currentPositionX - $attack[0] * $i == $item->currentPositionX &&
+                                    $figure->currentPositionY - $attack[1] * $i == $item->currentPositionY &&
+                                    $item->name != $king->name) {
+
+                                    break 2;
+                                } else if ($figure->currentPositionX - $attack[0] * $i == $figureMoveX &&
+                                    $figure->currentPositionY - $attack[1] * $i == $figureMoveY) {
+
+                                    return $figure;
+                                }
                             }
                         }
                     } else {
