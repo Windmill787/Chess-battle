@@ -13,7 +13,7 @@ use yii\helpers\Html;
 
 class BoardSquare extends Widget
 {
-    public static function widget($color, $board, $figures, $whiteUser, $blackUser, $playPositions)
+    public static function widget($color, $board, $figures, $whiteUser, $blackUser, $game, $playPositions)
     {
         echo Html::beginTag('td', [
             'height' => 60,
@@ -50,12 +50,12 @@ class BoardSquare extends Widget
             }
 
             if ($figure->name == 'pawn') {
-                FirstMoveButton::widget($figures, $figure, $board, $whiteUser, $blackUser, $playPositions);
+                FirstMoveButton::widget($figures, $figure, $board, $whiteUser, $blackUser, $game, $playPositions);
             }
-            /*if ($figure->name == 'king') {
-                CastlingButton::widget($figures, $figure, $board, $whiteUser, $blackUser, $game);
+            if ($figure->name == 'king') {
+                CastlingButton::widget($figures, $figure, $board, $whiteUser, $blackUser, $game, $playPositions);
             }
-            Buttons::widget($figures, $figure, $board, $whiteUser, $blackUser, $game);*/
+            Buttons::widget($figures, $figure, $board, $whiteUser, $blackUser, $game, $playPositions);
         }
         echo Html::endTag('td');
     }

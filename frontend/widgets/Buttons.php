@@ -12,10 +12,11 @@ use app\models\PlayPositions;
 use frontend\components\KingComponent;
 use yii\bootstrap\Widget;
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 
 class Buttons extends Widget
 {
-    public static function widget($figures, $figure, $board, $whiteUser, $blackUser, $game)
+    public static function widget($figures, $figure, $board, $whiteUser, $blackUser, $game, $playPositions)
     {
         if ($figures[15]->check == true) {
             if ($figure->name == 'king' && $figure->id == 16) {
@@ -26,7 +27,7 @@ class Buttons extends Widget
                     $anyFigureAttack = self::checkKingMovePosition($figures, $figure, $figureMoveX, $figureMoveY);
 
                     if (empty($anyFigureAttack)) {
-                        self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                        self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game, $playPositions);
                     }
                 }
                 foreach ($figure->attacks as $attack) {
@@ -36,7 +37,7 @@ class Buttons extends Widget
                     $anyFigureAttack = self::checkKingAttackPosition($figures, $figure, $figureMoveX, $figureMoveY);
 
                     if (empty($anyFigureAttack)) {
-                        self::checkEnemyFigure($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                        self::checkEnemyFigure($figures, $figureMoveX, $figureMoveY, $figure, $board, $game, $playPositions);
                     }
                 }
             }
@@ -49,7 +50,7 @@ class Buttons extends Widget
                     $anyFigureAttack = self::checkKingMovePosition($figures, $figure, $figureMoveX, $figureMoveY);
 
                     if (empty($anyFigureAttack)) {
-                        self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                        self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game, $playPositions);
                     }
                 }
                 foreach ($figure->attacks as $attack) {
@@ -59,7 +60,7 @@ class Buttons extends Widget
                     $anyFigureAttack = self::checkKingAttackPosition($figures, $figure, $figureMoveX, $figureMoveY);
 
                     if (empty($anyFigureAttack)) {
-                        self::checkEnemyFigure($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                        self::checkEnemyFigure($figures, $figureMoveX, $figureMoveY, $figure, $board, $game, $playPositions);
                     }
                 }
             }
@@ -78,7 +79,7 @@ class Buttons extends Widget
                         $anyFigureAttack = self::checkKingMovePosition($figures, $figure, $figureMoveX, $figureMoveY);
 
                         if (empty($anyFigureAttack)) {
-                            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game, $playPositions);
                         }
                     } else if ($figure->name == 'bishop' ||
                         $figure->name == 'queen' ||
@@ -88,7 +89,7 @@ class Buttons extends Widget
                             $figureMoveX = $figure->currentPositionX + $moves[0] * $i;
                             $figureMoveY = $figure->currentPositionY + $moves[1] * $i;
 
-                            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game, $playPositions);
 
                             foreach ($figures as $item) {
                                 if ($figureMoveX == $item->currentPositionX &&
@@ -105,7 +106,7 @@ class Buttons extends Widget
                         if ($figure->currentPositionY == 7) {
                             self::checkPawnMorph($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
                         } else {
-                            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game, $playPositions);
                         }
                     }
                 } else if ($figure->color == 'black'
@@ -120,7 +121,7 @@ class Buttons extends Widget
                         for ($i = 1; $i <= 8; $i++) {
                             $figureMoveX = $figure->currentPositionX - $moves[0] * $i;
                             $figureMoveY = $figure->currentPositionY - $moves[1] * $i;
-                            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game, $playPositions);
 
                             foreach ($figures as $item) {
                                 if ($figureMoveX == $item->currentPositionX &&
@@ -134,7 +135,7 @@ class Buttons extends Widget
                     } else {
                         $figureMoveX = $figure->currentPositionX - $moves[0];
                         $figureMoveY = $figure->currentPositionY - $moves[1];
-                        self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                        self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game, $playPositions);
                     }
                 }
             }
@@ -151,7 +152,7 @@ class Buttons extends Widget
                         $anyFigureAttack = self::checkKingAttackPosition($figures, $figure, $figureMoveX, $figureMoveY);
 
                         if (empty($anyFigureAttack)) {
-                            self::checkEnemyFigure($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                            self::checkEnemyFigure($figures, $figureMoveX, $figureMoveY, $figure, $board, $game, $playPositions);
                         }
                     } else if ($figure->name == 'bishop' ||
                         $figure->name == 'queen' ||
@@ -161,7 +162,7 @@ class Buttons extends Widget
                             $figureAttackX = $figure->currentPositionX + $attack[0] * $i;
                             $figureAttackY = $figure->currentPositionY + $attack[1] * $i;
 
-                            self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
+                            self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game, $playPositions);
 
                             foreach ($figures as $item) {
                                 if ($figureAttackX == $item->currentPositionX &&
@@ -174,7 +175,7 @@ class Buttons extends Widget
                     } else {
                         $figureAttackX = $figure->currentPositionX + $attack[0];
                         $figureAttackY = $figure->currentPositionY + $attack[1];
-                        self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
+                        self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game, $playPositions);
                     }
                 } else if ($figure->color == 'black') {
                     if ($figure->name == 'bishop' ||
@@ -185,7 +186,7 @@ class Buttons extends Widget
                             $figureAttackX = $figure->currentPositionX - $attack[0] * $i;
                             $figureAttackY = $figure->currentPositionY - $attack[1] * $i;
 
-                            self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
+                            self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game, $playPositions);
                             $king = $figures[15];
 
                             if ($figureAttackX == $king->currentPositionX &&
@@ -206,7 +207,7 @@ class Buttons extends Widget
                     } else {
                         $figureAttackX = $figure->currentPositionX - $attack[0];
                         $figureAttackY = $figure->currentPositionY - $attack[1];
-                        self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
+                        self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game, $playPositions);
                         $king = $figures[15];
 
                         if ($figureAttackX == $king->currentPositionX &&
@@ -221,7 +222,7 @@ class Buttons extends Widget
         }
     }
 
-    public static function checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game)
+    public static function checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game, $playPositions)
     {
         foreach ($figures as $item) {
             if ($item->currentPositionX == $figureAttackX &&
@@ -230,13 +231,33 @@ class Buttons extends Widget
                 $board->y == $figureAttackY &&
                 $item->color != $figure->color) {
 
-                echo Html::beginForm();
-                echo Html::submitButton('attack', [
-                    'class' => 'btn btn-xs btn-danger hidden attack attack' . $figure->id,
-                    'name' => 'attack' . $item->id . $figure->id . $game->id,
-                    'onclick' => 'hideButtons()'
-                ]);
-                echo Html::endForm();
+                foreach ($playPositions as $playPosition) {
+                    if ($figure->id == $playPosition->figure_id) {
+                        $form = ActiveForm::begin([
+                            'options'=>
+                                [
+                                    'style' => [
+                                        'position' => 'absolute'
+                                    ]
+                                ]
+                        ]);
+
+                        echo $form->field($playPosition, "id")
+                            ->label(false)->hiddenInput();
+
+                        echo $form->field($playPosition, "current_x")
+                            ->label(false)->hiddenInput(['value' => $figureAttackX]);
+
+                        echo $form->field($playPosition, "current_y")
+                            ->label(false)->hiddenInput(['value' => $figureAttackY]);
+
+                        echo Html::submitButton(\Yii::t('app', 'Attack'), [
+                            'class' => 'btn btn-xs btn-danger hidden attack attack' . $figure->id,
+                            'onclick' => 'hideButtons()'
+                        ]);
+                        ActiveForm::end();
+                    }
+                }
             }
         }
     }
@@ -363,19 +384,32 @@ class Buttons extends Widget
         }
     }
 
-    public static function checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game)
+    public static function checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game, $playPositions)
     {
         $anyFigure = self::checkAnyFigure($figures, $figureMoveX, $figureMoveY);
 
         if (empty($anyFigure) && $board->x == $figureMoveX && $board->y == $figureMoveY) {
 
-            echo Html::beginForm();
-            echo Html::submitButton('move', [
-                'class' => 'btn btn-xs btn-primary hidden move move' . $figure->id,
-                'name' => 'move' . $figure->id . $figureMoveX . $figureMoveY . $game->id,
-                'onclick' => 'hideButtons()'
-            ]);
-            echo Html::endForm();
+            foreach ($playPositions as $playPosition) {
+                if ($figure->id == $playPosition->figure_id) {
+                    $form = ActiveForm::begin();
+
+                    echo $form->field($playPosition, "id")
+                        ->label(false)->hiddenInput();
+
+                    echo $form->field($playPosition, "current_x")
+                        ->label(false)->hiddenInput(['value' => $figureMoveX]);
+
+                    echo $form->field($playPosition, "current_y")
+                        ->label(false)->hiddenInput(['value' => $figureMoveY]);
+
+                    echo Html::submitButton(\Yii::t('app', 'Move'), [
+                        'class' => 'btn btn-xs btn-primary hidden move move' . $figure->id,
+                        'onclick' => 'hideButtons()'
+                    ]);
+                    ActiveForm::end();
+                }
+            }
         }
     }
 }

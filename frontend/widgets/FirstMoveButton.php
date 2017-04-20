@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
 
 class FirstMoveButton extends Widget
 {
-    public static function widget($figures, PawnComponent $figure, $board, $whiteUser, $blackUser, $playPositions) {
+    public static function widget($figures, PawnComponent $figure, $board, $whiteUser, $blackUser, $game, $playPositions) {
 
         if ($figure->color == 'white' /*&& $whiteUser->id == \Yii::$app->user->id && $game->move %2 != 0*/) {
             $figureMoveX = $figure->currentPositionX + $figure->first_move[0];

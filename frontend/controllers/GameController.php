@@ -104,44 +104,37 @@ class GameController extends Controller
             ->all();
 
         $request = \Yii::$app->request;
-        $post = \Yii::$app->request->post('PlayPositions');
+        $movePost = $request->post('PlayPositions');
 
-        if ($request->post('PlayPositions')) {
-            $invitation = PlayPositions::findOne($post['id']);
+        if ($movePost) {
+            $invitation = PlayPositions::findOne($movePost['id']);
 
-            $invitation->current_x = $post['current_x'];
-            $invitation->current_y = $post['current_y'];
+            $desiredPosition = PlayPositions::findOne([
+                'game_id' => $model->id,
+                'current_x' => $movePost['current_x'],
+                'current_y' => $movePost['current_y']
+            ]);
+
+            if (empty($desiredPosition) == false) {
+                $desiredPosition->current_x = 0;
+                $desiredPosition->current_y = 0;
+                $desiredPosition->status = 'killed';
+                $desiredPosition->save();
+            }
+
+            $invitation->current_x = $movePost['current_x'];
+            $invitation->current_y = $movePost['current_y'];
             $invitation->save(false);
+
             return $this->refresh();
         }
 
-        foreach ($figures as $figure) {
-
-            /**
-             * @var $figure PawnComponent
-             */
-            /*if ($figure->name == 'pawn') {
-                if ($figure->color == 'white') {
-                    $figureMoveX = $figure->currentPositionX + $figure->first_move[0];
-                    $figureMoveY = $figure->currentPositionY + $figure->first_move[1];
-
-                } else if ($figure->color == 'black') {
-                    $figureMoveX = $figure->currentPositionX - $figure->first_move[0];
-                    $figureMoveY = $figure->currentPositionY - $figure->first_move[1];
-                }
-
-                if (isset($_POST['firstMove' . $figure->id . $figureMoveX . $figureMoveY . $model->id])) {
-                    $model->move = $model->move + 1;
-                    $model->save();
-                    $figure->move($figureMoveX, $figureMoveY, $model->id);
-                    $this->refresh();
-                }
-            }*/
+        /*foreach ($figures as $figure) {
 
             /**
              * @var $figure KingComponent
              */
-            if ($figure->name == 'king') {
+            /*if ($figure->name == 'king') {
                 foreach ($figure->castlingMove as $castling) {
                     $figureMoveX = $figure->currentPositionX + $castling[0];
                     $figureMoveY = $figure->currentPositionY + $castling[1];
@@ -166,56 +159,6 @@ class GameController extends Controller
                         $figure->castling($figureMoveX, $figureMoveY, $rook->id, $castling[0], $model->id);
                         $this->refresh();
                     }
-                }
-            }
-
-            /**
-             * @var $figure FigureComponent
-             */
-            foreach ($figure->moves as $moves) {
-                if ($figure->color == 'white') {
-                    if ($figure->name == 'bishop' ||
-                        $figure->name == 'queen' ||
-                        $figure->name == 'rook') {
-                        for ($i = 1; $i <= 8; $i++) {
-                            $figureMoveX = $figure->currentPositionX + $moves[0] * $i;
-                            $figureMoveY = $figure->currentPositionY + $moves[1] * $i;
-                            if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $model->id])) {
-                                $model->move = $model->move + 1;
-                                $model->save();
-                                $figure->move($figureMoveX, $figureMoveY, $model->id);
-                                $this->refresh();
-                            }
-                        }
-                    } else {
-                        $figureMoveX = $figure->currentPositionX + $moves[0];
-                        $figureMoveY = $figure->currentPositionY + $moves[1];
-                    }
-                } else if ($figure->color == 'black') {
-                    if ($figure->name == 'bishop' ||
-                        $figure->name == 'queen' ||
-                        $figure->name == 'rook') {
-                        for ($i = 1; $i <= 8; $i++) {
-                            $figureMoveX = $figure->currentPositionX - $moves[0] * $i;
-                            $figureMoveY = $figure->currentPositionY - $moves[1] * $i;
-                            if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $model->id])) {
-                                $model->move = $model->move + 1;
-                                $model->save();
-                                $figure->move($figureMoveX, $figureMoveY, $model->id);
-                                $this->refresh();
-                            }
-                        }
-                    } else {
-                        $figureMoveX = $figure->currentPositionX - $moves[0];
-                        $figureMoveY = $figure->currentPositionY - $moves[1];
-                    }
-                }
-
-                if (isset($_POST['move' . $figure->id . $figureMoveX . $figureMoveY . $model->id])) {
-                    $model->move = $model->move + 1;
-                    $model->save();
-                    $figure->move($figureMoveX, $figureMoveY, $model->id);
-                    $this->refresh();
                 }
             }
 
@@ -264,7 +207,7 @@ class GameController extends Controller
                     }
                 }
             }
-        }
+        }*/
 
         if (isset($_POST['back'])) {
             FigureBuilderComponent::back($figures, $model->id);

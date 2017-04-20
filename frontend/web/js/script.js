@@ -36,7 +36,8 @@ var king = 'king';
 function light (figure, id) {
     $("img").css('background-color','inherit');
     $("img#figure" + id).css('background-color','#DAA520');
-    $('.morph').addClass('hidden');
+    $('.morph')
+        .addClass('hidden');
     $('.move')
         .addClass('hidden');
     $('.attack')
