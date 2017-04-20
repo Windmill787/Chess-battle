@@ -19,13 +19,6 @@ use yii\widgets\Pjax;
 
 $this->title = Yii::t('app', 'Invitations');
 $this->params['breadcrumbs'][] = $this->title;
-
-$script = <<< JS
-$(document).ready(function() {
-setInterval(function(){ $("#refreshButton").click(); }, 2000);
-});
-JS;
-$this->registerJs($script);
 ?>
 <div class="site-invitations">
 
@@ -36,7 +29,7 @@ $this->registerJs($script);
             <div class="caption">
                     <?php
                     Pjax::begin();
-                    echo Html::a("Refresh", ['site/invitations'], ['class' => 'btn btn-lg btn-primary hidden', 'id' => 'refreshButton']);
+                    echo Html::a("Refresh", ['site/invitations'], ['class' => 'hidden', 'id' => 'refreshButton']);
 
                     if (empty($invitationsToMe) == false) {
 
@@ -66,83 +59,36 @@ $this->registerJs($script);
                             }
                         }
 
-                        foreach ($invitationsToMe as $invitation) {
+                        foreach ($invitationsToMe as $index => $invitation) {
 
-                            if ($invitation->status == 'pending') {
+                            $fromUser = \common\models\User::findOne(['id' => $invitation->from_user_id]);
+                            echo Html::beginTag('tbody');
+                            echo Html::beginTag('tr');
+                            echo Html::beginTag('td');
+                            echo Html::encode($fromUser->username);
+                            echo Html::endTag('td');
 
-                                $enemy = \common\models\User::findOne([
-                                    'id' => $invitation->from_user_id
-                                ]);
+                            echo Html::beginTag('td', [
+                                'align' => 'center'
+                            ]);
 
-                                echo Html::beginTag('tbody');
-                                echo Html::beginTag('tr');
-                                echo Html::beginTag('td');
-                                echo Html::encode($enemy->username);
-                                echo Html::endTag('td');
+                            $form = ActiveForm::begin();
+                            echo $form->field($invitation, "[$index]id")
+                                ->label(false)->hiddenInput();
 
-                                echo Html::beginTag('td', [
-                                    'align' => 'center'
-                                ]);
-                                $form = ActiveForm::begin();
+                            echo Html::submitButton(Yii::t('app', 'Decline'), [
+                                'class' => 'btn btn-danger',
+                            ]);
 
-                                echo $form->field($model, 'white_user_id')
-                                    ->hiddenInput(['value' => $enemy->id])->label(false);
+                            ActiveForm::end();
 
-                                echo $form->field($model, 'black_user_id')
-                                    ->hiddenInput(['value' => Yii::$app->user->id])->label(false);
+                            echo Html::endTag('td');
+                            echo Html::endTag('td');
 
-                                echo $form->field($model, 'status')
-                                    ->hiddenInput(['value' => 'in progress'])->label(false);
-
-                                echo $form->field($invitation, 'id')
-                                    ->hiddenInput(['value' => $invitation->id])->label(false);
-
-                                echo $form->field($invitation, 'from_user_id')
-                                    ->hiddenInput(['value' => $enemy->id])->label(false);
-
-                                echo $form->field($invitation, 'to_user_id')
-                                    ->hiddenInput(['value' => Yii::$app->user->id])->label(false);
-
-                                echo $form->field($invitation, 'status')
-                                    ->hiddenInput(['value' => 'accepted'])->label(false);
-
-                                echo Html::submitButton(Yii::t('app', 'Accept'), [
-                                    'class' => 'btn btn-success'
-                                ]);
-
-                                ActiveForm::end();
-
-                                echo Html::endTag('td');
-
-                                echo Html::beginTag('td', [
-                                    'align' => 'center'
-                                ]);
-                                $form = ActiveForm::begin();
-
-                                echo $form->field($invitation, 'id')
-                                    ->hiddenInput(['value' => $invitation->id])->label(false);
-
-                                echo $form->field($invitation, 'from_user_id')
-                                    ->hiddenInput(['value' => $enemy->id])->label(false);
-
-                                echo $form->field($invitation, 'to_user_id')
-                                    ->hiddenInput(['value' => Yii::$app->user->id])->label(false);
-
-                                echo $form->field($invitation, 'status')
-                                    ->hiddenInput(['value' => 'declined'])->label(false);
-
-                                echo Html::submitButton(Yii::t('app', 'Decline'), [
-                                    'class' => 'btn btn-danger',
-                                ]);
-
-                                ActiveForm::end();
-
-                                echo Html::endTag('td');
-
-                                echo Html::endTag('tr');
-                                echo Html::endTag('tbody');
-                            }
+                            echo Html::endTag('tr');
+                            echo Html::endTag('tbody');
                         }
+
                         echo Html::endTag('table');
                         echo \yii\widgets\LinkPager::widget([
                             'pagination' => $pages,

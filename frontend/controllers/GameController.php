@@ -19,6 +19,7 @@ use app\models\Figure;
 use frontend\components\FigureComponent;
 use frontend\components\KingComponent;
 use frontend\components\PawnComponent;
+use yii\base\Model;
 use yii\data\Pagination;
 use yii\web\Controller;
 use yii\filters\AccessControl;
@@ -207,15 +208,29 @@ class GameController extends Controller
                     $figureAttackX = $figure->currentPositionX + $attack[0];
                     $figureAttackY = $figure->currentPositionY + $attack[1];
                 } else if ($figure->color == 'black') {
-                    $figureAttackX = $figure->currentPositionX - $attack[0];
-                    $figureAttackY = $figure->currentPositionY - $attack[1];
-
-                    $king = $figures[15];
-
-                    if ($figureAttackX == $king->currentPositionX &&
-                        $figureAttackY == $king->currentPositionY
-                    ) {
-                        $king->check = true;
+                    if ($figure->name == 'bishop' ||
+                        $figure->name == 'queen' ||
+                        $figure->name == 'rook') {
+                        for ($i = 1; $i <= 8; $i++) {
+                            $figureAttackX = $figure->currentPositionX - $attack[0] * $i;
+                            $figureAttackY = $figure->currentPositionY - $attack[1] * $i;
+                            if (empty($figureAttackX) == false && empty($figureAttackY) == false) {
+                                $desiredFigure = PlayPositions::findOne([
+                                    'game_id' => $model->id,
+                                    'current_x' => $figureAttackX,
+                                    'current_y' => $figureAttackY
+                                ]);
+                                if (empty($desiredFigure->id) == false) {
+                                    if (isset($_POST['attack' . $desiredFigure->figure_id . $figure->id . $model->id])) {
+                                        $figure->attack($desiredFigure, $model->id);
+                                        $this->refresh();
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        $figureAttackX = $figure->currentPositionX - $attack[0];
+                        $figureAttackY = $figure->currentPositionY - $attack[1];
                     }
                 }
 

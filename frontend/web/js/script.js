@@ -34,8 +34,23 @@ var queen = 'queen';
 var king = 'king';
 
 function light (figure, id) {
-    $('img').css('border','none').css('background-color','inherit');
-    $('#figure' + id).css('border','7px solid #F0E68C').css('background-color','#F0E68C');
+    $("img").css('background-color','inherit');
+    $("img#figure" + id).css('background-color','#DAA520');
+    $('.morph').addClass('hidden');
+    $('.move').addClass('hidden');
+    $('.attack')
+        .addClass('hidden')
+        .css('position', 'absolute')
+        .css('margin-top', -10)
+        .css('margin-left', -22.5);
+    $('.move' + id).removeClass('hidden');
+    $('.attack' + id).removeClass('hidden');
+    $('.morph' + id).removeClass('hidden');
+}
+
+function checkLight (figure, id) {
+    $('img').css('background-color','inherit');
+    $('#figure' + id).css('background-color','#DAA520');
     $('.move').addClass('hidden');
     $('.attack')
         .addClass('hidden')

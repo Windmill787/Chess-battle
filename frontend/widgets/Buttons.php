@@ -29,6 +29,16 @@ class Buttons extends Widget
                         self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
                     }
                 }
+                foreach ($figure->attacks as $attack) {
+                    $figureMoveX = $figure->currentPositionX + $attack[0];
+                    $figureMoveY = $figure->currentPositionY + $attack[1];
+
+                    $anyFigureAttack = self::checkKingAttackPosition($figures, $figure, $figureMoveX, $figureMoveY);
+
+                    if (empty($anyFigureAttack)) {
+                        self::checkEnemyFigure($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                    }
+                }
             }
         } else if ($figures[31]->check == true) {
             if ($figure->name == 'king' && $figure->id == 32) {
@@ -40,6 +50,16 @@ class Buttons extends Widget
 
                     if (empty($anyFigureAttack)) {
                         self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                    }
+                }
+                foreach ($figure->attacks as $attack) {
+                    $figureMoveX = $figure->currentPositionX - $attack[0];
+                    $figureMoveY = $figure->currentPositionY - $attack[1];
+
+                    $anyFigureAttack = self::checkKingAttackPosition($figures, $figure, $figureMoveX, $figureMoveY);
+
+                    if (empty($anyFigureAttack)) {
+                        self::checkEnemyFigure($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
                     }
                 }
             }
@@ -82,7 +102,11 @@ class Buttons extends Widget
                     } else {
                         $figureMoveX = $figure->currentPositionX + $moves[0];
                         $figureMoveY = $figure->currentPositionY + $moves[1];
-                        self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                        if ($figure->currentPositionY == 7) {
+                            self::checkPawnMorph($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                        } else {
+                            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game);
+                        }
                     }
                 } else if ($figure->color == 'black'
                     /*&& $blackUser->id == \Yii::$app->user->id
@@ -162,6 +186,14 @@ class Buttons extends Widget
                             $figureAttackY = $figure->currentPositionY - $attack[1] * $i;
 
                             self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
+                            $king = $figures[15];
+
+                            if ($figureAttackX == $king->currentPositionX &&
+                                $figureAttackY == $king->currentPositionY
+                            ) {
+                                $king->checkFigure = $figure->id;
+                                $king->check = true;
+                            }
 
                             foreach ($figures as $item) {
                                 if ($figureAttackX == $item->currentPositionX &&
@@ -175,6 +207,14 @@ class Buttons extends Widget
                         $figureAttackX = $figure->currentPositionX - $attack[0];
                         $figureAttackY = $figure->currentPositionY - $attack[1];
                         self::checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game);
+                        $king = $figures[15];
+
+                        if ($figureAttackX == $king->currentPositionX &&
+                            $figureAttackY == $king->currentPositionY
+                        ) {
+                            $king->checkFigure = $figure->id;
+                            $king->check = true;
+                        }
                     }
                 }
             }
@@ -209,6 +249,17 @@ class Buttons extends Widget
                 return $figure;
                 break;
             }
+        }
+    }
+
+    public static function setCheck($figures, $figure, $figureAttackX, $figureAttackY) {
+        $king = $figures[15];
+
+        if ($figureAttackX == $king->currentPositionX &&
+            $figureAttackY == $king->currentPositionY
+        ) {
+            $king->checkFigure = $figure->id;
+            $king->check = true;
         }
     }
 
@@ -282,6 +333,33 @@ class Buttons extends Widget
                     }
                 }
             }
+        }
+    }
+
+    public static function checkPawnMorph($figures, $figureMoveX, $figureMoveY, $figure, $board, $game)
+    {
+        $anyFigure = self::checkAnyFigure($figures, $figureMoveX, $figureMoveY);
+
+        if (empty($anyFigure) && $board->x == $figureMoveX && $board->y == $figureMoveY) {
+
+            echo Html::beginForm();
+            echo Html::submitButton('queen', [
+                'class' => 'btn btn-xs btn-primary hidden morph morph' . $figure->id,
+                'name' => 'morphQueen' . $figure->id . $figure->name . $game->id,
+                'onclick' => 'hideButtons()'
+            ]);
+            echo Html::endForm();
+        }
+
+        if (empty($anyFigure) && $board->x == $figureMoveX && $board->y == $figureMoveY) {
+
+            echo Html::beginForm();
+            echo Html::submitButton('knight', [
+                'class' => 'btn btn-xs btn-primary hidden morph morph' . $figure->id,
+                'name' => 'morphKnight' . $figure->id . $figure->name . $game->id,
+                'onclick' => 'hideButtons()'
+            ]);
+            echo Html::endForm();
         }
     }
 

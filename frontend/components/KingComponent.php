@@ -17,6 +17,7 @@ class KingComponent extends FigureComponent
     public $name = 'king';
     public $castlingMove = [];
     public $check = false;
+    public $checkFigure;
     public $mate = false;
 
     public function __construct($color, $game_id, $config = [])

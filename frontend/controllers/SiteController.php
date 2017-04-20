@@ -122,15 +122,14 @@ class SiteController extends Controller
     {
         $model = new Game();
 
-        $query = Messages::find()->where(['to_user_id' => Yii::$app->user->id]);
+        $query = Messages::find()
+            ->where(['to_user_id' => Yii::$app->user->id])
+            ->andWhere(['status' => 'pending'])
+            ->indexBy('id');
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 10]);
         $invitationsToMe = $query->offset($pages->offset)
             ->limit($pages->limit)
-            ->all();
-
-        $invitationsFromMe = Messages::find()
-            ->where(['from_user_id' => Yii::$app->user->id])
             ->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -151,17 +150,23 @@ class SiteController extends Controller
             return $this->redirect('/game/play?id='.$model->id);
         }
 
-        foreach ($invitationsToMe as $invitation) {
-            if ($invitation->load(Yii::$app->request->post()) && $invitation->save()) {
-                return $this->refresh();
-            }
+        $invitationsFromMe = Messages::find()
+            ->where(['from_user_id' => Yii::$app->user->id])
+            ->andWhere(['status' => 'pending'])
+            ->all();
+
+        if (Yii::$app->request->post('Messages', Yii::$app->request->post('id'))) {
+            $invitation = Messages::findOne(Yii::$app->request->post('Messages', Yii::$app->request->post('id')));
+            $invitation->status = 'declined';
+            $invitation->save(false);
+            return $this->refresh();
         }
 
         return $this->render('invitations', [
             'model' => $model,
             'invitationsToMe' => $invitationsToMe,
             'invitationsFromMe' => $invitationsFromMe,
-            'pages' => $pages,
+            'pages' => $pages
         ]);
     }
 

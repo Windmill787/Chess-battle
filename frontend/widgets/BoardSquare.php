@@ -26,20 +26,36 @@ class BoardSquare extends Widget
 
             if ($board->x == $figure->currentPositionX && $board->y == $figure->currentPositionY) {
                 if ($figure->status != 'killed') {
-                    echo Html::img($figure->image, [
-                        'id' => 'figure'.$figure->id,
-                        'onclick' => "light(".$figure->name.', '.$figure->id.")"
-                    ]);
+                    if ($figure->name == 'king' && $figure->check == true) {
+                        echo Html::img($figure->image, [
+                            'id' => 'figure' . $figure->id,
+                            'onclick' => "light(" . $figure->name . ', ' . $figure->id . ")",
+                            'style' => [
+                                'border' => '2px solid red',
+                                'width' => '60px',
+                                'height' => '60px'
+                            ]
+                        ]);
+                    } else {
+                        echo Html::img($figure->image, [
+                            'id' => 'figure' . $figure->id,
+                            'onclick' => "light(" . $figure->name . ', ' . $figure->id . ")",
+                            'style' => [
+                                'width' => '60px',
+                                'height' => '60px'
+                            ]
+                        ]);
+                    }
                 }
             }
 
             if ($figure->name == 'pawn') {
                 FirstMoveButton::widget($figures, $figure, $board, $whiteUser, $blackUser, $game);
             }
-            if ($figure->name == 'king') {
+            /*if ($figure->name == 'king') {
                 CastlingButton::widget($figures, $figure, $board, $whiteUser, $blackUser, $game);
             }
-            Buttons::widget($figures, $figure, $board, $whiteUser, $blackUser, $game);
+            Buttons::widget($figures, $figure, $board, $whiteUser, $blackUser, $game);*/
         }
         echo Html::endTag('td');
     }
