@@ -99,12 +99,28 @@ class GameController extends Controller
             ->where(['game_id' => $model->id])
             ->all();
 
+        $playPositions = PlayPositions::find()
+            ->where(['game_id' => $model->id])
+            ->all();
+
+        $request = \Yii::$app->request;
+        $post = \Yii::$app->request->post('PlayPositions');
+
+        if ($request->post('PlayPositions')) {
+            $invitation = PlayPositions::findOne($post['id']);
+
+            $invitation->current_x = $post['current_x'];
+            $invitation->current_y = $post['current_y'];
+            $invitation->save(false);
+            return $this->refresh();
+        }
+
         foreach ($figures as $figure) {
 
             /**
              * @var $figure PawnComponent
              */
-            if ($figure->name == 'pawn') {
+            /*if ($figure->name == 'pawn') {
                 if ($figure->color == 'white') {
                     $figureMoveX = $figure->currentPositionX + $figure->first_move[0];
                     $figureMoveY = $figure->currentPositionY + $figure->first_move[1];
@@ -120,7 +136,7 @@ class GameController extends Controller
                     $figure->move($figureMoveX, $figureMoveY, $model->id);
                     $this->refresh();
                 }
-            }
+            }*/
 
             /**
              * @var $figure KingComponent
@@ -262,7 +278,8 @@ class GameController extends Controller
             'blackUser' => $blackUser,
             'board' => $board,
             'figures' => $figures,
-            'history' => $history
+            'history' => $history,
+            'playPositions' => $playPositions
         ]);
     }
 

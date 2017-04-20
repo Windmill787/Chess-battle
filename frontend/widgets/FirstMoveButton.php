@@ -13,19 +13,20 @@ use frontend\components\PawnComponent;
 use yii\helpers\Html;
 use yii\base\Widget;
 use app\models\Game;
+use yii\widgets\ActiveForm;
 
 class FirstMoveButton extends Widget
 {
-    public static function widget($figures, PawnComponent $figure, $board, $whiteUser, $blackUser, $game) {
+    public static function widget($figures, PawnComponent $figure, $board, $whiteUser, $blackUser, $playPositions) {
 
         if ($figure->color == 'white' /*&& $whiteUser->id == \Yii::$app->user->id && $game->move %2 != 0*/) {
             $figureMoveX = $figure->currentPositionX + $figure->first_move[0];
             $figureMoveY = $figure->currentPositionY + $figure->first_move[1];
-            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game->id);
+            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $playPositions);
         } else if ($figure->color == 'black' /*&& $blackUser->id == \Yii::$app->user->id && $game->move %2 == 0*/) {
             $figureMoveX = $figure->currentPositionX - $figure->first_move[0];
             $figureMoveY = $figure->currentPositionY - $figure->first_move[1];
-            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game->id);
+            self::checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $playPositions);
         }
     }
 
@@ -54,7 +55,7 @@ class FirstMoveButton extends Widget
         }
     }
 
-    public static function checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $game_id) {
+    public static function checkPosition($figures, $figureMoveX, $figureMoveY, $figure, $board, $playPositions) {
 
         $figuresOnPosition = self::checkFigure($figures, $figure, $figureMoveX, $figureMoveY);
 
@@ -64,13 +65,26 @@ class FirstMoveButton extends Widget
             if ($board->x == $figureMoveX &&
                 $board->y == $figureMoveY) {
 
-                echo Html::beginForm();
-                echo Html::submitButton('move', [
-                    'class' => 'btn btn-xs btn-primary hidden move move' . $figure->id,
-                    'name' => 'firstMove' . $figure->id . $figureMoveX . $figureMoveY . $game_id,
-                    'onclick' => 'hideButtons()'
-                ]);
-                echo Html::endForm();
+                foreach ($playPositions as $playPosition) {
+                    if ($figure->id == $playPosition->figure_id) {
+                        $form = ActiveForm::begin();
+
+                        echo $form->field($playPosition, "id")
+                            ->label(false)->hiddenInput();
+
+                        echo $form->field($playPosition, "current_x")
+                            ->label(false)->hiddenInput(['value' => $figureMoveX]);
+
+                        echo $form->field($playPosition, "current_y")
+                            ->label(false)->hiddenInput(['value' => $figureMoveY]);
+
+                        echo Html::submitButton(\Yii::t('app', 'Move'), [
+                            'class' => 'btn btn-xs btn-primary hidden move move' . $figure->id,
+                            'onclick' => 'hideButtons()'
+                        ]);
+                        ActiveForm::end();
+                    }
+                }
             }
         }
     }

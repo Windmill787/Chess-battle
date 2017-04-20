@@ -13,6 +13,7 @@
 /* @var $whiteUser \common\models\User */
 /* @var $blackUser \common\models\User */
 /* @var $history \app\models\History */
+/* @var $playPositions \app\models\PlayPositions */
 
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -27,7 +28,7 @@ $this->title = Yii::t('app', 'Play');
         <div class="row thumbnail">
             <div class="caption">
 
-                <?= Board::widget($board, $figures, $whiteUser, $blackUser, $model); ?>
+                <?= Board::widget($board, $figures, $whiteUser, $blackUser, $playPositions); ?>
 
             </div>
         </div>

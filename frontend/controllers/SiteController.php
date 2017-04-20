@@ -122,6 +122,8 @@ class SiteController extends Controller
     {
         $model = new Game();
 
+        $request = Yii::$app->request;
+
         $query = Messages::find()
             ->where(['to_user_id' => Yii::$app->user->id])
             ->andWhere(['status' => 'pending'])
@@ -132,7 +134,7 @@ class SiteController extends Controller
             ->limit($pages->limit)
             ->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load($request->post()) && $model->save()) {
 
             for ($i = 1; $i <= 32; $i++) {
                 $playPosition = new PlayPositions();
@@ -155,8 +157,10 @@ class SiteController extends Controller
             ->andWhere(['status' => 'pending'])
             ->all();
 
-        if (Yii::$app->request->post('Messages', Yii::$app->request->post('id'))) {
-            $invitation = Messages::findOne(Yii::$app->request->post('Messages', Yii::$app->request->post('id')));
+        $id = $request->post('id');
+
+        if ($request->post('Messages', $id)) {
+            $invitation = Messages::findOne($request->post('Messages', $id));
             $invitation->status = 'declined';
             $invitation->save(false);
             return $this->refresh();

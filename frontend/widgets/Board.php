@@ -15,7 +15,7 @@ use yii\bootstrap\Widget;
 
 class Board extends Widget
 {
-    public static function widget(BoardComponent $board, $figures, $whiteUser, $blackUser, $game)
+    public static function widget(BoardComponent $board, $figures, $whiteUser, $blackUser, $playPositions)
     {
         echo Html::beginTag('table', [
             'class' => 'table-bordered'
@@ -58,11 +58,11 @@ class Board extends Widget
                         $total = $board->y + $board->x;
                         if ($total % 2 == 0) {
 
-                            BoardSquare::widget('#AF5200', $board, $figures, $whiteUser, $blackUser, $game);
+                            BoardSquare::widget('#AF5200', $board, $figures, $whiteUser, $blackUser, $playPositions);
 
                         } else {
 
-                            BoardSquare::widget('#FFFFFF', $board, $figures, $whiteUser, $blackUser, $game);
+                            BoardSquare::widget('#FFFFFF', $board, $figures, $whiteUser, $blackUser, $playPositions);
 
                         }
                     }
