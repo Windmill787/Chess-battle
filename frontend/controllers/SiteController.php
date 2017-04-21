@@ -124,6 +124,10 @@ class SiteController extends Controller
 
         $request = Yii::$app->request;
 
+        $id = $request->post('id');
+
+        $invitation = Messages::findOne($request->post('Messages', $id));
+
         $query = Messages::find()
             ->where(['to_user_id' => Yii::$app->user->id])
             ->andWhere(['status' => 'pending'])
@@ -135,7 +139,8 @@ class SiteController extends Controller
             ->all();
 
         if ($model->load($request->post()) && $model->save()) {
-
+            $invitation->status = 'accepted';
+            $invitation->save();
             for ($i = 1; $i <= 32; $i++) {
                 $playPosition = new PlayPositions();
                 $figure = Figure::findOne($i);
@@ -152,13 +157,6 @@ class SiteController extends Controller
             return $this->redirect('/game/play?id='.$model->id);
         }
 
-        $invitationsFromMe = Messages::find()
-            ->where(['from_user_id' => Yii::$app->user->id])
-            ->andWhere(['status' => 'pending'])
-            ->all();
-
-        $id = $request->post('id');
-
         if ($request->post('Messages', $id)) {
             $invitation = Messages::findOne($request->post('Messages', $id));
             $invitation->status = 'declined';
@@ -169,7 +167,6 @@ class SiteController extends Controller
         return $this->render('invitations', [
             'model' => $model,
             'invitationsToMe' => $invitationsToMe,
-            'invitationsFromMe' => $invitationsFromMe,
             'pages' => $pages
         ]);
     }

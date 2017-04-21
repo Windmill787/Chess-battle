@@ -33,6 +33,8 @@ var rook = 'rook';
 var queen = 'queen';
 var king = 'king';
 
+$('.help-block').addClass('hidden');
+
 function light (figure, id) {
     $("img").css('background-color','inherit');
     $("img#figure" + id).css('background-color','#DAA520');
@@ -41,10 +43,7 @@ function light (figure, id) {
     $('.move')
         .addClass('hidden');
     $('.attack')
-        .addClass('hidden')
-        .css('position', 'absolute')
-        .css('margin-top', -10)
-        .css('margin-left', -22.5);
+        .addClass('hidden');
     $('.move' + id).removeClass('hidden');
     $('.attack' + id).removeClass('hidden');
     $('.morph' + id).removeClass('hidden');

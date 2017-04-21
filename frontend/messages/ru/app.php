@@ -122,5 +122,17 @@ return [
     'Accept' => 'Принять',
     'Decline' => 'Отклонить',
     'You was invited to play' => 'Вам было предложено сыграть',
-    'Decision' => 'Решение'
+    'Decision' => 'Решение',
+    'Invitations list' => 'Список приглашений',
+    'My matches' => 'Мои матчи',
+    'Rival' => 'Соперник',
+    'On this page you can see your opened matches' => 'На этой странице вы можете видеть Ваши открытые матчи',
+    'No another players matches' => 'Нет матчей других игроков',
+    'Your color is',
+    'No current started matches or noone has not accepted your invite' =>
+        'Нет текущих начатых матчей или никто не принял Ваше приглашение',
+    'History' => 'История',
+    'Your color is black' => 'Вы играете черными',
+    'Your color is white' => 'Вы играете белыми'
+
 ];

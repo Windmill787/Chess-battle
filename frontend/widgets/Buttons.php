@@ -230,14 +230,20 @@ class Buttons extends Widget
                 $board->x == $figureAttackX &&
                 $board->y == $figureAttackY &&
                 $item->color != $figure->color) {
-
                 foreach ($playPositions as $playPosition) {
                     if ($figure->id == $playPosition->figure_id) {
                         $form = ActiveForm::begin([
+                            'fieldConfig' => [
+                                'options' => [
+                                    'tag' => false,
+                                ],
+                            ],
                             'options'=>
                                 [
                                     'style' => [
-                                        'position' => 'absolute'
+                                        'position' => 'absolute',
+                                        'margin-left' =>  '7px',
+                                        'margin-top' => '-10px'
                                     ]
                                 ]
                         ]);
@@ -392,7 +398,16 @@ class Buttons extends Widget
 
             foreach ($playPositions as $playPosition) {
                 if ($figure->id == $playPosition->figure_id) {
-                    $form = ActiveForm::begin();
+                    $form = ActiveForm::begin([
+                        'options'=>
+                            [
+                                'style' => [
+                                    'position' => 'absolute',
+                                    'margin-left' =>  '9px',
+                                    'margin-top' => '-25px'
+                                ]
+                            ]
+                    ]);
 
                     echo $form->field($playPosition, "id")
                         ->label(false)->hiddenInput();

@@ -67,7 +67,16 @@ class FirstMoveButton extends Widget
 
                 foreach ($playPositions as $playPosition) {
                     if ($figure->id == $playPosition->figure_id) {
-                        $form = ActiveForm::begin();
+                        $form = ActiveForm::begin([
+                            'options'=>
+                                [
+                                    'style' => [
+                                        'position' => 'absolute',
+                                        'margin-left' =>  '9px',
+                                        'margin-top' => '-25px'
+                                    ]
+                                ]
+                        ]);
 
                         echo $form->field($playPosition, "id")
                             ->label(false)->hiddenInput();

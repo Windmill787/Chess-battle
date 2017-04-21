@@ -62,7 +62,7 @@ class Board extends Widget
 
                         } else {
 
-                            BoardSquare::widget('#FFFFFF', $board, $figures, $whiteUser, $blackUser, $game, $playPositions);
+                            BoardSquare::widget('#FFFFFF', $board, $figures, $whiteUser, $blackUser, $game , $playPositions);
 
                         }
                     }
@@ -103,11 +103,11 @@ class Board extends Widget
                     $total = $board->y + $board->x;
                     if ($total % 2 == 0) {
 
-                        BoardSquare::widget('#AF5200', $board, $figures, $whiteUser, $blackUser, $game);
+                        BoardSquare::widget('#AF5200', $board, $figures, $whiteUser, $blackUser, $game, $playPositions);
 
                     } else {
 
-                        BoardSquare::widget('#FFFFFF', $board, $figures, $whiteUser, $blackUser, $game);
+                        BoardSquare::widget('#FFFFFF', $board, $figures, $whiteUser, $blackUser, $game, $playPositions);
 
                     }
                 }

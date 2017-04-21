@@ -33,7 +33,8 @@ class BoardSquare extends Widget
                             'style' => [
                                 'border' => '2px solid red',
                                 'width' => '60px',
-                                'height' => '60px'
+                                'height' => '60px',
+                                'z-index' => '1000'
                             ]
                         ]);
                     } else {
@@ -42,7 +43,8 @@ class BoardSquare extends Widget
                             'onclick' => "light(" . $figure->name . ', ' . $figure->id . ")",
                             'style' => [
                                 'width' => '60px',
-                                'height' => '60px'
+                                'height' => '60px',
+                                'z-index' => '1000'
                             ]
                         ]);
                     }

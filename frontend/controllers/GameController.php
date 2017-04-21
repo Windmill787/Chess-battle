@@ -116,14 +116,13 @@ class GameController extends Controller
             ]);
 
             if (empty($desiredPosition) == false) {
-                $desiredPosition->current_x = 0;
-                $desiredPosition->current_y = 0;
-                $desiredPosition->status = 'killed';
-                $desiredPosition->save();
+                FigureComponent::killFigureOn($desiredPosition);
             }
 
-            $invitation->current_x = $movePost['current_x'];
-            $invitation->current_y = $movePost['current_y'];
+            FigureComponent::saveInHistory($invitation, $movePost['current_x'], $movePost['current_y']);
+
+            $invitation->attributes = $movePost;
+            $invitation->already_moved = 1;
             $invitation->save(false);
 
             return $this->refresh();
@@ -160,54 +159,7 @@ class GameController extends Controller
                         $this->refresh();
                     }
                 }
-            }
-
-            foreach ($figure->attacks as $attack) {
-                if ($figure->color == 'white') {
-                    $figureAttackX = $figure->currentPositionX + $attack[0];
-                    $figureAttackY = $figure->currentPositionY + $attack[1];
-                } else if ($figure->color == 'black') {
-                    if ($figure->name == 'bishop' ||
-                        $figure->name == 'queen' ||
-                        $figure->name == 'rook') {
-                        for ($i = 1; $i <= 8; $i++) {
-                            $figureAttackX = $figure->currentPositionX - $attack[0] * $i;
-                            $figureAttackY = $figure->currentPositionY - $attack[1] * $i;
-                            if (empty($figureAttackX) == false && empty($figureAttackY) == false) {
-                                $desiredFigure = PlayPositions::findOne([
-                                    'game_id' => $model->id,
-                                    'current_x' => $figureAttackX,
-                                    'current_y' => $figureAttackY
-                                ]);
-                                if (empty($desiredFigure->id) == false) {
-                                    if (isset($_POST['attack' . $desiredFigure->figure_id . $figure->id . $model->id])) {
-                                        $figure->attack($desiredFigure, $model->id);
-                                        $this->refresh();
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        $figureAttackX = $figure->currentPositionX - $attack[0];
-                        $figureAttackY = $figure->currentPositionY - $attack[1];
-                    }
-                }
-
-                if (empty($figureAttackX) == false && empty($figureAttackY) == false) {
-                    $desiredFigure = PlayPositions::findOne([
-                        'game_id' => $model->id,
-                        'current_x' => $figureAttackX,
-                        'current_y' => $figureAttackY
-                    ]);
-                    if (empty($desiredFigure->id) == false) {
-                        if (isset($_POST['attack' . $desiredFigure->figure_id . $figure->id . $model->id])) {
-                            $figure->attack($desiredFigure, $model->id);
-                            $this->refresh();
-                        }
-                    }
-                }
-            }
-        }*/
+            }*/
 
         if (isset($_POST['back'])) {
             FigureBuilderComponent::back($figures, $model->id);

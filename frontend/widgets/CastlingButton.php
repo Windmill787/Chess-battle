@@ -149,7 +149,16 @@ class CastlingButton extends Widget
 
             foreach ($playPositions as $playPosition) {
                 if ($king->id == $playPosition->figure_id) {
-                    $form = ActiveForm::begin();
+                    $form = ActiveForm::begin([
+                        'options'=>
+                            [
+                                'style' => [
+                                    'position' => 'absolute',
+                                    'margin-left' =>  '3px',
+                                    'margin-top' => '-25px'
+                                ]
+                            ]
+                    ]);
 
                     echo $form->field($playPosition, "id")
                         ->label(false)->hiddenInput();

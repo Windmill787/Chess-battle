@@ -54,15 +54,14 @@ $this->registerJs($script);
                         echo Html::beginTag('tbody');
                         echo Html::beginTag('tr');
                         echo Html::beginTag('td');
-                        echo Html::encode('Versus ');
                         if (Yii::$app->user->id == $whiteUser->id) {
                             echo Html::encode($blackUser->username);
                             echo Html::tag('br');
-                            echo Html::encode('Your color is white');
+                            echo Html::encode(Yii::t('app', 'Your color is white'));
                         } else {
                             echo Html::encode($whiteUser->username);
                             echo Html::tag('br');
-                            echo Html::encode('Your color is black');
+                            echo Html::encode(Yii::t('app', 'Your color is black'));
                         }
                         echo Html::endTag('td');
 

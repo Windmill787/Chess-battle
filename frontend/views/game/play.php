@@ -39,7 +39,7 @@ $this->title = Yii::t('app', 'Play');
             <div class="caption">
                 <?php
                 echo Html::beginTag('p');
-                echo Html::encode(Yii::t('app', 'Moves'));
+                echo Html::encode(Yii::t('app', 'History'));
                 echo Html::endTag('p');
                 ?>
                 <div class="thumbnail">

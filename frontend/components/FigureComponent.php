@@ -72,44 +72,21 @@ class FigureComponent
         $this->attacks = $this->moves;
     }
 
-    public function savePosition($game_id) {
-        $position = PlayPositions::findOne(['game_id' => $game_id, 'figure_id' => $this->id]);
-        $position->figure_id = $this->id;
-        $position->current_x = $this->currentPositionX;
-        $position->current_y = $this->currentPositionY;
-        $position->save();
-    }
-
-    public function attack($figure, $game_id) {
-        $this->currentPositionX = $figure->current_x;
-        $this->currentPositionY = $figure->current_y;
-        $this->savePosition($game_id);
-        $this->changeStatus($figure);
-        $this->saveInHistory($this->currentPositionX, $this->currentPositionY, $game_id);
-    }
-
-    public function move($figureMoveX, $figureMoveY, $game_id) {
-        $this->saveInHistory($figureMoveX, $figureMoveY, $game_id);
-        $this->currentPositionX = $figureMoveX;
-        $this->currentPositionY = $figureMoveY;
-        $this->savePosition($game_id);
-    }
-
-    public function changeStatus(PlayPositions $figure) {
+    public static function killFigureOn(PlayPositions $figure) {
         $figure->current_x = 0;
         $figure->current_y = 0;
         $figure->status = 'killed';
         $figure->save();
     }
 
-    public function saveInHistory($figureMoveX, $figureMoveY, $game_id) {
+    public static function saveInHistory(PlayPositions $playPosition, $moveX, $moveY) {
         $history = new History();
-        $history->game_id = $game_id;
-        $history->figure_id = $this->id;
-        $history->from_x = $this->currentPositionX;
-        $history->from_y = $this->currentPositionY;
-        $history->to_x = $figureMoveX;
-        $history->to_y = $figureMoveY;
+        $history->game_id = $playPosition->game_id;
+        $history->figure_id = $playPosition->figure_id;
+        $history->from_x = $playPosition->current_x;
+        $history->from_y = $playPosition->current_y;
+        $history->to_x = $moveX;
+        $history->to_y = $moveY;
         $history->save();
     }
 }

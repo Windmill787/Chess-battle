@@ -73,6 +73,31 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);
 
                             $form = ActiveForm::begin();
+
+                            echo $form->field($model, 'white_user_id')
+                                ->hiddenInput(['value' => Yii::$app->user->id])->label(false);
+
+                            echo $form->field($model, 'black_user_id')
+                                ->hiddenInput(['value' => $fromUser->id])->label(false);
+
+                            echo $form->field($model, 'status')
+                                ->hiddenInput(['value' => 'in progress'])->label(false);
+
+                            echo $form->field($invitation, "[$index]id")
+                                ->label(false)->hiddenInput();
+
+                            echo Html::submitButton(Yii::t('app', 'Accept'), [
+                                'class' => 'btn btn-success'
+                            ]);
+
+                            ActiveForm::end();
+
+                            echo Html::endTag('td');
+
+                            echo Html::beginTag('td');
+
+                            $form = ActiveForm::begin();
+
                             echo $form->field($invitation, "[$index]id")
                                 ->label(false)->hiddenInput();
 
