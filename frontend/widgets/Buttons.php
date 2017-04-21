@@ -18,7 +18,7 @@ class Buttons extends Widget
 {
     public static function widget($figures, $figure, $board, $whiteUser, $blackUser, $game, $playPositions)
     {
-        if ($figures[15]->check == true) {
+        /*if ($figures[15]->check == true) {
             if ($figure->name == 'king' && $figure->id == 16) {
                 foreach ($figure->moves as $moves) {
                     $figureMoveX = $figure->currentPositionX + $moves[0];
@@ -64,7 +64,7 @@ class Buttons extends Widget
                     }
                 }
             }
-        } else {
+        } else {*/
             //moves
             foreach ($figure->moves as $moves) {
                 if ($figure->color == 'white'
@@ -219,7 +219,6 @@ class Buttons extends Widget
                     }
                 }
             }
-        }
     }
 
     public static function checkEnemyFigure($figures, $figureAttackX, $figureAttackY, $figure, $board, $game, $playPositions)

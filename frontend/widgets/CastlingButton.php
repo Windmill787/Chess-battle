@@ -143,18 +143,18 @@ class CastlingButton extends Widget
         }
     }
 
-    public static function displayButton($king, $board, $castlingMoveX, $castlingMoveY, $rook, $game_id, $playPositions) {
+    public static function displayButton($king, $board, $castlingMoveX, $castlingMoveY, PlayPositions $rook, $game_id, $playPositions) {
         if ($board->x == $castlingMoveX &&
             $board->y == $castlingMoveY) {
 
             foreach ($playPositions as $playPosition) {
                 if ($king->id == $playPosition->figure_id) {
                     $form = ActiveForm::begin([
-                        'options'=>
+                        'options' =>
                             [
                                 'style' => [
                                     'position' => 'absolute',
-                                    'margin-left' =>  '3px',
+                                    'margin-left' => '3px',
                                     'margin-top' => '-25px'
                                 ]
                             ]
@@ -162,6 +162,24 @@ class CastlingButton extends Widget
 
                     echo $form->field($playPosition, "id")
                         ->label(false)->hiddenInput();
+
+                    echo $form->field($playPosition, "rook_id")
+                        ->label(false)->hiddenInput(['value' => $rook->id]);
+
+                    if ($rook->figure_id == 30 || $rook->figure_id == 14) {
+                        echo $form->field($playPosition, "rook_current_x")
+                            ->label(false)->hiddenInput(['value' => $castlingMoveX - 1]);
+
+                        echo $form->field($playPosition, "rook_current_y")
+                            ->label(false)->hiddenInput(['value' => $castlingMoveY]);
+
+                    } else if ($rook->figure_id == 29 || $rook->figure_id == 13) {
+                        echo $form->field($playPosition, "rook_current_x")
+                            ->label(false)->hiddenInput(['value' => $castlingMoveX + 1]);
+
+                        echo $form->field($playPosition, "rook_current_y")
+                            ->label(false)->hiddenInput(['value' => $castlingMoveY]);
+                    }
 
                     echo $form->field($playPosition, "current_x")
                         ->label(false)->hiddenInput(['value' => $castlingMoveX]);
@@ -174,6 +192,16 @@ class CastlingButton extends Widget
                         'value' => 'castling',
                         'onclick' => 'hideButtons()'
                     ]);
+
+                    /*echo $form->field($rook, "id")
+                        ->label(false)->hiddenInput();
+
+                    echo $form->field($rook, "current_x")
+                        ->label(false)->hiddenInput(['value' => $castlingMoveX]);
+
+                    echo $form->field($rook, "current_y")
+                        ->label(false)->hiddenInput(['value' => $castlingMoveY]);*/
+
                     ActiveForm::end();
                 }
             }

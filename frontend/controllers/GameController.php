@@ -121,45 +121,22 @@ class GameController extends Controller
 
             FigureComponent::saveInHistory($invitation, $movePost['current_x'], $movePost['current_y']);
 
+
+            if (empty($movePost['rook_id']) == false &&
+                empty($movePost['rook_current_x']) == false &&
+                empty($movePost['rook_current_y']) == false) {
+                $rook = PlayPositions::findOne($movePost['rook_id']);
+                $rook->current_x = $movePost['rook_current_x'];
+                $rook->current_y = $movePost['rook_current_y'];
+                $rook->save();
+            }
+
             $invitation->attributes = $movePost;
-            $invitation->already_moved = 1;
+            //$invitation->already_moved = 1;
             $invitation->save(false);
 
             return $this->refresh();
         }
-
-        /*foreach ($figures as $figure) {
-
-            /**
-             * @var $figure KingComponent
-             */
-            /*if ($figure->name == 'king') {
-                foreach ($figure->castlingMove as $castling) {
-                    $figureMoveX = $figure->currentPositionX + $castling[0];
-                    $figureMoveY = $figure->currentPositionY + $castling[1];
-
-                    if ($figure->color == 'white') {
-                        if ($castling[0] == 2) {
-                            $rook = PlayPositions::findOne(['game_id' => $model->id, 'figure_id' => 14]);
-                        } else if ($castling[0] == -2) {
-                            $rook = PlayPositions::findOne(['game_id' => $model->id, 'figure_id' => 13]);
-                        }
-                    } else if ($figure->color == 'black') {
-                        if ($castling[0] == 2) {
-                            $rook = PlayPositions::findOne(['game_id' => $model->id, 'figure_id' => 30]);
-                        } else if ($castling[0] == -2) {
-                            $rook = PlayPositions::findOne(['game_id' => $model->id, 'figure_id' => 29]);
-                        }
-                    }
-
-                    if (isset($_POST['cast' . $figure->id . $figureMoveX . $figureMoveY . $rook->id . $model->id])) {
-                        //$model->move = $model->move + 1;
-                        //$model->save();
-                        $figure->castling($figureMoveX, $figureMoveY, $rook->id, $castling[0], $model->id);
-                        $this->refresh();
-                    }
-                }
-            }*/
 
         if (isset($_POST['back'])) {
             FigureBuilderComponent::back($figures, $model->id);
