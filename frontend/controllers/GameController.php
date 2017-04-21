@@ -19,8 +19,10 @@ use app\models\Figure;
 use frontend\components\FigureComponent;
 use frontend\components\KingComponent;
 use frontend\components\PawnComponent;
+use frontend\components\QueenComponent;
 use yii\base\Model;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -107,7 +109,7 @@ class GameController extends Controller
         $movePost = $request->post('PlayPositions');
 
         if ($movePost) {
-            $invitation = PlayPositions::findOne($movePost['id']);
+            $figure = PlayPositions::findOne($movePost['id']);
 
             $desiredPosition = PlayPositions::findOne([
                 'game_id' => $model->id,
@@ -116,11 +118,8 @@ class GameController extends Controller
             ]);
 
             if (empty($desiredPosition) == false) {
-                FigureComponent::killFigureOn($desiredPosition);
+                FigureComponent::killFigure($desiredPosition);
             }
-
-            FigureComponent::saveInHistory($invitation, $movePost['current_x'], $movePost['current_y']);
-
 
             if (empty($movePost['rook_id']) == false &&
                 empty($movePost['rook_current_x']) == false &&
@@ -131,18 +130,23 @@ class GameController extends Controller
                 $rook->save();
             }
 
-            $invitation->attributes = $movePost;
-            //$invitation->already_moved = 1;
-            $invitation->save(false);
+            FigureComponent::saveInHistory($figure, $movePost['current_x'], $movePost['current_y']);
+
+            $figure->attributes = $movePost;
+            $figure->already_moved = 1;
+            $figure->save(false);
+
+            $model->move = $model->move + 1;
+            $model->save();
 
             return $this->refresh();
         }
 
-        if (isset($_POST['back'])) {
+        /*if (isset($_POST['back'])) {
             FigureBuilderComponent::back($figures, $model->id);
             FigureBuilderComponent::resetStatuses($model->id);
             $this->refresh();
-        }
+        }*/
 
         return $this->render('play', [
             'model' => $model,

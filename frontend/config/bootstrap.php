@@ -40,6 +40,14 @@ Yii::$container->set('figures', function ($container, $params, $game_id) {
         new RookComponent('black', 1, $game_id),
         new RookComponent('black', 2, $game_id),
         new QueenComponent('black', $game_id),
-        new KingComponent('black', $game_id),
+        new KingComponent('black', $game_id)
     ];
+});
+
+Yii::$container->set('whiteQueen', function ($container, $params, $game_id) {
+    return [new QueenComponent('white', $game_id)];
+});
+
+Yii::$container->set('blackQueen', function ($container, $params, $game_id) {
+    return [new QueenComponent('black', $game_id)];
 });

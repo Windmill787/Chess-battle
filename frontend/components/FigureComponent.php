@@ -72,7 +72,7 @@ class FigureComponent
         $this->attacks = $this->moves;
     }
 
-    public static function killFigureOn(PlayPositions $figure) {
+    public static function killFigure(PlayPositions $figure) {
         $figure->current_x = 0;
         $figure->current_y = 0;
         $figure->status = 'killed';

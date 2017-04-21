@@ -18,7 +18,7 @@ $this->title = Yii::t('app', 'My matches');
 
 $script = <<< JS
 $(document).ready(function() {
-setInterval(function(){ $("#refreshButton").click(); }, 2000);
+setInterval(function(){ $("#refreshButton").click(); }, 10000);
 });
 JS;
 $this->registerJs($script);

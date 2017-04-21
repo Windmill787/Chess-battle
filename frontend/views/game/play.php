@@ -91,26 +91,18 @@ $this->title = Yii::t('app', 'Play');
                     Modal::end();*/
                     ?>
 
-                    <?php
-                    print_r($figures[15]->check);
-                    echo Html::beginForm();
-                    echo Html::submitButton('New game', [
-                        'class' => 'btn btn-primary',
-                        'name' => 'back'
-                    ]);
-                    echo Html::endForm();
-                    ?>
-
             </div>
         </div>
     </div>
 </div>
 <?php
 
-if ($whiteUser->id != \Yii::$app->user->id && $blackUser->id != \Yii::$app->user->id) {
+if ($whiteUser->id != \Yii::$app->user->id && $blackUser->id != \Yii::$app->user->id ||
+    $whiteUser->id == \Yii::$app->user->id && $model->move %2 == 0 ||
+    $blackUser->id == \Yii::$app->user->id && $model->move %2 != 0) {
     $script = <<< JS
                     $(document).ready(function() {
-                        setInterval(function(){ $("#refreshButton").click(); }, 7000);
+                        setInterval(function(){ $("#refreshButton").click(); }, 15000);
                     });
 JS;
     $this->registerJs($script);
@@ -119,6 +111,3 @@ JS;
 <?php Pjax::begin(); ?>
 <?= Html::a("Refresh", ['game/play?id='.$model->id], ['class' => 'btn btn-lg btn-primary hidden', 'id' => 'refreshButton']) ?>
 <?php Pjax::end(); ?>
-<?php //acceptance tests, jenkins, selenium, driver, config(WebDriver: url, browser(better firefox, chrome), Yii parts, config...
-        //fixture-data from tables, -f -fails(codeseption),
-        //consept build, run ) ?>

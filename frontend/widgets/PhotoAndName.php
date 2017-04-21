@@ -19,13 +19,13 @@ class PhotoAndName
         } else if ($enemy->id == $blackUser->id) {
             $user = User::findOne($blackUser->id);
         }
-        echo Html::img($user->img, [
+        echo Html::img('', [
             'width' => 40,
             'height' => 40,
             'alt' => "No Image",
             'onerror' => "this.src = 'http://xn--174-5cd3cgu2f.xn--p1ai/wp-content/uploads/2015/09/noavatar.png'"
         ]);
-        echo Html::encode(' '.$user->username);
+        echo Html::encode(' '.$whiteUser->username);
     }
 
     public static function myPhoto($whiteUser, $blackUser) {
@@ -34,12 +34,12 @@ class PhotoAndName
         } else if (\Yii::$app->user->id == $blackUser->id) {
             $user = User::findOne($blackUser->id);
         }
-        echo Html::img($user->img, [
+        echo Html::img('',[
             'width' => 40,
             'height' => 40,
             'alt' => "No Image",
             'onerror' => "this.src = 'http://xn--174-5cd3cgu2f.xn--p1ai/wp-content/uploads/2015/09/noavatar.png'"
         ]);
-        echo Html::encode(' '.$user->username);
+        echo Html::encode(' '.$blackUser->username);
     }
 }

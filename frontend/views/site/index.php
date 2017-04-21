@@ -27,9 +27,6 @@ $this->registerJs($script);
         <div class="row thumbnail">
             <div class="caption">
                     <?php
-                    Pjax::begin();
-                    echo Html::a("Refresh", ['site/index'], ['class' => 'btn btn-lg btn-primary hidden', 'id' => 'refreshButton']);
-
                     if (empty($onlineUsers) == false) {
 
                         echo Html::beginTag('table', [
@@ -51,11 +48,14 @@ $this->registerJs($script);
                             echo Html::encode($user->username);
                             $form = ActiveForm::begin();
 
-                            echo $form->field($model, 'from_user_id')->hiddenInput(['value' => Yii::$app->user->id])->label(false);
+                            echo $form->field($model, 'from_user_id')
+                                ->hiddenInput(['value' => Yii::$app->user->id])->label(false);
 
-                            echo $form->field($model, 'to_user_id')->hiddenInput(['value' => $user->id])->label(false);
+                            echo $form->field($model, 'to_user_id')
+                                ->hiddenInput(['value' => $user->id])->label(false);
 
-                            echo $form->field($model, 'status')->hiddenInput(['value' => 'pending'])->label(false);
+                            echo $form->field($model, 'status')
+                                ->hiddenInput(['value' => 'pending'])->label(false);
 
                             echo Html::endTag('td');
 
@@ -76,8 +76,7 @@ $this->registerJs($script);
 
                     } else {
                         echo Html::encode(Yii::t('app', 'No users online'));
-                    }
-                    Pjax::end(); ?>
+                    } ?>
             </div>
         </div>
     </div>

@@ -189,18 +189,8 @@ class CastlingButton extends Widget
 
                     echo Html::submitButton(\Yii::t('app', 'Castling'), [
                         'class' => 'btn btn-xs btn-primary hidden move move' . $king->id,
-                        'value' => 'castling',
                         'onclick' => 'hideButtons()'
                     ]);
-
-                    /*echo $form->field($rook, "id")
-                        ->label(false)->hiddenInput();
-
-                    echo $form->field($rook, "current_x")
-                        ->label(false)->hiddenInput(['value' => $castlingMoveX]);
-
-                    echo $form->field($rook, "current_y")
-                        ->label(false)->hiddenInput(['value' => $castlingMoveY]);*/
 
                     ActiveForm::end();
                 }

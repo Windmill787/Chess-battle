@@ -20,7 +20,7 @@ $this->title = Yii::t('app', 'Watch');
 
 $script = <<< JS
 $(document).ready(function() {
-setInterval(function(){ $("#refreshButton").click(); }, 2000);
+setInterval(function(){ $("#refreshButton").click(); }, 12000);
 });
 JS;
 $this->registerJs($script);
