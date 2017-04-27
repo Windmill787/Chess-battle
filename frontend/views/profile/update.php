@@ -34,6 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?= $form->field($model, 'age') ?>
 
+            <?= $form->field($model, 'email') ?>
+
             <?= $form->field($model, 'img')->textInput() ?>
 
             <div class="form-group">

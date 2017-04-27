@@ -25,7 +25,7 @@ class Board extends Widget
 
         if ($blackUser->id == \Yii::$app->user->id) {
 
-            PhotoAndName::enemyPhoto($whiteUser, $whiteUser, $blackUser);
+            PhotoAndName::display($whiteUser);
 
             foreach ($board->reversedSymbolLabel as $label) :
 
@@ -67,9 +67,9 @@ class Board extends Widget
                         }
                     }
                 }
-            } else {
+            } else if ($whiteUser->id == \Yii::$app->user->id || \Yii::$app->user->id == null) {
 
-            PhotoAndName::enemyPhoto($blackUser, $whiteUser, $blackUser);
+            PhotoAndName::display($blackUser);
 
             foreach ($board->symbolLabel as $label) :
 
@@ -117,6 +117,14 @@ class Board extends Widget
 
         echo Html::endTag('table');
 
-        PhotoAndName::myPhoto($whiteUser, $blackUser);
+        if ($blackUser->id == \Yii::$app->user->id) {
+
+            PhotoAndName::display($blackUser);
+
+        } else if ($whiteUser->id == \Yii::$app->user->id || \Yii::$app->user->id == null) {
+
+            PhotoAndName::display($whiteUser);
+
+        }
     }
 }

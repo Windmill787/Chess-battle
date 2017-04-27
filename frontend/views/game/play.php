@@ -102,7 +102,7 @@ if ($whiteUser->id != \Yii::$app->user->id && $blackUser->id != \Yii::$app->user
     $blackUser->id == \Yii::$app->user->id && $model->move %2 != 0) {
     $script = <<< JS
                     $(document).ready(function() {
-                        setInterval(function(){ $("#refreshButton").click(); }, 15000);
+                        setInterval(function(){ $("#refreshButton").click(); }, 5000);
                     });
 JS;
     $this->registerJs($script);

@@ -33,7 +33,8 @@ var rook = 'rook';
 var queen = 'queen';
 var king = 'king';
 
-$('.help-block').addClass('hidden');
+$('.attack')
+    .css('margin-top', '-20px');
 
 function light (figure, id) {
     $("img").css('background-color','inherit');
